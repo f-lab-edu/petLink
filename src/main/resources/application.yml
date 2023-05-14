@@ -1,0 +1,7 @@
+# DB properties
+spring:
+  datasource:
+    driver-class-name: 'com.mysql.cj.jdbc.Driver'
+    url: 'jdbc:mysql://101.101.216.221:3306/PetLink'
+    username: 'petLink'
+    password: 'petLink'
