@@ -20,9 +20,7 @@ petLink의 펀딩에 참여해 <br>
 -----
 
 ### 🌐 서버 구조 🌐
-
-![img.png](img.png)
-
+![server_V1.png](.github%2Fresources%2FreadMe_images%2Fserver_V1.png)
 -----
 
 ### 🖥️ 사용 기술 및 환경 🖥️
@@ -37,4 +35,4 @@ petLink의 펀딩에 참여해 <br>
 ### 💾 ERD 💾
 
 [ERD LINK ](https://www.erdcloud.com/d/D6fkbZKiwQHX7kddG)
-![img_1.png](img_1.png)
+![erd_V1.png](.github%2Fresources%2FreadMe_images%2Ferd_V1.png)
