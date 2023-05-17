@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - feature/cicd
   pull_request:
     branches:
       - main
@@ -14,8 +13,6 @@ permissions:
 
 jobs:
   build:
-    #https://github.blog/changelog/2022-08-09-github-actions-the-ubuntu-18-04-actions-runner-image-is-being-deprecated-and-will-be-removed-by-12-1-22/
-    #runs-on: ubuntu-18.04
     runs-on: ubuntu-latest
 
     steps:
@@ -43,11 +40,13 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
           echo "DB_ID=${{ secrets.DB_ID }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "DB_IP=${{ secrets.DB_IP }}" >> $GITHUB_ENV
 
       - name: Build and test with Gradle
+        env:
+          DB_ID: ${{ secrets.DB_ID }}
+          DB_IP: ${{ secrets.DB_IP }}
         run: |
           ./gradlew build
           ./gradlew test
@@ -60,7 +59,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "build/libs/*.jar"
-          target: "/var/www/petLink"
+          target: "/var/www/studyConnect"
 
       - name: Execute commands over ssh
         uses: appleboy/ssh-action@master
@@ -70,9 +69,9 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/petLink/build/libs 
+            cd /var/www/studyConnect/build/libs 
             pkill java
-            nohup java -jar PetLink-0.0.1-SNAPSHOT.jar --DB_URL=${{ secrets.DB_URL }} --DB_ID=${{ secrets.DB_ID }} --DB_PASSWORD=${{ secrets.DB_PASSWORD }} > output.log 2>&1 &            
+            nohup java -jar StudyConnect-0.0.1-SNAPSHOT.jar --DB_IP=${{ secrets.DB_IP }} --DB_ID=${{ secrets.DB_ID }} --DB_PASSWORD=${{ secrets.DB_PASSWORD }} > output.log 2>&1 &            
             if [[ $(find . -name "output.log" -size +500k) ]]; then
               echo "Log file is larger than 500kb, deleting..."
               rm output.log
