@@ -2,6 +2,6 @@
 spring:
   datasource:
     driver-class-name: 'com.mysql.cj.jdbc.Driver'
-    url: 'jdbc:mysql://101.101.216.221:3306/PetLink'
-    username: 'petLink'
-    password: 'petLink'
+    url: ${DB_URL}
+    username: ${DB_ID}
+    password: ${DB_PASSWORD}

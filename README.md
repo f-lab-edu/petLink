@@ -1,8 +1,11 @@
 # 🐕petLink🐳
 
+#### [배포 서버](http://petlink.cloud/) : http://petlink.cloud/
+
 petLink의 펀딩에 참여해 <br>
 반려동물의 용품을 구매하며 도움이 필요한 동물들에게 도움을 지원할 수 있습니다.<br>
 함께 선한 영향력을 행사할 수 있는 기회를 제공합니다
+
 
 -----
 
@@ -17,9 +20,7 @@ petLink의 펀딩에 참여해 <br>
 -----
 
 ### 🌐 서버 구조 🌐
-
-![img.png](img.png)
-
+![server_V1.png](.github%2Fresources%2FreadMe_images%2Fserver_V1.png)
 -----
 
 ### 🖥️ 사용 기술 및 환경 🖥️
@@ -34,4 +35,4 @@ petLink의 펀딩에 참여해 <br>
 ### 💾 ERD 💾
 
 [ERD LINK ](https://www.erdcloud.com/d/D6fkbZKiwQHX7kddG)
-![img_1.png](img_1.png)
+![erd_V1.png](.github%2Fresources%2FreadMe_images%2Ferd_V1.png)
