@@ -21,14 +21,21 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    //bycrypt , jwt 관련 라이브러리
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // DB
     implementation 'mysql:mysql-connector-java:8.0.32'
-    testImplementation 'com.h2database:h2:2.1.214'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.h2database:h2'
+
 }
 
 tasks.named('test') {

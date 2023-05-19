@@ -1,4 +1,4 @@
-package com.petlink.common.domain;
+package com.petlink.common.domain.base;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
