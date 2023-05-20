@@ -1,6 +1,7 @@
 package com.petlink.member.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.petlink.common.encrypt.EncryptHelper;
 import com.petlink.member.domain.Member;
@@ -10,8 +11,9 @@ import com.petlink.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class MemberService {
 
 	private final MemberRepository memberRepository;
@@ -21,5 +23,9 @@ public class MemberService {
 		Member member = signUpRequestDto.toEntity(encryptHelper);
 		memberRepository.save(member);
 		return UserInfoResponseDto.of(member);
+	}
+
+	public Boolean isNameDuplicated(String name) {
+		return memberRepository.existsByName(name);
 	}
 }

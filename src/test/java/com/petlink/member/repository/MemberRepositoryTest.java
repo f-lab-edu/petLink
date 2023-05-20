@@ -52,5 +52,22 @@ class MemberRepositoryTest {
 		});
 	}
 
-
+	@Test
+	@DisplayName("회원 이름 중복 체크 테스트")
+	void checkName() {
+		// given
+		Member member = Member.builder()
+			.name("홍길동")
+			.email("test@email.com")
+			.password("1234")
+			.tel("010-1234-5678")
+			.status(MemberStatus.ACTIVE)
+			.address(new Address("서울", "강남구", "12345"))
+			.build();
+		memberRepository.save(member);
+		// when
+		Boolean exists = memberRepository.existsByName("홍길동");
+		// then
+		assertTrue(exists);
+	}
 }
