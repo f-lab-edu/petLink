@@ -13,6 +13,7 @@ import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.UserInfoResponseDto;
 import com.petlink.member.service.MemberService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -23,14 +24,17 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/signup")
-	public ResponseEntity<UserInfoResponseDto> signUp(@ModelAttribute SignUpRequestDto signUpRequestDto) {
+	public ResponseEntity<UserInfoResponseDto> signUp(@ModelAttribute @Valid SignUpRequestDto signUpRequestDto) {
 		UserInfoResponseDto responseDto = memberService.signUp(signUpRequestDto);
 		return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
 	}
 
 	@GetMapping("/duplicate/{name}")
 	public ResponseEntity<Boolean> checkName(@PathVariable String name) {
-		return new ResponseEntity<>(memberService.isNameDuplicated(name), HttpStatus.OK);
-	}
+		Boolean nameDuplicated = memberService.isNameDuplicated(name);
 
+		return ResponseEntity
+			.status(Boolean.TRUE.equals(nameDuplicated) ? HttpStatus.CONFLICT : HttpStatus.OK)
+			.body(nameDuplicated);
+	}
 }
