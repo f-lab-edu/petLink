@@ -52,6 +52,4 @@ public class SignUpRequestDto {
 			.status(MemberStatus.ACTIVE)
 			.build();
 	}
-
 }
-

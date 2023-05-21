@@ -37,7 +37,6 @@ class MemberControllerTest {
 	@DisplayName("회원가입 테스트")
 	void signUpTest() {
 
-		//요청 시 들어오는 객체 정의
 		SignUpRequestDto signUpRequestDto = new SignUpRequestDto(
 			"TestName",
 			"test@example.com",
@@ -48,14 +47,11 @@ class MemberControllerTest {
 			"TestDetailAddress"
 		);
 
-		//응답 시 보내는 객체 정의
 		UserInfoResponseDto userInfoResponseDto = UserInfoResponseDto.of(signUpRequestDto.toEntity(encryptHelper));
 
-		//
 		when(memberService.signUp(any(SignUpRequestDto.class))).thenReturn(userInfoResponseDto);
 		ResponseEntity<UserInfoResponseDto> responseEntity = memberController.signUp(signUpRequestDto);
 
-		// Assert
 		verify(memberService, times(1)).signUp(signUpRequestDto);
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 		assertEquals(userInfoResponseDto, responseEntity.getBody());

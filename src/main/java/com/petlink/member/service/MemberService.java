@@ -7,6 +7,7 @@ import com.petlink.common.encrypt.EncryptHelper;
 import com.petlink.member.domain.Member;
 import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.UserInfoResponseDto;
+import com.petlink.member.exception.AlreadyRegisteredMemberException;
 import com.petlink.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,12 @@ public class MemberService {
 
 	public UserInfoResponseDto signUp(SignUpRequestDto signUpRequestDto) {
 		Member member = signUpRequestDto.toEntity(encryptHelper);
+
+		Boolean emailDuplicated = memberRepository.existsByEmail(signUpRequestDto.getEmail());
+		if (Boolean.TRUE.equals(emailDuplicated)) {
+			throw new AlreadyRegisteredMemberException();
+		}
+
 		memberRepository.save(member);
 		return UserInfoResponseDto.of(member);
 	}

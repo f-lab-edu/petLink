@@ -6,4 +6,6 @@ import com.petlink.member.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 	Boolean existsByName(String name);
+
+	Boolean existsByEmail(String email);
 }
