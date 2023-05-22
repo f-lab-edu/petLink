@@ -1,6 +1,7 @@
 package com.petlink.member.dto.request;
 
-import com.petlink.common.encrypt.EncryptHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.petlink.member.domain.Address;
 import com.petlink.member.domain.Member;
 import com.petlink.member.domain.MemberStatus;
@@ -41,15 +42,19 @@ public class SignUpRequestDto {
 	@Size(max = 100, message = "상세주소는 최대 100자입니다.")
 	private String detailAddress;
 
-	public Member toEntity(EncryptHelper encryptHelper) {
+	public Member toEntity() {
 		Address addressInfo = new Address(zipCode, address, detailAddress);
 		return Member.builder()
 			.name(name)
 			.email(email)
-			.password(encryptHelper.encrypt(password))
+			.password(password)
 			.tel(tel)
 			.address(addressInfo)
 			.status(MemberStatus.ACTIVE)
 			.build();
+	}
+
+	public void encodingPassword(PasswordEncoder passwordEncoder) {
+		this.password = passwordEncoder.encode(password);
 	}
 }

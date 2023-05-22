@@ -6,31 +6,32 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootTest
 class EncryptTest {
 
 	@Autowired
-	private EncryptHelper encryptHelper;
+	private PasswordEncoder passwordEncoder;
 
 	@Test
-	@DisplayName("암호화 테스트")
+	@DisplayName("문자열을 암호화한다.")
 	void doEncrypt() {
 		String password = "1234";
-		String encryptPassword = encryptHelper.encrypt(password);
+		String encryptPassword = passwordEncoder.encode(password);
 		assertNotEquals(password, encryptPassword);
 	}
 
 	@Test
-	@DisplayName("암호화 비교 검증 테스트")
+	@DisplayName("평문과 암호화된 문자열을 비교한다.")
 	void isEquals() {
 		String password = "1235";
-		String encryptPassword = encryptHelper.encrypt(password);
+		String encryptPassword = passwordEncoder.encode(password);
 		assertNotEquals(password, encryptPassword);
 
-		boolean match = encryptHelper.isMatch(password, encryptPassword);
+		boolean match = passwordEncoder.matches(password, encryptPassword);
 		assertTrue(match);
-		boolean isNotMatch = encryptHelper.isMatch("5678", encryptPassword);
+		boolean isNotMatch = passwordEncoder.matches("5678", encryptPassword);
 		assertFalse(isNotMatch);
 	}
 }

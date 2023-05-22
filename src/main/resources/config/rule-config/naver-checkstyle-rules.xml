@@ -52,7 +52,7 @@
 
         <!-- [package-lowercase] -->
         <module name="PackageName">
-            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+            <property name="format" value="^[a-z]+(\.[a-zA-Z][a-zA-Z0-9]*)*$"/>
             <message key="name.invalidPattern"
                      value="[package-lowercase] Package name ''{0}'' must match pattern ''{1}''."/>
         </module>

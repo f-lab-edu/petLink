@@ -1,9 +1,9 @@
 package com.petlink.member.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.petlink.common.encrypt.EncryptHelper;
 import com.petlink.member.domain.Member;
 import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.UserInfoResponseDto;
@@ -18,10 +18,11 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
 	private final MemberRepository memberRepository;
-	private final EncryptHelper encryptHelper;
+	private final PasswordEncoder passwordEncoder;
 
 	public UserInfoResponseDto signUp(SignUpRequestDto signUpRequestDto) {
-		Member member = signUpRequestDto.toEntity(encryptHelper);
+		signUpRequestDto.encodingPassword(passwordEncoder);
+		Member member = signUpRequestDto.toEntity();
 
 		Boolean emailDuplicated = memberRepository.existsByEmail(signUpRequestDto.getEmail());
 		if (Boolean.TRUE.equals(emailDuplicated)) {
