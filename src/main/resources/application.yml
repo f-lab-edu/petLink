@@ -6,12 +6,18 @@ spring:
     username: ${DB_ID}
     password: ${DB_PASSWORD}
 
-
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
-    hibernate:
-      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        ddl-auto: update
+
+
+logging:
+  level:
+    org.hibernate.type: trace
 
 
 
