@@ -30,10 +30,10 @@ public class SecurityFilterChainConfig {
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
 					.requestMatchers(HttpMethod.GET, "/").permitAll()
-					.requestMatchers(HttpMethod.GET, "/petlink/members/duplicate/{name}").permitAll()
-					.requestMatchers(HttpMethod.POST, "/petlink/members/signup").permitAll()
-					.requestMatchers("/petlink/members/login").permitAll()
-					.requestMatchers("/petlink/members/logout").permitAll()
+					.requestMatchers(HttpMethod.GET, "/members/duplicate/{name}").permitAll()
+					.requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
+					.requestMatchers("/members/login").permitAll()
+					.requestMatchers("/members/logout").permitAll()
 					.anyRequest().authenticated()
 			)
 			.sessionManagement()

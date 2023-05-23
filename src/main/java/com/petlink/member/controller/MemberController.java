@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/petlink/members")
+@RequestMapping("/members")
 public class MemberController {
 
 	private final MemberService memberService;
