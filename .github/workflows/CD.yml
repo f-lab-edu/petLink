@@ -1,20 +1,15 @@
-name: CI CD
+name: CD
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    types: [ opened, reopened, synchronize ]
-
-
+      - feature/cicd
 permissions:
   contents: read
 
 jobs:
-  build:
-    #https://github.blog/changelog/2022-08-09-github-actions-the-ubuntu-18-04-actions-runner-image-is-being-deprecated-and-will-be-removed-by-12-1-22/
-    #runs-on: ubuntu-18.04
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,54 +21,37 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-            ~/.gradle/caches/modules-2/files-2.1
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
       - name: Set up environment variables
         run: |
           echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
           echo "DB_ID=${{ secrets.DB_ID }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
 
-      - name: Build and test with Gradle
+      - name: Build with Gradle
         run: |
-          ./gradlew build
-          ./gradlew test
+          chmod +x ./gradlew
+          ./gradlew clean build -x test
 
       - name: Copy files over ssh
-        if: github.event_name == 'push'
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_IP_ADDRESS }}
-          port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "build/libs/*.jar"
           target: "/var/www/petLink"
 
+
       - name: Execute commands over ssh
-        if: github.event_name == 'push'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP_ADDRESS }}
-          port: ${{ secrets.SERVER_PORT }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/petLink/build/libs 
             pkill java
-            nohup java -jar PetLink-0.0.1-SNAPSHOT.jar --DB_URL=${{ secrets.DB_URL }} --DB_ID=${{ secrets.DB_ID }} --DB_PASSWORD=${{ secrets.DB_PASSWORD }} > output.log 2>&1 &            
+            nohup java -jar petLink-0.0.1-SNAPSHOT.jar --DB_URL=${{ secrets.DB_URL }} --DB_ID=${{ secrets.DB_ID }} --DB_PASSWORD=${{ secrets.DB_PASSWORD }} > output.log 2>&1 &            
             if [[ $(find . -name "output.log" -size +500k) ]]; then
               echo "Log file is larger than 500kb, deleting..."
               rm output.log
