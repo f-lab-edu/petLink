@@ -1,0 +1,48 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up environment variables
+        run: |
+          echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
+          echo "DB_ID=${{ secrets.DB_ID }}" >> $GITHUB_ENV
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Copy files over ssh
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP_ADDRESS }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "build/libs/*.jar"
+          target: "/var/www/petLink"
+
+      - name: Execute commands over ssh
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_IP_ADDRESS }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/petLink/build/libs 
+            pkill java
+            nohup java -jar petLink-0.0.1-SNAPSHOT.jar --DB_URL=${{ secrets.DB_URL }} --DB_ID=${{ secrets.DB_ID }} --DB_PASSWORD=${{ secrets.DB_PASSWORD }} > output.log 2>&1 &            
+            if [[ $(find . -name "output.log" -size -500k) ]]; then
+              echo "Log file is smaller than 500KB, deleting..."
+              rm output.log
+            fi
+            disown 
+            exit
