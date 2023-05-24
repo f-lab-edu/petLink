@@ -29,11 +29,11 @@ public class Member extends BaseTimeEntity {
 	@Column(nullable = false, unique = true, name = "member_id")
 	private Long id;
 
-	@Column(name = "member_name", nullable = false)
-	private String name;
-
 	@Column(unique = true, name = "member_email", nullable = false)
 	private String email;
+
+	@Column(name = "member_name", nullable = false)
+	private String name;
 
 	@Column(name = "member_password", nullable = false)
 	private String password;

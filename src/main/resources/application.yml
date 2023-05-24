@@ -14,10 +14,11 @@ spring:
         format_sql: true
         ddl-auto: update
 
-
 logging:
   level:
     org.hibernate.type: trace
 
-
-
+# JWT properties
+jwt:
+  secret-key: flab-petlink-project-secret-key-and-toDay # secret key
+  expire-length: 86400000 # 1 days

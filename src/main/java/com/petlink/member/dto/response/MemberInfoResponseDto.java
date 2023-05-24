@@ -7,13 +7,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserInfoResponseDto {
+public class MemberInfoResponseDto {
 	private Long id;
 	private String name;
 	private String email;
 
-	public static UserInfoResponseDto of(Member member) {
-		return UserInfoResponseDto.builder()
+	public static MemberInfoResponseDto of(Member member) {
+		return MemberInfoResponseDto.builder()
 			.id(member.getId())
 			.name(member.getName())
 			.email(member.getEmail())

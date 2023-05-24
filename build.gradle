@@ -23,15 +23,19 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    //bycrypt , jwt 관련 라이브러리
+    //bycrypt
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
 
+    //jwt 관련 라이브러리
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    compileOnly 'org.projectlombok:lombok'
-    testImplementation 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.projectlombok:lombok'
 
     // DB
     implementation 'mysql:mysql-connector-java:8.0.32'

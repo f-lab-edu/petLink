@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.petlink.member.dto.request.SignUpRequestDto;
-import com.petlink.member.dto.response.UserInfoResponseDto;
+import com.petlink.member.dto.response.MemberInfoResponseDto;
 import com.petlink.member.service.MemberService;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,14 +46,14 @@ class MemberControllerTest {
 			.build();
 
 		signUpRequestDto.encodingPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
-		UserInfoResponseDto userInfoResponseDto = UserInfoResponseDto.of(signUpRequestDto.toEntity());
+		MemberInfoResponseDto memberInfoResponseDto = MemberInfoResponseDto.of(signUpRequestDto.toEntity());
 
-		when(memberService.signUp(any(SignUpRequestDto.class))).thenReturn(userInfoResponseDto);
-		ResponseEntity<UserInfoResponseDto> responseEntity = memberController.signUp(signUpRequestDto);
+		when(memberService.signUp(any(SignUpRequestDto.class))).thenReturn(memberInfoResponseDto);
+		ResponseEntity<MemberInfoResponseDto> responseEntity = memberController.signUp(signUpRequestDto);
 
 		verify(memberService, times(1)).signUp(signUpRequestDto);
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		assertEquals(userInfoResponseDto.getEmail(), Objects.requireNonNull(responseEntity.getBody()).getEmail());
+		assertEquals(memberInfoResponseDto.getEmail(), Objects.requireNonNull(responseEntity.getBody()).getEmail());
 	}
 
 	@Test
