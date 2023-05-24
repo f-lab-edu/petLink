@@ -37,7 +37,7 @@ class LoginControllerTest {
 	void login() throws Exception {
 		String email = "test@email.com";
 		String password = "password1234";
-		
+
 		mockMvc.perform(
 				MockMvcRequestBuilders.post("/auth/login")
 					.param("email", email)
