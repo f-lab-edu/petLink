@@ -1,7 +1,5 @@
 package com.petlink.member.dto.request;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.petlink.member.domain.Address;
 import com.petlink.member.domain.Member;
 import com.petlink.member.domain.MemberStatus;
@@ -10,11 +8,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class SignUpRequestDto {
 
 	@NotBlank(message = "닉네임은 필수입니다.")
@@ -54,7 +55,7 @@ public class SignUpRequestDto {
 			.build();
 	}
 
-	public void encodingPassword(PasswordEncoder passwordEncoder) {
-		this.password = passwordEncoder.encode(password);
+	public void encodingPassword(String password) {
+		this.password = password;
 	}
 }

@@ -35,15 +35,15 @@ class MemberServiceTest {
 	@DisplayName("회원가입을 진행할 수 있다.")
 	void testSignUp() {
 		// Given
-		SignUpRequestDto signUpRequestDto = new SignUpRequestDto(
-			"TestName",
-			"test@example.com",
-			"password",
-			"1234567890",
-			"12345",
-			"TestAddress",
-			"TestDetailAddress"
-		);
+		SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+			.name("TestName")
+			.email("test@example.com")
+			.password("password")
+			.tel("1234567890")
+			.zipCode("12345")
+			.address("TestAddress")
+			.detailAddress("TestDetailAddress")
+			.build();
 
 		when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 		when(memberRepository.existsByEmail(anyString())).thenReturn(false);

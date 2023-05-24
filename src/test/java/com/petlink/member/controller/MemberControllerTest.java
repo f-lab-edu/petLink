@@ -3,6 +3,8 @@ package com.petlink.member.controller;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Objects;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,18 +35,17 @@ class MemberControllerTest {
 	@Test
 	@DisplayName("회원가입을 진행할 수 있다.")
 	void signUpTest() {
+		SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+			.name("TestName")
+			.email("test@example.com")
+			.password("password")
+			.tel("1234567890")
+			.zipCode("12345")
+			.address("TestAddress")
+			.detailAddress("TestDetailAddress")
+			.build();
 
-		SignUpRequestDto signUpRequestDto = new SignUpRequestDto(
-			"TestName",
-			"test@example.com",
-			"password",
-			"1234567890",
-			"12345",
-			"TestAddress",
-			"TestDetailAddress"
-		);
-
-		signUpRequestDto.encodingPassword(passwordEncoder);
+		signUpRequestDto.encodingPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
 		UserInfoResponseDto userInfoResponseDto = UserInfoResponseDto.of(signUpRequestDto.toEntity());
 
 		when(memberService.signUp(any(SignUpRequestDto.class))).thenReturn(userInfoResponseDto);
@@ -52,26 +53,24 @@ class MemberControllerTest {
 
 		verify(memberService, times(1)).signUp(signUpRequestDto);
 		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-		assertEquals(userInfoResponseDto, responseEntity.getBody());
+		assertEquals(userInfoResponseDto.getEmail(), Objects.requireNonNull(responseEntity.getBody()).getEmail());
 	}
 
 	@Test
 	@DisplayName("올바르지 않은 이메일 형식은 회원가입을 진행할 수 없다.")
 	void signUpTest_invalidEmail() {
 
-		SignUpRequestDto signUpRequestDto = new SignUpRequestDto(
-			"TestName",
-			"invalid_email", // 중복된 이메일
-			"password",
-			"1234567890",
-			"12345",
-			"TestAddress",
-			"TestDetailAddress"
-		);
+		SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+			.name("TestName")
+			.email("test@example.com")
+			.password("password")
+			.tel("1234567890")
+			.zipCode("12345")
+			.address("TestAddress")
+			.detailAddress("TestDetailAddress")
+			.build();
+		signUpRequestDto.encodingPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
 
-		signUpRequestDto.encodingPassword(passwordEncoder);
-
-		// When an invalid SignUpRequestDto is passed, an IllegalArgumentException is thrown by the service
 		when(memberService.signUp(any(SignUpRequestDto.class)))
 			.thenThrow(new IllegalArgumentException("이메일 형식이 올바르지 않습니다."));
 

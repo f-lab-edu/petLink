@@ -21,8 +21,9 @@ public class MemberService {
 	private final PasswordEncoder passwordEncoder;
 
 	public UserInfoResponseDto signUp(SignUpRequestDto signUpRequestDto) {
-		signUpRequestDto.encodingPassword(passwordEncoder);
+
 		Member member = signUpRequestDto.toEntity();
+		signUpRequestDto.encodingPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
 
 		Boolean emailDuplicated = memberRepository.existsByEmail(signUpRequestDto.getEmail());
 		if (Boolean.TRUE.equals(emailDuplicated)) {
