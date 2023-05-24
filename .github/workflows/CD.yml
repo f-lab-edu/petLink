@@ -22,7 +22,7 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Copy files over ssh
-        uses: appleboy/scp-action@v1
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.SERVER_IP_ADDRESS }}
           username: ${{ secrets.SERVER_USERNAME }}
@@ -30,8 +30,9 @@ jobs:
           source: "build/libs/*.jar"
           target: "/var/www/petLink"
 
+
       - name: Execute commands over ssh
-        uses: appleboy/ssh-action@v1
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SERVER_IP_ADDRESS }}
           username: ${{ secrets.SERVER_USERNAME }}
@@ -40,8 +41,8 @@ jobs:
             cd /var/www/petLink/build/libs 
             pkill java
             nohup java -jar petLink-0.0.1-SNAPSHOT.jar --DB_URL=${{ secrets.DB_URL }} --DB_ID=${{ secrets.DB_ID }} --DB_PASSWORD=${{ secrets.DB_PASSWORD }} > output.log 2>&1 &            
-            if [[ $(find . -name "output.log" -size -500k) ]]; then
-              echo "Log file is smaller than 500KB, deleting..."
+            if [[ $(find . -name "output.log" -size +500k) ]]; then
+              echo "Log file is larger than 500kb, deleting..."
               rm output.log
             fi
             disown 
