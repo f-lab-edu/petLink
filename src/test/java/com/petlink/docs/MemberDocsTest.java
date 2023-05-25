@@ -3,6 +3,7 @@ package com.petlink.docs;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -67,6 +68,8 @@ class MemberDocsTest extends RestDocsSupport {
 			.andDo(print())
 			.andExpect(status().isCreated())
 			.andDo(document("sign-up",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
 				requestFields(
 					fieldWithPath("name").type(JsonFieldType.STRING).description("이름(닉네임)"),
 					fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
@@ -74,7 +77,7 @@ class MemberDocsTest extends RestDocsSupport {
 					fieldWithPath("tel").type(JsonFieldType.STRING).description("전화번호"),
 					fieldWithPath("zipCode").type(JsonFieldType.STRING).description("우편번호"),
 					fieldWithPath("address").type(JsonFieldType.STRING).description("주소"),
-					fieldWithPath("detailAddress").type(JsonFieldType.STRING).description("상세주소")
+					fieldWithPath("detailAddress").optional().type(JsonFieldType.STRING).description("상세주소")
 				),
 				responseFields(
 					fieldWithPath("id").type(JsonFieldType.NUMBER).description("회원번호"),
