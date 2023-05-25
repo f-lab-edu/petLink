@@ -14,22 +14,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.petlink.member.service.LoginService;
+import com.petlink.member.service.AuthenticationService;
 
 @ExtendWith(MockitoExtension.class)
-class LoginControllerTest {
+class AuthenticationControllerTest {
 
 	@InjectMocks
-	private LoginController loginController;
+	private AuthenticationController authenticationController;
 
 	@Mock
-	private LoginService loginService;
+	private AuthenticationService authenticationService;
 
 	private MockMvc mockMvc;
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders.standaloneSetup(loginController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(authenticationController).build();
 	}
 
 	@Test

@@ -1,5 +1,6 @@
 package com.petlink.config.security;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,16 +21,13 @@ public class SecurityFilterChainConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.csrf()
-			.disable()
-			.cors()
-			.disable()
-			.formLogin()
-			.disable()
+		return http
+			.cors().disable()
+			.csrf().disable()
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
-					.requestMatchers(HttpMethod.GET, "/").permitAll()
+					.requestMatchers("/").permitAll()
+					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 					.requestMatchers(HttpMethod.GET, "/members/duplicate/{name}").permitAll()
 					.requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
 					.requestMatchers("/auth/login").permitAll()
@@ -39,8 +37,8 @@ public class SecurityFilterChainConfig {
 			.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 생성 정책 설정: STATELESS (상태 정보를 서버에 저장하지 않음)
 			.and()
-			.authenticationProvider(authenticationProvider);
-		return http.build();
+			.formLogin().disable() // 폼 로그인 비활성화
+			.authenticationProvider(authenticationProvider).build();
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.petlink.member.domain.Member;
+import com.petlink.member.dto.request.LogoutRequest;
 import com.petlink.member.exception.NotFoundMemberException;
 import com.petlink.member.exception.NotMatchedPasswordException;
 import com.petlink.member.repository.MemberRepository;
@@ -17,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class LoginService {
+public class AuthenticationService {
 
 	private final MemberRepository memberRepository;
 	private final PasswordEncoder passwordEncoder;
@@ -38,5 +39,9 @@ public class LoginService {
 		}
 
 		return createToken(member.getEmail(), secretKey, expireLength);
+	}
+
+	public void logout(LogoutRequest logOutRequest) {
+
 	}
 }
