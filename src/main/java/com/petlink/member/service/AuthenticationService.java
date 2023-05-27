@@ -1,14 +1,11 @@
 package com.petlink.member.service;
 
-import static com.petlink.common.util.JwtTokenUtils.*;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.petlink.common.util.jwt.JwtTokenProvider;
 import com.petlink.member.domain.Member;
-import com.petlink.member.dto.request.LogoutRequest;
 import com.petlink.member.exception.NotFoundMemberException;
 import com.petlink.member.exception.NotMatchedPasswordException;
 import com.petlink.member.repository.MemberRepository;
@@ -21,13 +18,8 @@ import lombok.RequiredArgsConstructor;
 public class AuthenticationService {
 
 	private final MemberRepository memberRepository;
+	private final JwtTokenProvider jwtTokenProvider;
 	private final PasswordEncoder passwordEncoder;
-
-	@Value("${jwt.secret-key}")
-	private String secretKey;
-
-	@Value("${jwt.expire-length}")
-	private Long expireLength;
 
 	public String login(String email, String password) {
 		//회원이 존재하지 않을 경우 예외 처리
@@ -38,10 +30,7 @@ public class AuthenticationService {
 			throw new NotMatchedPasswordException("비밀번호가 일치하지 않습니다.");
 		}
 
-		return createToken(member.getEmail(), secretKey, expireLength);
+		return jwtTokenProvider.createToken(member);
 	}
 
-	public void logout(LogoutRequest logOutRequest) {
-
-	}
 }

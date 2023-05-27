@@ -9,5 +9,6 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LogoutRequest {
-	String token;
+	String accessToken;
+	String refreshToken;
 }
