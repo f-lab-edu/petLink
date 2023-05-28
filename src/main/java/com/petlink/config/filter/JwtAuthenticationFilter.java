@@ -3,6 +3,7 @@ package com.petlink.config.filter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,15 +31,22 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtTokenProvider jwtTokenProvider;
+	private final List<String> excludedPaths = List.of("/members/duplicate/{name}", "/members/signup", "/auth/login");
 
 	@Override
 	protected void doFilterInternal(@NotNull HttpServletRequest request,
 		@NotNull HttpServletResponse response,
 		@NotNull FilterChain filterChain) throws ServletException, IOException {
+
+		if (excludedPaths.contains(request.getServletPath())) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+
 		log.info("JWT Filtering....");
 
 		String token = parseJwtFromCookie(request);
-		log.info("memberEmail: {}", jwtTokenProvider.getMemberEmailByToken(token));
+		log.info("memberEmail: {}", jwtTokenProvider.getEmailByToken(token));
 		if (StringUtils.hasText(token) && jwtTokenProvider.isTokenValid(token)) {
 			Authentication authentication = getAuthentication(token);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -57,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private Authentication getAuthentication(String token) {
-		String memberEmail = jwtTokenProvider.getMemberEmailByToken(token);
+		String memberEmail = jwtTokenProvider.getEmailByToken(token);
 		log.info("memberEmail: {}", memberEmail);
 		return new UsernamePasswordAuthenticationToken(memberEmail, null, new ArrayList<>());
 	}

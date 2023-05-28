@@ -27,6 +27,8 @@ public class JwtTokenProvider {
 	 */
 	public String createToken(Member member) {
 		Claims claims = Jwts.claims();
+		claims.put("id", member.getId());
+		claims.put("role", JwtRole.MEMBER);
 		return Jwts.builder()
 			.setClaims(claims)
 			.setSubject(member.getEmail())
@@ -62,14 +64,14 @@ public class JwtTokenProvider {
 
 	/** 토큰에서 사용자 이메일 추출
 	 */
-	public String getMemberEmailByToken(String token) {
+	public String getEmailByToken(String token) {
 		return extractClaim(token, Claims::getSubject);
 	}
 
 	/** 토큰 유효성 검사
 	 */
 	public boolean isTokenValid(String token) {
-		return (getMemberEmailByToken(token) != null && !isTokenExpired(token));
+		return (getEmailByToken(token) != null && !isTokenExpired(token));
 	}
 
 	/** 토큰 만료일자 검사

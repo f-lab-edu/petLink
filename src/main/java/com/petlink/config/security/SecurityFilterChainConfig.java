@@ -1,6 +1,5 @@
 package com.petlink.config.security;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,17 +24,16 @@ public class SecurityFilterChainConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
 		return http
 			.cors().disable()
 			.csrf().disable()
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
-					.requestMatchers("/").permitAll()
-					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 					.requestMatchers(HttpMethod.GET, "/members/duplicate/{name}").permitAll()
 					.requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
-					.requestMatchers("/auth/login").permitAll()
-					.requestMatchers("/auth/logout").permitAll()
+					.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+					.requestMatchers("/**").hasRole("MANAGER") // (추후 개선)MANAGER 역할을 가진 사용자에게만 모든 요청을 허용
 					.anyRequest().authenticated()
 			)
 			.sessionManagement()
