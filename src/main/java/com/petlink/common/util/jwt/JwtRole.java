@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum JwtRole {
-	MANAGER("매니저"),
-	MEMBER("회원");
+	MANAGER("ROLE_MANAGER"),
+	MEMBER("ROLE_MEMBER");
 
 	private final String role;
 }

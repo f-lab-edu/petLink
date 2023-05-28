@@ -16,7 +16,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/auth")
 @RestController
@@ -35,5 +37,15 @@ public class AuthenticationController {
 		cookie.setPath("/");
 		response.addCookie(cookie);
 		return new ResponseEntity<>(new LoginResponse(token), HttpStatus.OK);
+	}
+
+	@PostMapping("/logout")
+	public ResponseEntity<Void> logout(HttpServletResponse response) {
+		log.info("logout 요청 접수");
+		Cookie cookie = new Cookie(JwtToken.JWT_TOKEN.getTokenName(), null);
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

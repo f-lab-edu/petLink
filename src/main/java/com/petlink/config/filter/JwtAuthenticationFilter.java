@@ -33,25 +33,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final List<String> excludedPaths = List.of("/members/duplicate/{name}", "/members/signup", "/auth/login");
 
-	@Override
-	protected void doFilterInternal(@NotNull HttpServletRequest request,
-		@NotNull HttpServletResponse response,
-		@NotNull FilterChain filterChain) throws ServletException, IOException {
-
-		if (excludedPaths.contains(request.getServletPath())) {
-			filterChain.doFilter(request, response);
-			return;
-		}
-
-		log.info("JWT Filtering....");
-
-		String token = parseJwtFromCookie(request);
-		log.info("memberEmail: {}", jwtTokenProvider.getEmailByToken(token));
-		if (StringUtils.hasText(token) && jwtTokenProvider.isTokenValid(token)) {
-			Authentication authentication = getAuthentication(token);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-		}
-		filterChain.doFilter(request, response);
+	private static void generateTokenExceptionMessage(HttpServletResponse response, String message) throws IOException {
+		response.setCharacterEncoding("utf-8");
+		response.getWriter().println("{ \"message\": \"" + message + "\" }");
 	}
 
 	private String parseJwtFromCookie(HttpServletRequest request) {
@@ -68,5 +52,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String memberEmail = jwtTokenProvider.getEmailByToken(token);
 		log.info("memberEmail: {}", memberEmail);
 		return new UsernamePasswordAuthenticationToken(memberEmail, null, new ArrayList<>());
+	}
+
+	@Override
+	protected void doFilterInternal(@NotNull HttpServletRequest request,
+		@NotNull HttpServletResponse response,
+		@NotNull FilterChain filterChain) throws ServletException, IOException {
+
+		if (excludedPaths.contains(request.getServletPath())) {
+			filterChain.doFilter(request, response);
+			return;
+		}
+
+		log.info("JWT Filtering....");
+
+		String token = parseJwtFromCookie(request);
+
+		if (token == null) {
+			generateTokenExceptionMessage(response, "인증을 위해 JWT 토큰이 필요합니다.");
+			filterChain.doFilter(request, response);
+			return;
+		}
+
+		if (!jwtTokenProvider.isTokenValid(token)) {
+			generateTokenExceptionMessage(response, "유효하지 않은 토큰입니다.");
+			filterChain.doFilter(request, response);
+			return;
+		}
+
+		if (StringUtils.hasText(token) && jwtTokenProvider.isTokenValid(token)) {
+
+			Authentication authentication = getAuthentication(token);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		}
+		filterChain.doFilter(request, response);
 	}
 }
