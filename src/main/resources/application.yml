@@ -14,6 +14,13 @@ spring:
         format_sql: true
         ddl-auto: update
 
+  data:
+    redis:
+      host: 118.67.133.150
+      port: 6379
+
+
+# AWS properties
 logging:
   level:
     org.hibernate.type: trace
@@ -22,3 +29,4 @@ logging:
 jwt:
   secret-key: flab-project-petlink-secret-key-sample
   expire-length: 86400000 # 1 days
+

@@ -69,7 +69,6 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = {AlreadyRegisteredMemberException.class})
 	public ResponseEntity<Object> handleAlreadyRegisteredMemberException(AlreadyRegisteredMemberException ex) {
 		Map<String, Object> body = createMessageBody(ex);
-
 		return new ResponseEntity<>(body, HttpStatus.CONFLICT);
 	}
 }
