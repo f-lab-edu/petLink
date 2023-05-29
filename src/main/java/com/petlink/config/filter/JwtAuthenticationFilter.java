@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -31,7 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtTokenProvider jwtTokenProvider;
-	private final List<String> excludedPaths = List.of("/members/duplicate/{name}", "/members/signup", "/auth/login");
+	private final List<String> excludedPaths = List.of("/members/duplicate/**", "/members/signup", "/auth/login");
+	private final PathMatcher pathMatcher = new AntPathMatcher();
 
 	private static void generateTokenExceptionMessage(HttpServletResponse response, String message) throws IOException {
 		response.setCharacterEncoding("utf-8");
@@ -59,7 +62,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		@NotNull HttpServletResponse response,
 		@NotNull FilterChain filterChain) throws ServletException, IOException {
 
-		if (excludedPaths.contains(request.getServletPath())) {
+		boolean isExcluded = excludedPaths.stream()
+			.anyMatch(p -> pathMatcher.match(p, request.getServletPath()));
+
+		if (isExcluded) {
 			filterChain.doFilter(request, response);
 			return;
 		}

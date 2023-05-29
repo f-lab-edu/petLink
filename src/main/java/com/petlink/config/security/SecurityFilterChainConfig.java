@@ -33,7 +33,7 @@ public class SecurityFilterChainConfig {
 			.csrf().disable()
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
-					.requestMatchers(HttpMethod.GET, "/members/duplicate/{name}").permitAll()
+					.requestMatchers(HttpMethod.GET, "/members/duplicate/**").permitAll()
 					.requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
 					.anyRequest().authenticated()
