@@ -1,15 +1,17 @@
-package com.petlink.member.domain;
+package com.petlink.manager.domain;
+
+import java.util.List;
 
 import com.petlink.common.domain.base.BaseTimeEntity;
+import com.petlink.funding.domain.Funding;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,8 +24,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "member")
-public class Member extends BaseTimeEntity {
+@Table(name = "manager")
+public class Manager extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false, unique = true, name = "id")
@@ -38,13 +40,13 @@ public class Member extends BaseTimeEntity {
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	@Column(name = "tel", nullable = false)
-	private String tel;
+	@Column(name = "phone_number", nullable = false)
+	private String phoneNumber;
 
-	@Embedded
-	private Address address;
+	@Column(name = "office_number", nullable = false)
+	private String officeNumber;
 
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, name = "status")
-	private MemberStatus status;
+	@OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
+	private List<Funding> fundingList;
+
 }

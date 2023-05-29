@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address {
-	@Column(name = "member_address")
+	@Column(name = "address")
 	private String addressInfo;
+	@Column(name = "detail_address")
 	private String detailAddress;
+	@Column(name = "zip_code")
 	private String zipCode;
 
 	public Address(String zipCode, String addressInfo, String detailAddress) {
