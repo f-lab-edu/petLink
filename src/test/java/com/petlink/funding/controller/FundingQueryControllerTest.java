@@ -15,6 +15,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -22,16 +26,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petlink.config.filter.JwtAuthenticationFilter;
 import com.petlink.funding.domain.FundingCategory;
 import com.petlink.funding.domain.FundingState;
-import com.petlink.funding.dto.response.FundingDetailResponseDto;
-import com.petlink.funding.dto.response.FundingListDto;
+import com.petlink.funding.dto.response.FundingInfoDto;
+import com.petlink.funding.dto.response.FundingSummaryDto;
 import com.petlink.funding.service.FundingService;
 
-@WebMvcTest(controllers = FundingController.class,
+@WebMvcTest(controllers = FundingQueryController.class,
 	excludeFilters = {
 		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 	})
 @AutoConfigureMockMvc(addFilters = false)
-class FundingControllerTest {
+class FundingQueryControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
@@ -43,32 +47,35 @@ class FundingControllerTest {
 	private FundingService fundingService;
 
 	@Test
-	@DisplayName("모든 펀딩 목록을 조회할 수 있다.")
+	@DisplayName("페이징을 사용하여 펀딩 목록을 조회할 수 있다.")
 	void selectFundingList() throws Exception {
 
-		List<FundingListDto> responseDto = List.of(
-			FundingListDto.builder().id(1L).title("title").miniTitle("miniTitle").build(),
-			FundingListDto.builder().id(2L).title("title2").miniTitle("miniTitle2").build()
+		PageRequest pageRequest = PageRequest.of(0, 10);
+		List<FundingSummaryDto> responseDto = List.of(
+			FundingSummaryDto.builder().id(1L).title("title").build(),
+			FundingSummaryDto.builder().id(2L).title("title2").build()
 		);
 
-		when(fundingService.findAllFundingSummaries()).thenReturn(responseDto);
+		Page<FundingSummaryDto> page = new PageImpl<>(responseDto, pageRequest, responseDto.size());
 
-		mockMvc.perform(get("/funding/list"))
+		when(fundingService.getFundingSummaries(any(Pageable.class))).thenReturn(page);
+
+		mockMvc.perform(get("/fundings/queries")
+				.param("page", "0")
+				.param("size", "10"))
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(MediaType.APPLICATION_JSON))
-			.andExpect(jsonPath("$[0].id").value(1L))
-			.andExpect(jsonPath("$[0].title").value("title"))
-			.andExpect(jsonPath("$[0].miniTitle").value("miniTitle"))
-			.andExpect(jsonPath("$[1].id").value(2L))
-			.andExpect(jsonPath("$[1].title").value("title2"))
-			.andExpect(jsonPath("$[1].miniTitle").value("miniTitle2"));
+			.andExpect(jsonPath("$.content[0].id").value(1L))
+			.andExpect(jsonPath("$.content[0].title").value("title"))
+			.andExpect(jsonPath("$.content[1].id").value(2L))
+			.andExpect(jsonPath("$.content[1].title").value("title2"));
 	}
 
 	@Test
 	void testFindById() throws Exception {
 		Long id = 1L;
 
-		FundingDetailResponseDto responseDto = FundingDetailResponseDto.builder()
+		FundingInfoDto responseDto = FundingInfoDto.builder()
 			.id(id)
 			.managerId(1L)
 			.managerName("Manager Name")
@@ -87,7 +94,7 @@ class FundingControllerTest {
 
 		when(fundingService.findById(id)).thenReturn(responseDto);
 
-		mockMvc.perform(get("/funding/" + id))
+		mockMvc.perform(get("/funding/queries" + id))
 			.andExpect(status().isOk())
 			.andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
