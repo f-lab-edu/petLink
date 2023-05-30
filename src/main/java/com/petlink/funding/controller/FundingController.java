@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.petlink.funding.dto.response.FundingDetailResponseDto;
 import com.petlink.funding.dto.response.FundingListDto;
-import com.petlink.funding.dto.response.FundingResponseDto;
 import com.petlink.funding.service.FundingService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,9 +27,8 @@ public class FundingController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<FundingResponseDto> findById(@PathVariable Long id) {
+	public ResponseEntity<FundingDetailResponseDto> findById(@PathVariable Long id) {
 		return ResponseEntity.ok(fundingService.findById(id));
 	}
-
 }
 

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import com.petlink.common.exception.ExceptionCode;
 import com.petlink.common.exception.GlobalException;
 import com.petlink.funding.domain.Funding;
+import com.petlink.funding.dto.response.FundingDetailResponseDto;
 import com.petlink.funding.dto.response.FundingListDto;
-import com.petlink.funding.dto.response.FundingResponseDto;
 import com.petlink.funding.repository.FundingRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,11 @@ public class FundingService {
 		return fundingRepository.findAllFundingSummaries();
 	}
 
-	public FundingResponseDto findById(Long id) {
+	public FundingDetailResponseDto findById(Long id) {
 		Funding funding = fundingRepository.findById(id)
 			.orElseThrow(() -> new GlobalException(ExceptionCode.FUNDING_NOT_FOUND));
 
-		return FundingResponseDto.builder()
+		return FundingDetailResponseDto.builder()
 			.id(funding.getId())
 			.managerId(funding.getManager().getId())
 			.managerName(funding.getManager().getName())

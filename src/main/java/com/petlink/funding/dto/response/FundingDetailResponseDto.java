@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class FundingResponseDto {
+public class FundingDetailResponseDto {
 	private Long id;
 	private Long managerId;
 	private String managerName;
