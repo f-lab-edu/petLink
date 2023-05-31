@@ -15,8 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.petlink.common.util.jwt.JwtTokenProvider;
 import com.petlink.member.domain.Member;
-import com.petlink.member.exception.NotFoundMemberException;
-import com.petlink.member.exception.NotMatchedPasswordException;
+import com.petlink.member.exception.MemberException;
 import com.petlink.member.repository.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,7 +66,8 @@ class AuthenticationServiceTest {
 		when(memberRepository.findByEmail(email)).thenReturn(Optional.empty());
 
 		// then
-		assertThrows(NotFoundMemberException.class, () -> authenticationService.login(email, password));
+		assertThrows(MemberException.class,
+			() -> authenticationService.login(email, password));
 	}
 
 	@Test
@@ -86,6 +86,6 @@ class AuthenticationServiceTest {
 		when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
 
 		// then
-		assertThrows(NotMatchedPasswordException.class, () -> authenticationService.login(email, password));
+		assertThrows(MemberException.class, () -> authenticationService.login(email, password));
 	}
 }
