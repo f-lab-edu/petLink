@@ -26,19 +26,19 @@ import lombok.NoArgsConstructor;
 public class Member extends BaseTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false, unique = true, name = "member_id")
+	@Column(nullable = false, unique = true, name = "id")
 	private Long id;
 
-	@Column(unique = true, name = "member_email", nullable = false)
+	@Column(unique = true, name = "email", nullable = false)
 	private String email;
 
-	@Column(name = "member_name", nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "member_password", nullable = false)
+	@Column(name = "password", nullable = false)
 	private String password;
 
-	@Column(name = "member_tel", nullable = false)
+	@Column(name = "tel", nullable = false)
 	private String tel;
 
 	@Embedded

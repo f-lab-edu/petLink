@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.petlink.common.util.jwt.JwtTokenProvider;
 import com.petlink.member.domain.Member;
-import com.petlink.member.exception.NotFoundMemberException;
-import com.petlink.member.exception.NotMatchedPasswordException;
+import com.petlink.member.exception.MemberException;
+import com.petlink.member.exception.MemberExceptionCode;
 import com.petlink.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -24,10 +24,10 @@ public class AuthenticationService {
 	public String login(String email, String password) {
 		//회원이 존재하지 않을 경우 예외 처리
 		Member member = memberRepository.findByEmail(email)
-			.orElseThrow(() -> new NotFoundMemberException("회원을 찾을 수 없습니다."));
+			.orElseThrow(() -> new MemberException(MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION));
 
 		if (!passwordEncoder.matches(password, member.getPassword())) {
-			throw new NotMatchedPasswordException("비밀번호가 일치하지 않습니다.");
+			throw new MemberException(MemberExceptionCode.NOT_MATCHED_INFOMATION);
 		}
 
 		return jwtTokenProvider.createToken(member);

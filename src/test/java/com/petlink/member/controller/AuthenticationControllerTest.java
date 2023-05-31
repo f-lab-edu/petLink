@@ -20,8 +20,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petlink.common.util.jwt.JwtToken;
 import com.petlink.config.filter.JwtAuthenticationFilter;
-import com.petlink.member.exception.NotFoundMemberException;
-import com.petlink.member.exception.NotMatchedPasswordException;
+import com.petlink.member.exception.MemberException;
+import com.petlink.member.exception.MemberExceptionCode;
 import com.petlink.member.service.AuthenticationService;
 
 @WebMvcTest(controllers = AuthenticationController.class,
@@ -77,7 +77,8 @@ class AuthenticationControllerTest {
 		String email = "id@google.com";
 		String password = "wrong-password";
 
-		when(authenticationService.login(email, password)).thenThrow(new NotFoundMemberException());
+		when(authenticationService.login(email, password)).thenThrow(
+			new MemberException(MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION));
 
 		String requestBodyJson = objectMapper.writeValueAsString(new HashMap<String, String>() {
 			{
@@ -103,7 +104,8 @@ class AuthenticationControllerTest {
 		String email = "id@google.com";
 		String password = "wrong-password";
 
-		when(authenticationService.login(email, password)).thenThrow(new NotMatchedPasswordException());
+		when(authenticationService.login(email, password)).thenThrow(
+			new MemberException(MemberExceptionCode.NOT_MATCHED_INFOMATION));
 
 		String requestBodyJson = objectMapper.writeValueAsString(new HashMap<String, String>() {
 			{
