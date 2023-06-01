@@ -15,9 +15,13 @@ spring:
         ddl-auto: update
 
 
+# AWS properties
 logging:
   level:
     org.hibernate.type: trace
 
-
+# JWT properties
+jwt:
+  secret-key: flab-project-petlink-secret-key-sample
+  expire-length: 86400000 # 1 days
 

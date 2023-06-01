@@ -34,7 +34,7 @@ public class SignUpRequestDto {
 	@Pattern(regexp = "^[0-9]*$", message = "전화번호는 숫자만 가능합니다.")
 	private String tel;
 
-	@Size(max = 5, message = "우편번호는 최대 5자입니다.")
+	@Size(max = 6, message = "우편번호는 최대 5자입니다.")
 	private String zipCode;
 
 	@Size(max = 50, message = "주소는 최대 50자입니다.")

@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.petlink.member.domain.Member;
 import com.petlink.member.dto.request.SignUpRequestDto;
-import com.petlink.member.dto.response.UserInfoResponseDto;
+import com.petlink.member.dto.response.MemberInfoResponseDto;
 import com.petlink.member.repository.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -50,7 +50,7 @@ class MemberServiceTest {
 		when(memberRepository.save(any(Member.class))).thenAnswer(i -> i.getArguments()[0]);
 
 		// When
-		UserInfoResponseDto result = memberService.signUp(signUpRequestDto);
+		MemberInfoResponseDto result = memberService.signUp(signUpRequestDto);
 
 		// Then
 		assertNotNull(result);

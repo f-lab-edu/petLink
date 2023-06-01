@@ -12,8 +12,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.petlink.config.security.customUser.CustomUserDetailsService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
+@Slf4j
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -24,6 +26,7 @@ public class SecurityConfig {
 		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
 		authProvider.setUserDetailsService(customUserDetailsService);
 		authProvider.setPasswordEncoder(passwordEncoder());
+		log.info("authenticationProvider: {}", authProvider);
 		return authProvider;
 	}
 

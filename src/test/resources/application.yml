@@ -25,3 +25,8 @@ spring:
 logging:
   level:
     org.hibernate.type: trace
+
+# JWT properties
+jwt:
+  secret-key: flab-project-petlink-secret-key-sample # secret key
+  expire-length: 86400000 # 1 days
