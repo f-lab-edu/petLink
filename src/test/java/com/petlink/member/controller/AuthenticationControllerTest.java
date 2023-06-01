@@ -124,5 +124,17 @@ class AuthenticationControllerTest {
 		verify(authenticationService, times(1)).login(email, password);
 	}
 
-}
 
+	/*
+	 * 단위 테스트의 범위
+	 *
+	 * 컨트롤러도 하나의 단위로 볼 수 있다.
+	 * Bean 을 띄우는 테스트들이
+	 * WebMvcTest의 경우 매 CI 마다 속도로 인해 테스트하기 힘들다.
+	 *
+	 * 테스트의 중요한점은 속도.
+	 *
+	 *
+	 * 통합 테스트는 별개의 클래스로 CI 과정에서는 무시되도록
+	 * */
+}
