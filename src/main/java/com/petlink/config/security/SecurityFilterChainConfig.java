@@ -28,6 +28,8 @@ public class SecurityFilterChainConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		//토큰으로 ROLE을 처리 하는게 , 더 괜찮을 것 같다.
+
 		return http
 			.formLogin().disable()
 			.csrf().disable()
