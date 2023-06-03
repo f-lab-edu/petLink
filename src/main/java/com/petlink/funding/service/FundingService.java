@@ -21,7 +21,6 @@ public class FundingService {
 
 	public Page<FundingListDto> getFundingList(FundingListRequestDto requestDto, Pageable pageable) {
 
-		fundingRepository.findByAll(requestDto, pageable);
 		return null;
 	}
 
