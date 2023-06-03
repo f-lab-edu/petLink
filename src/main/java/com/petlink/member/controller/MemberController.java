@@ -31,10 +31,6 @@ public class MemberController {
 
 	@GetMapping("/duplicate/{name}")
 	public ResponseEntity<Boolean> checkName(@PathVariable String name) {
-		Boolean nameDuplicated = memberService.isNameDuplicated(name);
-
-		return ResponseEntity
-			.status(Boolean.TRUE.equals(nameDuplicated) ? HttpStatus.CONFLICT : HttpStatus.OK)
-			.body(nameDuplicated);
+		return new ResponseEntity<>(memberService.isNameDuplicated(name), HttpStatus.OK);
 	}
 }
