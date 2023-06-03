@@ -33,7 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtTokenProvider jwtTokenProvider;
-	private final List<String> excludedPaths = List.of("/members/duplicate/**", "/members/signup", "/auth/login");
+	private final List<String> excludedPaths = List.of("/members/duplicate/**", "/members/signup", "/auth/login",
+		"/fundings", "/fundings/**");
 	private final PathMatcher pathMatcher = new AntPathMatcher();
 
 	private static void generateTokenExceptionMessage(HttpServletResponse response, String message) throws IOException {

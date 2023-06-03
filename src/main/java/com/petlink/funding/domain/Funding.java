@@ -67,4 +67,17 @@ public class Funding extends BaseEntity {
 
 	@Column(nullable = false)
 	private Long successDonation;
+
+	@Override
+	public String toString() {
+		return "Funding{" + "id=" + id + ", title='" + title + '\'' + ", miniTitle='" + miniTitle + '\'' +
+			", content='" + content + '\'' +
+			", state=" + state +
+			", category=" + category +
+			", startDate=" + startDate +
+			", endDate=" + endDate +
+			", targetDonation=" + targetDonation +
+			", successDonation=" + successDonation +
+			'}';
+	}
 }

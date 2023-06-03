@@ -1,14 +1,15 @@
 package com.petlink.funding.service;
 
+import static com.petlink.funding.exception.FundingExceptionCode.*;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.petlink.common.exception.ExceptionCode;
-import com.petlink.common.exception.GlobalException;
-import com.petlink.funding.domain.Funding;
-import com.petlink.funding.dto.response.FundingInfoDto;
-import com.petlink.funding.dto.response.FundingSummaryDto;
+import com.petlink.funding.dto.request.FundingListRequestDto;
+import com.petlink.funding.dto.response.DetailInfoResponse;
+import com.petlink.funding.dto.response.FundingListDto;
+import com.petlink.funding.exception.FundingException;
 import com.petlink.funding.repository.FundingRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,39 +19,30 @@ import lombok.RequiredArgsConstructor;
 public class FundingService {
 	private final FundingRepository fundingRepository;
 
-	public Page<FundingSummaryDto> getFundingSummaries(Pageable pageable) {
-		return fundingRepository.findAll(pageable)
-			.map(funding -> FundingSummaryDto.builder()
+	public Page<FundingListDto> getFundingList(FundingListRequestDto requestDto, Pageable pageable) {
+
+		fundingRepository.findByAll(requestDto, pageable);
+		return null;
+	}
+
+	public DetailInfoResponse findById(Long id) {
+		return fundingRepository.findById(id)
+			.map(funding -> DetailInfoResponse.builder()
 				.id(funding.getId())
+				.managerEmail(funding.getManager().getEmail())
+				.managerId(funding.getManager().getId())
+				.managerName(funding.getManager().getName())
+				.phoneNumber(funding.getManager().getPhoneNumber())
 				.title(funding.getTitle())
+				.miniTitle(funding.getMiniTitle())
+				.content(funding.getContent())
 				.state(funding.getState())
 				.category(funding.getCategory())
 				.startDate(funding.getStartDate())
 				.endDate(funding.getEndDate())
 				.targetDonation(funding.getTargetDonation())
-				.build());
+				.successDonation(funding.getSuccessDonation())
+				.build())
+			.orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
 	}
-
-	public FundingInfoDto findById(Long id) {
-		Funding funding = fundingRepository.findById(id)
-			.orElseThrow(() -> new GlobalException(ExceptionCode.FUNDING_NOT_FOUND));
-
-		return FundingInfoDto.builder()
-			.id(funding.getId())
-			.managerId(funding.getManager().getId())
-			.managerName(funding.getManager().getName())
-			.managerEmail(funding.getManager().getEmail())
-			.phoneNumber(funding.getManager().getPhoneNumber())
-			.title(funding.getTitle())
-			.miniTitle(funding.getMiniTitle())
-			.content(funding.getContent())
-			.state(funding.getState())
-			.category(funding.getCategory())
-			.startDate(funding.getStartDate())
-			.endDate(funding.getEndDate())
-			.targetDonation(funding.getTargetDonation())
-			.successDonation(funding.getSuccessDonation())
-			.build();
-	}
-
 }

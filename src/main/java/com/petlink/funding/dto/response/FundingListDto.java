@@ -1,16 +1,24 @@
 package com.petlink.funding.dto.response;
 
+import java.time.LocalDateTime;
+
+import com.petlink.funding.domain.FundingCategory;
+import com.petlink.funding.domain.FundingState;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FundingListDto {
-	private final Long id;
-	private final String title;
-	private final String miniTitle;
-
-	public FundingListDto(Long id, String title, String miniTitle) {
-		this.id = id;
-		this.title = title;
-		this.miniTitle = miniTitle;
-	}
+	private Long id;
+	private String title;
+	private FundingState state;
+	private FundingCategory category;
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
 }

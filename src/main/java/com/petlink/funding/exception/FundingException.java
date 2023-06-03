@@ -2,12 +2,10 @@ package com.petlink.funding.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.petlink.member.exception.MemberExceptionCode;
-
 public class FundingException extends RuntimeException {
-	private final MemberExceptionCode exceptionCode;
+	private final FundingExceptionCode exceptionCode;
 
-	public FundingException(MemberExceptionCode exceptionCode) {
+	public FundingException(FundingExceptionCode exceptionCode) {
 		super(exceptionCode.getMessage());
 		this.exceptionCode = exceptionCode;
 	}

@@ -38,6 +38,8 @@ public class SecurityFilterChainConfig {
 					.requestMatchers(HttpMethod.GET, "/members/duplicate/**").permitAll()
 					.requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+					.requestMatchers(HttpMethod.GET, "/fundings").permitAll()
+					.requestMatchers(HttpMethod.GET, "/fundings/**").permitAll()
 					.anyRequest().authenticated()
 			)
 			.sessionManagement()
