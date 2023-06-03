@@ -30,21 +30,12 @@ public class MemberService {
 		if (Boolean.TRUE.equals(emailDuplicated)) {
 			throw new MemberException(MemberExceptionCode.ALREADY_REGISTERED_MEMBER);
 		}
-		Boolean existsByName = memberRepository.existsByName(signUpRequestDto.getName());
-		if (Boolean.TRUE.equals(existsByName)) {
-			throw new MemberException(MemberExceptionCode.ALREADY_USED_NAME);
-		}
 
 		memberRepository.save(member);
 		return MemberInfoResponseDto.of(member);
 	}
 
 	public Boolean isNameDuplicated(String name) {
-		Boolean existsByName = memberRepository.existsByName(name);
-		if (Boolean.TRUE.equals(existsByName)) {
-			throw new MemberException(MemberExceptionCode.ALREADY_USED_NAME);
-		}
-
-		return Boolean.TRUE;
+		return memberRepository.existsByName(name);
 	}
 }

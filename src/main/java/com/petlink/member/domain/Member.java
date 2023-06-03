@@ -32,7 +32,7 @@ public class Member extends BaseTimeEntity {
 	@Column(unique = true, name = "email", nullable = false)
 	private String email;
 
-	@Column(unique = true, name = "name", nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 
 	@Column(name = "password", nullable = false)
@@ -45,6 +45,6 @@ public class Member extends BaseTimeEntity {
 	private Address address;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, name = "status")
+	@Column(nullable = false)
 	private MemberStatus status;
 }
