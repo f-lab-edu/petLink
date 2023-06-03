@@ -26,9 +26,13 @@ public class MemberService {
 		signUpRequestDto.encodingPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
 		Member member = signUpRequestDto.toEntity();
 
-		Boolean emailDuplicated = memberRepository.existsByEmail(signUpRequestDto.getEmail());
-		if (Boolean.TRUE.equals(emailDuplicated)) {
+		Boolean existsByEmail = memberRepository.existsByEmail(signUpRequestDto.getEmail());
+		if (Boolean.TRUE.equals(existsByEmail)) {
 			throw new MemberException(MemberExceptionCode.ALREADY_REGISTERED_MEMBER);
+		}
+		Boolean existsByName = memberRepository.existsByName(signUpRequestDto.getName());
+		if (Boolean.TRUE.equals(existsByName)) {
+			throw new MemberException(MemberExceptionCode.ALREADY_USED_NAME);
 		}
 
 		memberRepository.save(member);
@@ -36,6 +40,11 @@ public class MemberService {
 	}
 
 	public Boolean isNameDuplicated(String name) {
-		return memberRepository.existsByName(name);
+		Boolean existsByName = memberRepository.existsByName(name);
+		if (Boolean.TRUE.equals(existsByName)) {
+			throw new MemberException(MemberExceptionCode.ALREADY_USED_NAME);
+		}
+
+		return Boolean.TRUE;
 	}
 }
