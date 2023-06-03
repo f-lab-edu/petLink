@@ -22,9 +22,6 @@ spring:
     init:
       mode: always
 
-logging:
-  level:
-    org.hibernate.type: trace
 
 # JWT properties
 jwt:

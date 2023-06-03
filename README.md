@@ -1,6 +1,8 @@
 # 🐕petLink🐳
 
-#### [배포 서버](http://petlink.cloud/) : http://petlink.cloud/
+#### [배포 서버](http://petlink.
+
+cloud/) : http://petlink.cloud/
 
 petLink의 펀딩에 참여해 <br>
 반려동물의 용품을 구매하며 도움이 필요한 동물들에게 도움을 지원할 수 있습니다.<br>
@@ -20,7 +22,8 @@ petLink의 펀딩에 참여해 <br>
 -----
 
 ### 🌐 서버 구조 🌐
-![server_V1.png](.github%2Fresources%2FreadMe_images%2Fserver_V1.png)
+
+![server_V1.png](ReadMe%2Fimages%2Fserver_V1.png)
 -----
 
 ### 🖥️ 사용 기술 및 환경 🖥️
@@ -29,10 +32,22 @@ petLink의 펀딩에 참여해 <br>
 - SpringBoot 3.0.5
 - MySql 8.0
 - JPA
+- QueryDSL
 
 -----
 
 ### 💾 ERD 💾
 
 [ERD LINK ](https://www.erdcloud.com/d/D6fkbZKiwQHX7kddG)
-![erd_V1.png](.github%2Fresources%2FreadMe_images%2Ferd_V1.png)
+<details>
+<summary>V1</summary>
+<div markdown="1">
+
+![erd_V1.png](ReadMe%2Fimages%2Ferd_V1.png)
+
+</div>
+</details>
+
+### v2
+
+![erd_V2.png](ReadMe%2Fimages%2Ferd_V2.png)
