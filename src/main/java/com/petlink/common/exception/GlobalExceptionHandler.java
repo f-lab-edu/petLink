@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.petlink.funding.exception.FundingException;
 import com.petlink.member.exception.MemberException;
@@ -53,6 +54,15 @@ public class GlobalExceptionHandler {
 		FieldError fieldError = bindingResult.getFieldError();
 		String fieldName = Objects.requireNonNull(fieldError).getField();
 		Object rejectedValue = fieldError.getRejectedValue();
+		String errorMessage = "유효하지 않은 파라미터입니다: " + fieldName + " [" + rejectedValue + "]";
+
+		return buildAndReturnResponse(HttpStatus.BAD_REQUEST, errorMessage);
+	}
+
+	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
+	public ResponseEntity<ErrorResponse> handleTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+		String fieldName = exception.getName();
+		String rejectedValue = Objects.requireNonNull(exception.getValue()).toString();
 		String errorMessage = "유효하지 않은 파라미터입니다: " + fieldName + " [" + rejectedValue + "]";
 
 		return buildAndReturnResponse(HttpStatus.BAD_REQUEST, errorMessage);

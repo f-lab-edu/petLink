@@ -1,7 +1,9 @@
 package com.petlink.funding.controller;
 
+import static com.petlink.common.util.date.DateConverter.*;
 import static com.petlink.funding.domain.FundingCategory.*;
 import static com.petlink.funding.domain.FundingState.*;
+import static com.petlink.funding.exception.FundingExceptionCode.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -33,7 +35,9 @@ import com.petlink.config.filter.JwtAuthenticationFilter;
 import com.petlink.funding.domain.FundingCategory;
 import com.petlink.funding.domain.FundingState;
 import com.petlink.funding.dto.request.FundingListRequestDto;
+import com.petlink.funding.dto.response.DetailInfoResponse;
 import com.petlink.funding.dto.response.FundingListResponseDto;
+import com.petlink.funding.exception.FundingException;
 import com.petlink.funding.service.FundingService;
 
 @WebMvcTest(controllers = FundingQueryController.class,
@@ -96,7 +100,7 @@ class FundingQueryControllerTest {
 	}
 
 	@Test
-	@DisplayName("조회 조건에 따른 상태(PROGRESS)를 검증한다.")
+	@DisplayName("상태(PROGRESS) 조회 조건을 가지고  조회한다.")
 	void getFundingListWithStateParam() throws Exception {
 		//given
 		List<FundingCategory> category = List.of(FOOD, CLOTHES);
@@ -125,7 +129,7 @@ class FundingQueryControllerTest {
 	}
 
 	@Test
-	@DisplayName("조회 조건에 따른 카테고리(FOOD, CLOTHES)를 검증한다.")
+	@DisplayName("카테고리(FOOD, CLOTHES) 조회 조건을 가지고  조회한다.")
 	void getFundingListWithCategoryParam() throws Exception {
 		//given
 		List<FundingCategory> category = List.of(FOOD, CLOTHES);
@@ -148,7 +152,6 @@ class FundingQueryControllerTest {
 				.param("page", String.valueOf(pageable.getPageNumber()))
 				.param("size", String.valueOf(pageable.getPageSize())))
 			.andExpect(status().isOk())
-			//모든 category가 FOOD, CLOTHES인지 체크
 			.andExpect(jsonPath("$.content.[*].category", everyItem(in(Arrays.asList("FOOD", "CLOTHES")))))
 			.andDo(print());
 	}
@@ -190,7 +193,7 @@ class FundingQueryControllerTest {
 	}
 
 	@Test
-	@DisplayName("인식할 수 없는 상태를 전달한 경우 에러가 반환된다.")
+	@DisplayName("인식할 수 없는 펀딩 상태를 전달한 경우 에러가 반환된다.")
 	void getFundingListUnrecognizedState() throws Exception {
 		mockMvc.perform(get("/fundings")
 				.param("startDate", "20230101")
@@ -201,4 +204,73 @@ class FundingQueryControllerTest {
 			.andExpect(jsonPath("$.timestamp").exists())
 			.andDo(print());
 	}
+
+	@Test
+	@DisplayName("펀딩 아이디로 펀딩 상세정보를 조회할 수 있다..")
+	void getFundingById() throws Exception {
+		// Given
+		Long id = 1L;
+		DetailInfoResponse mockResponse = DetailInfoResponse.builder()
+			.id(id)
+			.managerId(1L)
+			.managerName("Test Manager")
+			.managerEmail("test@manager.com")
+			.phoneNumber("012-3456-7890")
+			.title("Test Title")
+			.miniTitle("Test Mini Title")
+			.content("Test Content")
+			.state(FundingState.PROGRESS)
+			.category(FundingCategory.FOOD)
+			.startDate(toLocalDateTime("20230101"))
+			.endDate(toLocalDateTime("20231201"))
+			.targetDonation(1000000L)
+			.successDonation(500000L)
+			.build();
+
+		when(fundingService.findById(id)).thenReturn(mockResponse);
+
+		// When & Then
+		mockMvc.perform(get("/fundings/" + id))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.id").value(id))
+			.andExpect(jsonPath("$.managerId").value(mockResponse.getManagerId()))
+			.andExpect(jsonPath("$.managerName").value(mockResponse.getManagerName()))
+			.andExpect(jsonPath("$.managerEmail").value(mockResponse.getManagerEmail()))
+			.andExpect(jsonPath("$.phoneNumber").value(mockResponse.getPhoneNumber()))
+			.andExpect(jsonPath("$.title").value(mockResponse.getTitle()))
+			.andExpect(jsonPath("$.miniTitle").value(mockResponse.getMiniTitle()))
+			.andExpect(jsonPath("$.content").value(mockResponse.getContent()))
+			.andExpect(jsonPath("$.state").value(mockResponse.getState().toString()))
+			.andExpect(jsonPath("$.category").value(mockResponse.getCategory().toString()))
+			.andExpect(jsonPath("$.targetDonation").value(mockResponse.getTargetDonation()))
+			.andExpect(jsonPath("$.successDonation").value(mockResponse.getSuccessDonation()))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("존재하지 않는 펀딩 아이디로 조회할 경우 에러가 반환된다.")
+	void getFundingById_WithInvalidId_ThrowsException() throws Exception {
+		// Arrange
+		Long invalidId = 99999L;
+		when(fundingService.findById(invalidId)).thenThrow(
+			new FundingException(FUNDING_NOT_FOUND));
+
+		// Act & Assert
+		mockMvc.perform(get("/fundings/" + invalidId))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$.status").value("NOT_FOUND"))
+			.andExpect(jsonPath("$.timestamp").exists());
+	}
+
+	@Test
+	@DisplayName("펀딩의 아이디가 NULL 일 경우 예외가 발생한다..")
+	void getFundingById_WithNullId_ThrowsException() throws Exception {
+		when(fundingService.findById(null)).thenThrow(new FundingException(FUNDING_NOT_FOUND));
+
+		mockMvc.perform(get("/fundings/" + null))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.status").value("BAD_REQUEST"))
+			.andExpect(jsonPath("$.timestamp").exists());
+	}
+
 }
