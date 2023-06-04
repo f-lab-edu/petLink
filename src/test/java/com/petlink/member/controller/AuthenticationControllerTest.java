@@ -1,13 +1,17 @@
 package com.petlink.member.controller;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.HashMap;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,7 +19,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petlink.common.util.jwt.JwtToken;
@@ -29,6 +38,7 @@ import com.petlink.member.service.AuthenticationService;
 		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
 	})
 @AutoConfigureMockMvc(addFilters = false)
+@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 class AuthenticationControllerTest {
 
 	@Autowired
@@ -39,6 +49,14 @@ class AuthenticationControllerTest {
 
 	@MockBean
 	private AuthenticationService authenticationService;
+
+	@BeforeEach
+	public void setUp(WebApplicationContext webApplicationContext,
+		RestDocumentationContextProvider restDocumentation) {
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+			.apply(documentationConfiguration(restDocumentation))
+			.build();
+	}
 
 	@Test
 	@DisplayName("로그인에 성공 시 토큰이 쿠키에 등록된다.")
@@ -65,7 +83,16 @@ class AuthenticationControllerTest {
 			// then
 			.andExpect(status().isOk())
 			.andExpect(cookie().exists(JwtToken.JWT_TOKEN.getTokenName()))
-			.andExpect(cookie().value(JwtToken.JWT_TOKEN.getTokenName(), token));
+			.andExpect(cookie().value(JwtToken.JWT_TOKEN.getTokenName(), token))
+			.andDo(document("login",
+				requestFields(
+					fieldWithPath("email").description("로그인할 이메일"),
+					fieldWithPath("password").description("로그인할 비밀번호")
+				),
+				responseFields(
+					fieldWithPath("token").description("JWT 토큰")
+				)
+			));
 
 		verify(authenticationService, times(1)).login(email, password);
 	}

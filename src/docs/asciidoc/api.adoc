@@ -1,0 +1,13 @@
+// 예시
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+
+== REQUEST
+
+include::{snippets}/login/http-request.adoc[]
+
+== RESPONSE
+
+include::{snippets}/login/http-response.adoc[]
+
