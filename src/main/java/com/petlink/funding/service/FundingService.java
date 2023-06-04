@@ -1,14 +1,16 @@
 package com.petlink.funding.service;
 
+import static com.petlink.common.util.date.DateConverter.*;
 import static com.petlink.funding.exception.FundingExceptionCode.*;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
+import com.petlink.funding.domain.Funding;
 import com.petlink.funding.dto.request.FundingListRequestDto;
 import com.petlink.funding.dto.response.DetailInfoResponse;
-import com.petlink.funding.dto.response.FundingListDto;
+import com.petlink.funding.dto.response.FundingListResponseDto;
 import com.petlink.funding.exception.FundingException;
 import com.petlink.funding.repository.FundingRepository;
 
@@ -19,9 +21,32 @@ import lombok.RequiredArgsConstructor;
 public class FundingService {
 	private final FundingRepository fundingRepository;
 
-	public Page<FundingListDto> getFundingList(FundingListRequestDto requestDto, Pageable pageable) {
+	public Slice<FundingListResponseDto> getFundingList(FundingListRequestDto requestDto, Pageable pageable) {
 
-		return null;
+		Slice<Funding> fundingList = fundingRepository.findFundingList(
+			toLocalDateTime(requestDto.getStartDate()),
+			toLocalDateTime(requestDto.getEndDate()),
+			requestDto.getCategory(),
+			requestDto.getState(),
+			pageable);
+
+		if (fundingList.isEmpty()) {
+			throw new FundingException(NO_SEARCH_RESULTS_FOUND);
+		}
+
+		return fundingList
+			.map(this::entityToResponse);
+	}
+
+	private FundingListResponseDto entityToResponse(Funding funding) {
+		return FundingListResponseDto.builder()
+			.id(funding.getId())
+			.title(funding.getTitle())
+			.state(funding.getState())
+			.category(funding.getCategory())
+			.startDate(funding.getStartDate())
+			.endDate(funding.getEndDate())
+			.build();
 	}
 
 	public DetailInfoResponse findById(Long id) {

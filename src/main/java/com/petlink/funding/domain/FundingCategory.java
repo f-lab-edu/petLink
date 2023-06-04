@@ -14,4 +14,5 @@ public enum FundingCategory {
 	ETC("기타");
 
 	private final String category;
+
 }

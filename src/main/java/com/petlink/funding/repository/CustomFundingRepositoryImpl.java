@@ -46,7 +46,7 @@ public class CustomFundingRepositoryImpl implements CustomFundingRepository {
 			.where(builder)
 			.offset(pageable.getOffset())
 			.limit(1L + pageable.getPageSize())
-			.orderBy(funding.startDate.desc())
+			.orderBy(funding.id.asc())
 			.fetch();
 
 		boolean hasNext = results.size() > pageable.getPageSize();

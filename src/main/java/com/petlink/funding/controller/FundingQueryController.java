@@ -1,7 +1,7 @@
 package com.petlink.funding.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.petlink.funding.dto.request.FundingListRequestDto;
 import com.petlink.funding.dto.response.DetailInfoResponse;
-import com.petlink.funding.dto.response.FundingListDto;
+import com.petlink.funding.dto.response.FundingListResponseDto;
 import com.petlink.funding.service.FundingService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,10 +24,11 @@ public class FundingQueryController {
 	private final FundingService fundingService;
 
 	@GetMapping
-	public ResponseEntity<Page<FundingListDto>> getFundingList(
+	public ResponseEntity<Slice<FundingListResponseDto>> getFundingList(
 		@Validated FundingListRequestDto requestDto,
 		Pageable pageable
 	) {
+
 		return ResponseEntity.ok(fundingService.getFundingList(requestDto, pageable));
 	}
 

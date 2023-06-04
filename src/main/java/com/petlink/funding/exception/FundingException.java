@@ -10,6 +10,11 @@ public class FundingException extends RuntimeException {
 		this.exceptionCode = exceptionCode;
 	}
 
+	public FundingException(FundingExceptionCode exceptionCode, String message) {
+		super(exceptionCode.getMessage() + message);
+		this.exceptionCode = exceptionCode;
+	}
+
 	public HttpStatus getHttpStatus() {
 		return exceptionCode.getHttpStatus();
 	}
