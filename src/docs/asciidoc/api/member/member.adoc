@@ -1,0 +1,14 @@
+[[sign-up]]
+== 회원가입
+
+=== 회원가입 요청
+
+include::{snippets}/sign-up/http-request.adoc[]
+include::{snippets}/sign-up/request-fields.adoc[]
+
+=== 회원가입 응답
+
+include::{snippets}/sign-up/http-response.adoc[]
+include::{snippets}/sign-up/response-fields.adoc[]
+
+[[sign-in]]

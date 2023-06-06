@@ -33,7 +33,11 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtTokenProvider jwtTokenProvider;
-	private final List<String> excludedPaths = List.of("/members/duplicate/**", "/members/signup", "/auth/login",
+	private final List<String> excludedPaths = List.of(
+		"/docs/index.html",
+		"/members/duplicate/**",
+		"/members/signup",
+		"/auth/login",
 		"/fundings", "/fundings/**");
 	private final PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -62,6 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(@NotNull HttpServletRequest request,
 		@NotNull HttpServletResponse response,
 		@NotNull FilterChain filterChain) throws ServletException, IOException {
+		log.info("JWT Filtering....{}", request.getServletPath());
 
 		boolean isExcluded = excludedPaths.stream()
 			.anyMatch(p -> pathMatcher.match(p, request.getServletPath()));
@@ -70,8 +75,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
-
-		log.info("JWT Filtering....");
 
 		String token = parseJwtFromCookie(request);
 
