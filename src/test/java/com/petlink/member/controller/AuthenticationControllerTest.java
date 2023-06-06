@@ -119,7 +119,13 @@ class AuthenticationControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestBodyJson)
 			)// then
-			.andExpect(status().isNotFound());
+			.andExpect(status().isNotFound())
+			.andDo(document("login",
+				requestFields(
+					fieldWithPath("email").description("로그인할 이메일"),
+					fieldWithPath("password").description("로그인할 비밀번호")
+				)
+			));
 
 		verify(authenticationService, times(1)).login(email, password);
 	}
@@ -146,7 +152,13 @@ class AuthenticationControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(requestBodyJson)
 			)// then
-			.andExpect(status().isUnauthorized());
+			.andExpect(status().isUnauthorized())
+			.andDo(document("login",
+				requestFields(
+					fieldWithPath("email").description("로그인할 이메일"),
+					fieldWithPath("password").description("로그인할 비밀번호")
+				)
+			));
 
 		verify(authenticationService, times(1)).login(email, password);
 	}

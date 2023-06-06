@@ -1,15 +1,19 @@
 package com.petlink.funding.repository;
 
-import java.time.LocalDateTime;
+import static com.petlink.common.util.date.DateConverter.*;
+import static com.petlink.funding.domain.FundingCategory.*;
+import static com.petlink.funding.domain.FundingState.*;
+import static org.assertj.core.api.Assertions.*;
+
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import com.petlink.config.jpa.QuerydslConfiguration;
@@ -24,21 +28,137 @@ class FundingRepositoryTest {
 	@Autowired
 	FundingRepository fundingRepository;
 
+	@BeforeEach
+	void setUp() {
+		fundingRepository.deleteAll();
+	}
+
+	void setUpData(FundingState state, FundingCategory category, int count) {
+		for (int i = 1; i <= count; i++) {
+			Funding funding = Funding.builder()
+				.title("펀딩 제목 " + i)
+				.miniTitle("펀딩 부제목 " + i)
+				.content("펀딩 내용 " + i)
+				.state(state)
+				.category(category)
+				.startDate(toLocalDateTime("20230501"))
+				.endDate(toLocalDateTime("20230601"))
+				.targetDonation(10000L + i)
+				.successDonation(5000L + i)
+				.build();
+			fundingRepository.save(funding);
+		}
+	}
+
 	@Test
 	@DisplayName("펀딩 목록을 조회할 수 있다.")
 	void findAll() {
-		LocalDateTime startDate = LocalDateTime.of(2023, 1, 1, 0, 0, 0);
-		LocalDateTime endDate = LocalDateTime.of(2023, 12, 1, 0, 0, 0);
+		//given
+		setUpData(PROGRESS, TOY, 3);
+		setUpData(END, FOOD, 5);
 
+		Pageable pageable = Pageable.ofSize(10).withPage(0);
+
+		//when
 		Slice<Funding> fundingList = fundingRepository.findFundingList(
-			startDate,
-			endDate,
-			List.of(FundingCategory.values()),
-			List.of(FundingState.values()),
-			PageRequest.of(0, 2)
+			toLocalDateTime("20230501"),
+			toLocalDateTime("20230601"),
+			null,
+			null,
+			pageable
 		);
 
-		fundingList.forEach(System.out::println);
-		Assertions.assertEquals(2, fundingList.getContent().size());
+		//then
+		assertThat(fundingList).hasSize(8);
+		assertThat(fundingList
+			.stream()
+			.filter(funding -> funding.getCategory() == TOY)
+			.count()).isEqualTo(3);
+		assertThat(fundingList
+			.stream()
+			.filter(funding -> funding.getCategory() == FOOD)
+			.count()).isEqualTo(5);
+	}
+
+	@Test
+	@DisplayName("펀딩 목록을 조회할 수 있다. - 카테고리")
+	void findAllByCategory() {
+		//given
+		setUpData(PROGRESS, TOY, 3);
+		setUpData(END, FOOD, 5);
+
+		Pageable pageable = Pageable.ofSize(10).withPage(0);
+
+		//when
+		Slice<Funding> fundingList = fundingRepository.findFundingList(
+			toLocalDateTime("20230501"),
+			toLocalDateTime("20230601"),
+			List.of(TOY),
+			null,
+			pageable
+		);
+
+		//then
+		assertThat(fundingList).hasSize(3);
+		assertThat(fundingList
+			.stream()
+			.filter(funding -> funding.getCategory() == TOY)
+			.count()).isEqualTo(3);
+	}
+
+	@Test
+	@DisplayName("펀딩 목록을 조회할 수 있다. - 상태")
+	void findAllByState() {
+		//given
+		setUpData(PROGRESS, TOY, 3);
+		setUpData(END, FOOD, 5);
+
+		Pageable pageable = Pageable.ofSize(10).withPage(0);
+
+		//when
+		Slice<Funding> fundingList = fundingRepository.findFundingList(
+			toLocalDateTime("20230501"),
+			toLocalDateTime("20230601"),
+			null,
+			List.of(PROGRESS),
+			pageable
+		);
+
+		//then
+		assertThat(fundingList).hasSize(3);
+		assertThat(fundingList
+			.stream()
+			.filter(funding -> funding.getState() == PROGRESS)
+			.count()).isEqualTo(3);
+	}
+
+	@Test
+	@DisplayName("펀딩 목록을 조회할 수 있다. - 카테고리, 상태")
+	void findAllByCategoryAndState() {
+		//given
+		setUpData(PROGRESS, TOY, 3);
+		setUpData(END, FOOD, 5);
+
+		Pageable pageable = Pageable.ofSize(10).withPage(0);
+
+		//when
+		Slice<Funding> fundingList = fundingRepository.findFundingList(
+			toLocalDateTime("20230501"),
+			toLocalDateTime("20230601"),
+			List.of(TOY),
+			List.of(PROGRESS),
+			pageable
+		);
+
+		//then
+		assertThat(fundingList).hasSize(3);
+		assertThat(fundingList
+			.stream()
+			.filter(funding -> funding.getCategory() == TOY)
+			.count()).isEqualTo(3);
+		assertThat(fundingList
+			.stream()
+			.filter(funding -> funding.getState() == PROGRESS)
+			.count()).isEqualTo(3);
 	}
 }
