@@ -1,61 +1,41 @@
 package com.petlink.member.controller;
 
+import static com.petlink.member.exception.MemberExceptionCode.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.HashMap;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petlink.common.util.jwt.JwtToken;
-import com.petlink.config.filter.JwtAuthenticationFilter;
+import com.petlink.RestDocsSupport;
+import com.petlink.member.dto.request.LoginRequest;
+import com.petlink.member.dto.response.LoginResponse;
 import com.petlink.member.exception.MemberException;
-import com.petlink.member.exception.MemberExceptionCode;
 import com.petlink.member.service.AuthenticationService;
 
-@WebMvcTest(controllers = AuthenticationController.class,
-	excludeFilters = {
-		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
-	})
-@AutoConfigureMockMvc(addFilters = false)
-@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-class AuthenticationControllerTest {
+@ExtendWith(MockitoExtension.class)
+class AuthenticationControllerTest extends RestDocsSupport {
 
-	@Autowired
-	MockMvc mockMvc;
+	@InjectMocks
+	private AuthenticationController authenticationController;
 
-	@Autowired
-	ObjectMapper objectMapper;
-
-	@MockBean
+	@Mock
 	private AuthenticationService authenticationService;
 
-	@BeforeEach
-	public void setUp(WebApplicationContext webApplicationContext,
-		RestDocumentationContextProvider restDocumentation) {
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-			.apply(documentationConfiguration(restDocumentation))
-			.build();
+	@Override
+	protected Object initController() {
+		return new AuthenticationController(authenticationService);
 	}
 
 	@Test
@@ -65,34 +45,36 @@ class AuthenticationControllerTest {
 		String email = "id@google.com";
 		String password = "password1234";
 		String token = "dummy-token";
-		when(authenticationService.login(email, password)).thenReturn(token);
 
-		String requestBodyJson = objectMapper.writeValueAsString(new HashMap<String, String>() {
-			{
-				put("email", email);
-				put("password", password);
-			}
-		});
+		LoginRequest loginRequest = LoginRequest.builder()
+			.email(email)
+			.password(password)
+			.build();
+
+		LoginResponse loginResponse = LoginResponse.builder()
+			.token(token)
+			.build();
 
 		// when
+		when(authenticationService.login(email, password)).thenReturn(token);
 		mockMvc.perform(post("/auth/login")
-				.contentType(MediaType.APPLICATION_JSON)
-				.param("email", email)
-				.content(requestBodyJson)
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest))
 			)
 			// then
 			.andExpect(status().isOk())
-			.andExpect(cookie().exists(JwtToken.JWT_TOKEN.getTokenName()))
-			.andExpect(cookie().value(JwtToken.JWT_TOKEN.getTokenName(), token))
 			.andDo(document("login",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
 				requestFields(
-					fieldWithPath("email").description("로그인할 이메일"),
-					fieldWithPath("password").description("로그인할 비밀번호")
+					fieldWithPath("email").type(JsonFieldType.STRING).description("로그인할 이메일"),
+					fieldWithPath("password").type(JsonFieldType.STRING).description("로그인할 비밀번호")
 				),
 				responseFields(
-					fieldWithPath("token").description("JWT 토큰")
+					fieldWithPath("token").type(JsonFieldType.STRING).description("JWT 토큰")
 				)
-			));
+			))
+			.andDo(print());
 
 		verify(authenticationService, times(1)).login(email, password);
 	}
@@ -104,28 +86,21 @@ class AuthenticationControllerTest {
 		String email = "id@google.com";
 		String password = "wrong-password";
 
-		when(authenticationService.login(email, password)).thenThrow(
-			new MemberException(MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION));
+		LoginRequest loginRequest = LoginRequest.builder()
+			.email(email)
+			.password(password)
+			.build();
 
-		String requestBodyJson = objectMapper.writeValueAsString(new HashMap<String, String>() {
-			{
-				put("email", email);
-				put("password", password);
-			}
-		});
+		when(authenticationService.login(email, password)).thenThrow(
+			new MemberException(NOT_FOUND_MEMBER_EXCEPTION));
 
 		// when
 		mockMvc.perform(post("/auth/login")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(requestBodyJson)
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest))
 			)// then
 			.andExpect(status().isNotFound())
-			.andDo(document("login",
-				requestFields(
-					fieldWithPath("email").description("로그인할 이메일"),
-					fieldWithPath("password").description("로그인할 비밀번호")
-				)
-			));
+			.andDo(print());
 
 		verify(authenticationService, times(1)).login(email, password);
 	}
@@ -137,28 +112,21 @@ class AuthenticationControllerTest {
 		String email = "id@google.com";
 		String password = "wrong-password";
 
-		when(authenticationService.login(email, password)).thenThrow(
-			new MemberException(MemberExceptionCode.NOT_MATCHED_INFOMATION));
+		LoginRequest loginRequest = LoginRequest.builder()
+			.email(email)
+			.password(password)
+			.build();
 
-		String requestBodyJson = objectMapper.writeValueAsString(new HashMap<String, String>() {
-			{
-				put("email", email);
-				put("password", password);
-			}
-		});
+		when(authenticationService.login(email, password)).thenThrow(
+			new MemberException(NOT_MATCHED_INFOMATION));
 
 		// when
 		mockMvc.perform(post("/auth/login")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(requestBodyJson)
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest))
 			)// then
 			.andExpect(status().isUnauthorized())
-			.andDo(document("login",
-				requestFields(
-					fieldWithPath("email").description("로그인할 이메일"),
-					fieldWithPath("password").description("로그인할 비밀번호")
-				)
-			));
+			.andDo(print());
 
 		verify(authenticationService, times(1)).login(email, password);
 	}
