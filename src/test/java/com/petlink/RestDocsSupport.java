@@ -1,4 +1,4 @@
-package com.petlink.docs;
+package com.petlink;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
 

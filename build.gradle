@@ -106,17 +106,15 @@ bootJar {
 
 
 tasks.register('cleanDocs', Delete) {
-    delete 'docs' // 경로 수정
+    delete 'docs'
 }
 
-clean.dependsOn cleanDocs
-
 tasks.register('copyRestDocs', Copy) {
-    dependsOn asciidoctor
+    dependsOn asciidoctor, cleanDocs
     from file("build/docs/asciidoc/index.html") // 복사할 파일 위치
     into 'docs' // 경로 수정
 }
 
 build {
-    dependsOn clean, copyRestDocs
+    dependsOn copyRestDocs
 }

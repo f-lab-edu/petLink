@@ -12,5 +12,7 @@ endif::[]
 [[Member]]
 == Member API
 
-include::api/member/member.adoc[]
+include::api/member/sign-up.adoc[]
+include::api/member/name-duplicate.adoc[]
+include::api/member/login.adoc[]
 

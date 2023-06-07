@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.MemberInfoResponseDto;
+import com.petlink.member.dto.response.NameCheckResponse;
 import com.petlink.member.service.MemberService;
 
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class MemberController {
 	}
 
 	@GetMapping("/duplicate/{name}")
-	public ResponseEntity<Boolean> checkName(@PathVariable String name) {
-		return new ResponseEntity<>(memberService.isNameDuplicated(name), HttpStatus.OK);
+	public ResponseEntity<NameCheckResponse> checkName(@PathVariable String name) {
+		return ResponseEntity.ok(memberService.isNameDuplicated(name));
 	}
 }
