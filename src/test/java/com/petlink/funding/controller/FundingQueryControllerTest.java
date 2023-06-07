@@ -83,6 +83,79 @@ class FundingQueryControllerTest extends RestDocsSupport {
 	}
 
 	@Test
+	@DisplayName("문서 생성 테스트")
+	void getFundingListDocs() throws Exception {
+
+		FundingListRequestDto requestDto = FundingListRequestDto.builder()
+			.startDate("20230101")
+			.endDate("20231231")
+			.category(List.of(FundingCategory.values()))
+			.state(List.of(FundingState.values()))
+			.build();
+
+		Pageable pageable = PageRequest.of(0, 2);
+
+		List<FundingListResponseDto> mockDtoList = createMockDtoList(2, null, null);
+
+		Slice<FundingListResponseDto> mockSlice = new PageImpl<>(mockDtoList, pageable, mockDtoList.size());
+
+		when(fundingService.getFundingList(ArgumentMatchers.any(FundingListRequestDto.class),
+			ArgumentMatchers.any(Pageable.class))).thenReturn(
+			mockSlice);
+
+		mockMvc.perform(get("/fundings")
+				.param("startDate", "20230101")
+				.param("endDate", "20231231")
+				.param("category", "TOY, FOOD, ETC")
+				.param("state", "END , PROGRESS")
+				.param("page", "0")
+				.param("size", "2")
+			)
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andDo(document("fundings/get-list",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				queryParameters(
+					parameterWithName("startDate").description("조회 시작일"),
+					parameterWithName("endDate").description("조회 종료일"),
+					parameterWithName("category").description("펀딩 카테고리"),
+					parameterWithName("state").description("펀딩 상태"),
+					parameterWithName("page").description("페이지 번호"),
+					parameterWithName("size").description("페이지 사이즈")
+				),
+				responseFields(
+					fieldWithPath("content").type(JsonFieldType.ARRAY).description("펀딩 목록"),
+					fieldWithPath("content[].id").type(JsonFieldType.NUMBER).description("펀딩 ID"),
+					fieldWithPath("content[].title").type(JsonFieldType.STRING).description("펀딩 제목"),
+					fieldWithPath("content[].state").type(JsonFieldType.STRING).description("펀딩 상태"),
+					fieldWithPath("content[].category").type(JsonFieldType.STRING).description("펀딩 카테고리"),
+					fieldWithPath("content[].startDate").type(JsonFieldType.ARRAY).description("펀딩 시작일"),
+					fieldWithPath("content[].endDate").type(JsonFieldType.ARRAY).description("펀딩 종료일"),
+					fieldWithPath("pageable.sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 정보가 비어있는지 여부"),
+					fieldWithPath("pageable.sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않은 상태인지 여부"),
+					fieldWithPath("pageable.sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬된 상태인지 여부"),
+					fieldWithPath("pageable.offset").type(JsonFieldType.NUMBER).description("페이지 오프셋"),
+					fieldWithPath("pageable.pageNumber").type(JsonFieldType.NUMBER).description("페이지 번호"),
+					fieldWithPath("pageable.pageSize").type(JsonFieldType.NUMBER).description("페이지 크기"),
+					fieldWithPath("pageable.paged").type(JsonFieldType.BOOLEAN).description("페이징 여부"),
+					fieldWithPath("pageable.unpaged").type(JsonFieldType.BOOLEAN).description("페이징 되지 않았는지 여부"),
+					fieldWithPath("last").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부"),
+					fieldWithPath("totalPages").type(JsonFieldType.NUMBER).description("총 페이지 수"),
+					fieldWithPath("totalElements").type(JsonFieldType.NUMBER).description("총 요소 수"),
+					fieldWithPath("size").type(JsonFieldType.NUMBER).description("페이지 사이즈"),
+					fieldWithPath("number").type(JsonFieldType.NUMBER).description("페이지 번호"),
+					fieldWithPath("sort.empty").type(JsonFieldType.BOOLEAN).description("정렬 정보가 비어있는지 여부"),
+					fieldWithPath("sort.unsorted").type(JsonFieldType.BOOLEAN).description("정렬되지 않은 상태인지 여부"),
+					fieldWithPath("sort.sorted").type(JsonFieldType.BOOLEAN).description("정렬된 상태인지 여부"),
+					fieldWithPath("first").type(JsonFieldType.BOOLEAN).description("첫번째 페이지 여부"),
+					fieldWithPath("numberOfElements").type(JsonFieldType.NUMBER).description("현재 페이지의 요소 수"),
+					fieldWithPath("empty").type(JsonFieldType.BOOLEAN).description("페이지가 비어있는지 여부")
+				)));
+
+	}
+
+	@Test
 	@DisplayName("최소한의 검색 조건으로 펀딩 목록을 조회한다.")
 	void getFundingList() throws Exception {
 

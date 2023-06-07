@@ -10,13 +10,14 @@ endif::[]
 :sectlinks:
 
 [[Members]]
-== Member API
+= Member API
 
 include::api/member/sign-up.adoc[]
 include::api/member/name-duplicate.adoc[]
 include::api/member/login.adoc[]
 
 [[Fundings]]
-== Funding API
+= Funding API
 
+include::api/funding/get-list.adoc[]
 include::api/funding/get-by-id.adoc[]
