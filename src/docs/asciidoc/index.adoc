@@ -9,10 +9,14 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
-[[Member]]
+[[Members]]
 == Member API
 
 include::api/member/sign-up.adoc[]
 include::api/member/name-duplicate.adoc[]
 include::api/member/login.adoc[]
 
+[[Fundings]]
+== Funding API
+
+include::api/funding/get-by-id.adoc[]

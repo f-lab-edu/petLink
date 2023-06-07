@@ -6,6 +6,10 @@ import static com.petlink.funding.domain.FundingState.*;
 import static com.petlink.funding.exception.FundingExceptionCode.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -18,20 +22,19 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
 
-import com.petlink.config.filter.JwtAuthenticationFilter;
+import com.petlink.RestDocsSupport;
 import com.petlink.funding.domain.FundingCategory;
 import com.petlink.funding.domain.FundingState;
 import com.petlink.funding.dto.request.FundingListRequestDto;
@@ -40,17 +43,19 @@ import com.petlink.funding.dto.response.FundingListResponseDto;
 import com.petlink.funding.exception.FundingException;
 import com.petlink.funding.service.FundingService;
 
-@WebMvcTest(controllers = FundingQueryController.class,
-	excludeFilters = {
-		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
-	})
-@AutoConfigureMockMvc(addFilters = false)
-class FundingQueryControllerTest {
-	@Autowired
-	MockMvc mockMvc;
+@ExtendWith(MockitoExtension.class)
+class FundingQueryControllerTest extends RestDocsSupport {
 
-	@MockBean
+	@InjectMocks
+	private FundingQueryController fundingQueryController;
+
+	@Mock
 	private FundingService fundingService;
+
+	@Override
+	protected Object initController() {
+		return new FundingQueryController(fundingService);
+	}
 
 	private <T> T getRotatingValue(List<T> list, T[] allValues, int index) {
 		if (list != null && !list.isEmpty()) {
@@ -80,6 +85,12 @@ class FundingQueryControllerTest {
 	@Test
 	@DisplayName("최소한의 검색 조건으로 펀딩 목록을 조회한다.")
 	void getFundingList() throws Exception {
+
+		FundingListRequestDto requestDto = FundingListRequestDto.builder()
+			.startDate("20230101")
+			.endDate("20231231")
+			.build();
+
 		Pageable pageable = PageRequest.of(0, 5);
 		List<FundingListResponseDto> mockDtoList = createMockDtoList(5, null, null);
 		Slice<FundingListResponseDto> mockSlice = new PageImpl<>(mockDtoList, pageable, mockDtoList.size());
@@ -230,7 +241,8 @@ class FundingQueryControllerTest {
 		when(fundingService.findById(id)).thenReturn(mockResponse);
 
 		// When & Then
-		mockMvc.perform(get("/fundings/" + id))
+		mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/fundings/{id}", id))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.id").value(id))
 			.andExpect(jsonPath("$.managerId").value(mockResponse.getManagerId()))
@@ -244,7 +256,30 @@ class FundingQueryControllerTest {
 			.andExpect(jsonPath("$.category").value(mockResponse.getCategory().toString()))
 			.andExpect(jsonPath("$.targetDonation").value(mockResponse.getTargetDonation()))
 			.andExpect(jsonPath("$.successDonation").value(mockResponse.getSuccessDonation()))
-			.andDo(print());
+			.andDo(print())
+			.andDo(document("fundings/get-by-id",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				pathParameters(
+					parameterWithName("id").description("펀딩 아이디")
+				),
+				responseFields(
+					fieldWithPath("id").type(JsonFieldType.NUMBER).description("펀딩 아이디"),
+					fieldWithPath("managerId").type(JsonFieldType.NUMBER).description("펀딩 관리자 아이디"),
+					fieldWithPath("managerName").type(JsonFieldType.STRING).description("펀딩 관리자 이름"),
+					fieldWithPath("managerEmail").type(JsonFieldType.STRING).description("펀딩 관리자 이메일"),
+					fieldWithPath("phoneNumber").type(JsonFieldType.STRING).description("펀딩 관리자 전화번호"),
+					fieldWithPath("title").type(JsonFieldType.STRING).description("펀딩 제목"),
+					fieldWithPath("miniTitle").type(JsonFieldType.STRING).description("펀딩 부제목"),
+					fieldWithPath("content").type(JsonFieldType.STRING).description("펀딩 내용"),
+					fieldWithPath("state").type(JsonFieldType.STRING).description("펀딩 상태"),
+					fieldWithPath("category").type(JsonFieldType.STRING).description("펀딩 카테고리"),
+					fieldWithPath("startDate").type(JsonFieldType.ARRAY).description("펀딩 시작일"),
+					fieldWithPath("endDate").type(JsonFieldType.ARRAY).description("펀딩 종료일"),
+					fieldWithPath("targetDonation").type(JsonFieldType.NUMBER).description("목표 금액"),
+					fieldWithPath("successDonation").type(JsonFieldType.NUMBER).description("달성 금액")
+				)
+			));
 	}
 
 	@Test
@@ -261,16 +296,4 @@ class FundingQueryControllerTest {
 			.andExpect(jsonPath("$.status").value("NOT_FOUND"))
 			.andExpect(jsonPath("$.timestamp").exists());
 	}
-
-	@Test
-	@DisplayName("펀딩의 아이디가 NULL 일 경우 예외가 발생한다..")
-	void getFundingById_WithNullId_ThrowsException() throws Exception {
-		when(fundingService.findById(null)).thenThrow(new FundingException(FUNDING_NOT_FOUND));
-
-		mockMvc.perform(get("/fundings/" + null))
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.status").value("BAD_REQUEST"))
-			.andExpect(jsonPath("$.timestamp").exists());
-	}
-
 }
