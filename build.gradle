@@ -103,3 +103,20 @@ bootJar {
         into 'static/docs'
     }
 }
+
+
+tasks.register('cleanDocs', Delete) {
+    delete 'docs' // 경로 수정
+}
+
+clean.dependsOn cleanDocs
+
+tasks.register('copyRestDocs', Copy) {
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc/index.html") // 복사할 파일 위치
+    into 'docs' // 경로 수정
+}
+
+build {
+    dependsOn clean, copyRestDocs
+}
