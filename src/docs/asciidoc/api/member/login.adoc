@@ -1,14 +1,14 @@
 [[login]]
-== 로그인
+=== 로그인
 
-=== 로그인 요청
+==== 로그인 요청
 
-include::{snippets}/login/http-request.adoc[]
-include::{snippets}/login/request-fields.adoc[]
+include::{snippets}/member/login/http-request.adoc[]
+include::{snippets}/member/login/request-fields.adoc[]
 
-=== 로그인 응답
+==== 로그인 응답
 
-include::{snippets}/login/http-response.adoc[]
-include::{snippets}/login/response-fields.adoc[]
+include::{snippets}/member/login/http-response.adoc[]
+include::{snippets}/member/login/response-fields.adoc[]
 
 [[login]]

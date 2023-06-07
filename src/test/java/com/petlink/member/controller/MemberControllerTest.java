@@ -69,7 +69,7 @@ class MemberControllerTest extends RestDocsSupport {
 			.andExpect(status().isCreated())
 			.andExpect(jsonPath("id").value(response.getId()))
 			.andExpect(status().isCreated())
-			.andDo(document("sign-up",
+			.andDo(document("member/sign-up",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				requestFields(
@@ -104,7 +104,7 @@ class MemberControllerTest extends RestDocsSupport {
 			)
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("isOk").value(response.getIsOk()))
-			.andDo(document("name-duplicate",
+			.andDo(document("member/name-duplicate",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				pathParameters(

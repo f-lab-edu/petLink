@@ -63,7 +63,7 @@ class AuthenticationControllerTest extends RestDocsSupport {
 			)
 			// then
 			.andExpect(status().isOk())
-			.andDo(document("login",
+			.andDo(document("member/login",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				requestFields(

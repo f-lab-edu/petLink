@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>PetLink REST API 문서</title>
+<title>PetLink API 명세</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -440,61 +440,121 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>PetLink REST API 문서</h1>
+<h1>PetLink API 명세</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-<ul class="sectlevel0">
-<li><a href="#Members">Member API</a>
 <ul class="sectlevel1">
-<li><a href="#sign-up">회원가입</a>
+<li><a href="#_목차">1. 목차</a></li>
+<li><a href="#overview">2. Overview</a>
 <ul class="sectlevel2">
-<li><a href="#_회원가입_요청">회원가입 요청</a></li>
-<li><a href="#_회원가입_응답">회원가입 응답</a></li>
+<li><a href="#overview-host">2.1. Host</a></li>
+<li><a href="#overview-http-status-codes">2.2. HTTP status codes</a></li>
 </ul>
 </li>
-<li><a href="#name-duplicate">이름(닉네임) 중복 체크</a>
+<li><a href="#Members">3. Member API</a>
 <ul class="sectlevel2">
-<li><a href="#_이름닉네임_중복_체크_요청">이름(닉네임) 중복 체크  요청</a></li>
-<li><a href="#_이름닉네임_중복_체크_응답">이름(닉네임) 중복 체크  응답</a></li>
+<li><a href="#sign-up">3.1. 회원가입</a></li>
+<li><a href="#name-duplicate">3.2. 이름(닉네임) 중복 체크</a></li>
+<li><a href="#login">3.3. 로그인</a></li>
 </ul>
 </li>
-<li><a href="#login">로그인</a>
+<li><a href="#Fundings">4. Funding API</a>
 <ul class="sectlevel2">
-<li><a href="#_로그인_요청">로그인 요청</a></li>
-<li><a href="#_로그인_응답">로그인 응답</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#Fundings">Funding API</a>
-<ul class="sectlevel1">
-<li><a href="#get-list">펀딩 목록 조회</a>
-<ul class="sectlevel2">
-<li><a href="#_펀딩_목록_요청">펀딩 목록 요청</a></li>
-<li><a href="#_펀딩_목록_응답">펀딩 목록 응답</a></li>
-</ul>
-</li>
-<li><a href="#get-by-id">펀딩 상세 조회</a>
-<ul class="sectlevel2">
-<li><a href="#_펀딩_상세_조회_요청">펀딩 상세 조회 요청</a></li>
-<li><a href="#_펀딩_상세_조회_응답">펀딩 상세 조회 응답</a></li>
-</ul>
-</li>
+<li><a href="#get-list">4.1. 펀딩 목록 조회</a></li>
+<li><a href="#get-by-id">4.2. 펀딩 상세 조회</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
-<h1 id="Members" class="sect0"><a class="link" href="#Members">Member API</a></h1>
 <div class="sect1">
-<h2 id="sign-up"><a class="link" href="#sign-up">회원가입</a></h2>
+<h2 id="_목차"><a class="link" href="#_목차">1. 목차</a></h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="overview"><a class="link" href="#overview">2. Overview</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_회원가입_요청"><a class="link" href="#_회원가입_요청">회원가입 요청</a></h3>
+<h3 id="overview-host"><a class="link" href="#overview-host">2.1. Host</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">환경</th>
+<th class="tableblock halign-left valign-top">Host</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Production</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>petlink.cloud</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Docs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">'https://f-lab-edu.github.io/petLink/'</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="overview-http-status-codes"><a class="link" href="#overview-http-status-codes">2.2. HTTP status codes</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">상태 코드</th>
+<th class="tableblock halign-left valign-top">설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>200 OK</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">성공</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>400 Bad Request</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">잘못된 요청</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>401 Unauthorized</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">비인증 상태</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>403 Forbidden</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">권한 거부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>404 Not Found</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">존재하지 않는 요청 리소스</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>500 Internal Server Error</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">서버 에러</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="Members"><a class="link" href="#Members">3. Member API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="sign-up"><a class="link" href="#sign-up">3.1. 회원가입</a></h3>
+<div class="sect3">
+<h4 id="_회원가입_요청"><a class="link" href="#_회원가입_요청">3.1.1. 회원가입 요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /members/signup HTTP/1.1
@@ -513,8 +573,9 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_request_fields"><a class="link" href="#_request_fields">Request Fields</a></h4>
+<h4 id="_request_fields"><a class="link" href="#_request_fields">3.1.2. Request Fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -576,9 +637,8 @@ Host: localhost:8080
 </tbody>
 </table>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_회원가입_응답"><a class="link" href="#_회원가입_응답">회원가입 응답</a></h3>
+<div class="sect3">
+<h4 id="_회원가입_응답"><a class="link" href="#_회원가입_응답">3.1.3. 회원가입 응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -592,8 +652,9 @@ Content-Length: 69
 }</code></pre>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_response_fields"><a class="link" href="#_response_fields">Response Fields</a></h4>
+<h4 id="_response_fields"><a class="link" href="#_response_fields">3.1.4. Response Fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -632,13 +693,10 @@ Content-Length: 69
 </table>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="name-duplicate"><a class="link" href="#name-duplicate">이름(닉네임) 중복 체크</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_이름닉네임_중복_체크_요청"><a class="link" href="#_이름닉네임_중복_체크_요청">이름(닉네임) 중복 체크  요청</a></h3>
+<h3 id="name-duplicate"><a class="link" href="#name-duplicate">3.2. 이름(닉네임) 중복 체크</a></h3>
+<div class="sect3">
+<h4 id="_이름닉네임_중복_체크_요청"><a class="link" href="#_이름닉네임_중복_체크_요청">3.2.1. 이름(닉네임) 중복 체크  요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /members/duplicate/TestName HTTP/1.1
@@ -665,8 +723,8 @@ Host: localhost:8080</code></pre>
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_이름닉네임_중복_체크_응답"><a class="link" href="#_이름닉네임_중복_체크_응답">이름(닉네임) 중복 체크  응답</a></h3>
+<div class="sect3">
+<h4 id="_이름닉네임_중복_체크_응답"><a class="link" href="#_이름닉네임_중복_체크_응답">3.2.2. 이름(닉네임) 중복 체크  응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -678,8 +736,9 @@ Content-Length: 19
 }</code></pre>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_response_fields_2"><a class="link" href="#_response_fields_2">Response Fields</a></h4>
+<h4 id="_response_fields_2"><a class="link" href="#_response_fields_2">3.2.3. Response Fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -706,13 +765,10 @@ Content-Length: 19
 </table>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="login"><a class="link" href="#login">로그인</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_로그인_요청"><a class="link" href="#_로그인_요청">로그인 요청</a></h3>
+<h3 id="login"><a class="link" href="#login">3.3. 로그인</a></h3>
+<div class="sect3">
+<h4 id="_로그인_요청"><a class="link" href="#_로그인_요청">3.3.1. 로그인 요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /auth/login HTTP/1.1
@@ -726,8 +782,9 @@ Host: localhost:8080
 }</code></pre>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_request_fields_2"><a class="link" href="#_request_fields_2">Request Fields</a></h4>
+<h4 id="_request_fields_2"><a class="link" href="#_request_fields_2">3.3.2. Request Fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -759,13 +816,12 @@ Host: localhost:8080
 </tbody>
 </table>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_로그인_응답"><a class="link" href="#_로그인_응답">로그인 응답</a></h3>
+<div class="sect3">
+<h4 id="_로그인_응답"><a class="link" href="#_로그인_응답">3.3.3. 로그인 응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Set-Cookie: jwt-token=dummy-token; Path=/; Max-Age=3600; Expires=Wed, 07 Jun 2023 15:33:58 GMT
+Set-Cookie: jwt-token=dummy-token; Path=/; Max-Age=3600; Expires=Wed, 07 Jun 2023 15:55:11 GMT
 Content-Type: application/json
 Content-Length: 29
 
@@ -774,8 +830,9 @@ Content-Length: 29
 }</code></pre>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_response_fields_3"><a class="link" href="#_response_fields_3">Response Fields</a></h4>
+<h4 id="_response_fields_3"><a class="link" href="#_response_fields_3">3.3.4. Response Fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -804,12 +861,13 @@ Content-Length: 29
 </div>
 </div>
 </div>
-<h1 id="Fundings" class="sect0"><a class="link" href="#Fundings">Funding API</a></h1>
 <div class="sect1">
-<h2 id="get-list"><a class="link" href="#get-list">펀딩 목록 조회</a></h2>
+<h2 id="Fundings"><a class="link" href="#Fundings">4. Funding API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_펀딩_목록_요청"><a class="link" href="#_펀딩_목록_요청">펀딩 목록 요청</a></h3>
+<h3 id="get-list"><a class="link" href="#get-list">4.1. 펀딩 목록 조회</a></h3>
+<div class="sect3">
+<h4 id="_펀딩_목록_요청"><a class="link" href="#_펀딩_목록_요청">4.1.1. 펀딩 목록 요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /fundings?startDate=20230101&amp;endDate=20231231&amp;category=TOY%2C+FOOD%2C+ETC&amp;state=END+%2C+PROGRESS&amp;page=0&amp;size=2 HTTP/1.1
@@ -855,8 +913,8 @@ Host: localhost:8080</code></pre>
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_펀딩_목록_응답"><a class="link" href="#_펀딩_목록_응답">펀딩 목록 응답</a></h3>
+<div class="sect3">
+<h4 id="_펀딩_목록_응답"><a class="link" href="#_펀딩_목록_응답">4.1.2. 펀딩 목록 응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -907,8 +965,9 @@ Content-Length: 827
 }</code></pre>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_response_fields_4"><a class="link" href="#_response_fields_4">Response Fields</a></h4>
+<h4 id="_response_fields_4"><a class="link" href="#_response_fields_4">4.1.3. Response Fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1067,7 +1126,7 @@ Content-Length: 827
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>first</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">첫 페이지 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">첫번째 페이지 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>numberOfElements</code></p></td>
@@ -1085,13 +1144,10 @@ Content-Length: 827
 </table>
 </div>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="get-by-id"><a class="link" href="#get-by-id">펀딩 상세 조회</a></h2>
-<div class="sectionbody">
 <div class="sect2">
-<h3 id="_펀딩_상세_조회_요청"><a class="link" href="#_펀딩_상세_조회_요청">펀딩 상세 조회 요청</a></h3>
+<h3 id="get-by-id"><a class="link" href="#get-by-id">4.2. 펀딩 상세 조회</a></h3>
+<div class="sect3">
+<h4 id="_펀딩_상세_조회_요청"><a class="link" href="#_펀딩_상세_조회_요청">4.2.1. 펀딩 상세 조회 요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /fundings/1 HTTP/1.1
@@ -1118,8 +1174,8 @@ Host: localhost:8080</code></pre>
 </tbody>
 </table>
 </div>
-<div class="sect2">
-<h3 id="_펀딩_상세_조회_응답"><a class="link" href="#_펀딩_상세_조회_응답">펀딩 상세 조회 응답</a></h3>
+<div class="sect3">
+<h4 id="_펀딩_상세_조회_응답"><a class="link" href="#_펀딩_상세_조회_응답">4.2.2. 펀딩 상세 조회 응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1144,8 +1200,9 @@ Content-Length: 414
 }</code></pre>
 </div>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_response_fields_5"><a class="link" href="#_response_fields_5">Response Fields</a></h4>
+<h4 id="_response_fields_5"><a class="link" href="#_response_fields_5">4.2.3. Response Fields</a></h4>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1256,7 +1313,7 @@ Content-Length: 414
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-06-07 23:33:41 +0900
+Last updated 2023-06-07 23:52:55 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
