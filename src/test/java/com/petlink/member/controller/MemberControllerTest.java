@@ -1,6 +1,5 @@
 package com.petlink.member.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
@@ -121,13 +120,18 @@ class MemberControllerTest extends RestDocsSupport {
 
 	@Test
 	@DisplayName("중복된 이름(닉네임)은 회원가입 할 수 없다.")
-	void checkNameFailTest() {
+	void checkNameFailTest() throws Exception {
 
 		String testName = "TestName";
 		when(memberService.isNameDuplicated(testName)).thenThrow(
 			new MemberException(MemberExceptionCode.ALREADY_USED_NAME));
 
-		assertThrows(MemberException.class, () -> memberController.checkName(testName));
+		mockMvc.perform(
+				RestDocumentationRequestBuilders.get("/members/duplicate/{name}", testName)
+			)
+			.andExpect(status().isConflict());
+
+		verify(memberService, times(1)).isNameDuplicated(testName);
 	}
 
 }
