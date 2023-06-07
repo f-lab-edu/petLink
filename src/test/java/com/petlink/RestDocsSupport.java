@@ -10,6 +10,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.petlink.common.exception.GlobalExceptionHandler;
 
 @ExtendWith(RestDocumentationExtension.class)
 public abstract class RestDocsSupport {
@@ -22,6 +23,7 @@ public abstract class RestDocsSupport {
 	void setUp(RestDocumentationContextProvider provider) {
 		this.mockMvc = MockMvcBuilders.standaloneSetup(initController())
 			.apply(documentationConfiguration(provider))
+			.setControllerAdvice(GlobalExceptionHandler.class)
 			.build();
 	}
 
