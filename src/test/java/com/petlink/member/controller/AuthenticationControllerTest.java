@@ -1,152 +1,134 @@
 package com.petlink.member.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petlink.common.util.jwt.JwtToken;
-import com.petlink.config.filter.JwtAuthenticationFilter;
-import com.petlink.member.exception.MemberException;
-import com.petlink.member.exception.MemberExceptionCode;
-import com.petlink.member.service.AuthenticationService;
-import org.junit.jupiter.api.BeforeEach;
+import static com.petlink.member.exception.MemberExceptionCode.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.restdocs.payload.JsonFieldType;
 
-import java.util.HashMap;
+import com.petlink.RestDocsSupport;
+import com.petlink.member.dto.request.LoginRequest;
+import com.petlink.member.dto.response.LoginResponse;
+import com.petlink.member.exception.MemberException;
+import com.petlink.member.service.AuthenticationService;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.cookie;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+@ExtendWith(MockitoExtension.class)
+class AuthenticationControllerTest extends RestDocsSupport {
 
-@WebMvcTest(controllers = AuthenticationController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = JwtAuthenticationFilter.class)
-        })
-@AutoConfigureMockMvc(addFilters = false)
-@ExtendWith({SpringExtension.class})
-class AuthenticationControllerTest {
+	@InjectMocks
+	private AuthenticationController authenticationController;
 
-    @Autowired
-    MockMvc mockMvc;
+	@Mock
+	private AuthenticationService authenticationService;
 
-    @Autowired
-    ObjectMapper objectMapper;
+	@Override
+	protected Object initController() {
+		return new AuthenticationController(authenticationService);
+	}
 
-    @MockBean
-    private AuthenticationService authenticationService;
+	@Test
+	@DisplayName("로그인에 성공 시 토큰이 쿠키에 등록된다.")
+	void login() throws Exception {
+		// given
+		String email = "id@google.com";
+		String password = "password1234";
+		String token = "dummy-token";
 
-    @BeforeEach
-    public void setUp(WebApplicationContext webApplicationContext) {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .build();
-    }
+		LoginRequest loginRequest = LoginRequest.builder()
+			.email(email)
+			.password(password)
+			.build();
 
-    @Test
-    @DisplayName("로그인에 성공 시 토큰이 쿠키에 등록된다.")
-    void login() throws Exception {
-        // given
-        String email = "id@google.com";
-        String password = "password1234";
-        String token = "dummy-token";
-        when(authenticationService.login(email, password)).thenReturn(token);
+		LoginResponse loginResponse = LoginResponse.builder()
+			.token(token)
+			.build();
 
-        String requestBodyJson = objectMapper.writeValueAsString(new HashMap<String, String>() {
-            {
-                put("email", email);
-                put("password", password);
-            }
-        });
+		// when
+		when(authenticationService.login(email, password)).thenReturn(token);
+		mockMvc.perform(post("/auth/login")
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest))
+			)
+			// then
+			.andExpect(status().isOk())
+			.andDo(document("member/login",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				requestFields(
+					fieldWithPath("email").type(JsonFieldType.STRING).description("로그인할 이메일"),
+					fieldWithPath("password").type(JsonFieldType.STRING).description("로그인할 비밀번호")
+				),
+				responseFields(
+					fieldWithPath("token").type(JsonFieldType.STRING).description("JWT 토큰")
+				)
+			))
+			.andDo(print());
 
-        // when
-        mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("email", email)
-                        .content(requestBodyJson)
-                )
-                // then
-                .andExpect(status().isOk())
-                .andExpect(cookie().exists(JwtToken.JWT_TOKEN.getTokenName()))
-                .andExpect(cookie().value(JwtToken.JWT_TOKEN.getTokenName(), token));
+		verify(authenticationService, times(1)).login(email, password);
+	}
 
-        verify(authenticationService, times(1)).login(email, password);
-    }
+	@Test
+	@DisplayName("회원이 존재하지 않으면 예외가 발생한다.")
+	void isNotMember() throws Exception {
+		// given
+		String email = "id@google.com";
+		String password = "wrong-password";
 
-    @Test
-    @DisplayName("회원이 존재하지 않으면 예외가 발생한다.")
-    void isNotMember() throws Exception {
-        // given
-        String email = "id@google.com";
-        String password = "wrong-password";
+		LoginRequest loginRequest = LoginRequest.builder()
+			.email(email)
+			.password(password)
+			.build();
 
-        when(authenticationService.login(email, password)).thenThrow(
-                new MemberException(MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION));
+		when(authenticationService.login(email, password)).thenThrow(
+			new MemberException(NOT_FOUND_MEMBER_EXCEPTION));
 
-        String requestBodyJson = objectMapper.writeValueAsString(new HashMap<String, String>() {
-            {
-                put("email", email);
-                put("password", password);
-            }
-        });
+		// when
+		mockMvc.perform(post("/auth/login")
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest))
+			)// then
+			.andExpect(status().isNotFound())
+			.andDo(print());
 
-        // when
-        mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBodyJson)
-                )// then
-                .andExpect(status().isNotFound());
+		verify(authenticationService, times(1)).login(email, password);
+	}
 
-        verify(authenticationService, times(1)).login(email, password);
-    }
+	@Test
+	@DisplayName("비밀번호가 일치하지 않으면 예외가 발생한다.")
+	void isNotMatchedPassword() throws Exception {
+		// given
+		String email = "id@google.com";
+		String password = "wrong-password";
 
-    @Test
-    @DisplayName("비밀번호가 일치하지 않으면 예외가 발생한다.")
-    void isNotMatchedPassword() throws Exception {
-        // given
-        String email = "id@google.com";
-        String password = "wrong-password";
+		LoginRequest loginRequest = LoginRequest.builder()
+			.email(email)
+			.password(password)
+			.build();
 
-        when(authenticationService.login(email, password)).thenThrow(
-                new MemberException(MemberExceptionCode.NOT_MATCHED_INFOMATION));
+		when(authenticationService.login(email, password)).thenThrow(
+			new MemberException(NOT_MATCHED_INFOMATION));
 
-        String requestBodyJson = objectMapper.writeValueAsString(new HashMap<String, String>() {
-            {
-                put("email", email);
-                put("password", password);
-            }
-        });
+		// when
+		mockMvc.perform(post("/auth/login")
+				.contentType(APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(loginRequest))
+			)// then
+			.andExpect(status().isUnauthorized())
+			.andDo(print());
 
-        // when
-        mockMvc.perform(post("/auth/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBodyJson)
-                )// then
-                .andExpect(status().isUnauthorized());
+		verify(authenticationService, times(1)).login(email, password);
+	}
 
-        verify(authenticationService, times(1)).login(email, password);
-    }
-
-
-    /*
-     * 단위 테스트의 범위
-     *
-     * 컨트롤러도 하나의 단위로 볼 수 있다.
-     * Bean 을 띄우는 테스트들이
-     * WebMvcTest의 경우 매 CI 마다 속도로 인해 테스트하기 힘들다.
-     *
-     * 테스트의 중요한점은 속도.
-     *
-     *
-     * 통합 테스트는 별개의 클래스로 CI 과정에서는 무시되도록
-     * */
 }

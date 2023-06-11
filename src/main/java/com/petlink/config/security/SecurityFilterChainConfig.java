@@ -1,5 +1,6 @@
 package com.petlink.config.security;
 
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -28,13 +29,14 @@ public class SecurityFilterChainConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		//토큰으로 ROLE을 처리 하는게 , 더 괜찮을 것 같다.
-
 		return http
-			.formLogin().disable()
 			.csrf().disable()
+			.httpBasic().disable()
+			.formLogin().disable()
 			.authorizeHttpRequests(authorizeRequests ->
 				authorizeRequests
+					.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+					.requestMatchers(HttpMethod.GET, "/docs/index.html").permitAll()
 					.requestMatchers(HttpMethod.GET, "/members/duplicate/**").permitAll()
 					.requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
 					.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
@@ -52,5 +54,4 @@ public class SecurityFilterChainConfig {
 			.authenticationProvider(authenticationProvider)
 			.build();
 	}
-
 }

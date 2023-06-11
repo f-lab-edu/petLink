@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.petlink.member.domain.Member;
 import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.MemberInfoResponseDto;
+import com.petlink.member.dto.response.NameCheckResponse;
 import com.petlink.member.exception.MemberException;
 import com.petlink.member.exception.MemberExceptionCode;
 import com.petlink.member.repository.MemberRepository;
@@ -39,12 +40,11 @@ public class MemberService {
 		return MemberInfoResponseDto.of(member);
 	}
 
-	public Boolean isNameDuplicated(String name) {
+	public NameCheckResponse isNameDuplicated(String name) {
 		Boolean existsByName = memberRepository.existsByName(name);
 		if (Boolean.TRUE.equals(existsByName)) {
 			throw new MemberException(MemberExceptionCode.ALREADY_USED_NAME);
 		}
-
-		return Boolean.TRUE;
+		return new NameCheckResponse();
 	}
 }
