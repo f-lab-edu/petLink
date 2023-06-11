@@ -79,7 +79,7 @@ class FundingQueryControllerTest {
     }
 
     @Test
-    @DisplayName("최소한의 검색 조건으로 펀딩 목록을 조회한다.")
+    @DisplayName("최소한의 검색 조건으로 펀딩 목록을 조회할 수 있다.")
     void getFundingList() throws Exception {
         Pageable pageable = PageRequest.of(0, 5);
         List<FundingListResponseDto> mockDtoList = createMockDtoList(5, null, null);
@@ -101,7 +101,7 @@ class FundingQueryControllerTest {
     }
 
     @Test
-    @DisplayName("상태(PROGRESS) 조회 조건을 가지고  조회한다.")
+    @DisplayName("상태(PROGRESS) 조회 조건을 가지고  조회할 수 있다..")
     void getFundingListWithStateParam() throws Exception {
         //given
         List<FundingCategory> category = List.of(FOOD, CLOTHES);
@@ -130,7 +130,7 @@ class FundingQueryControllerTest {
     }
 
     @Test
-    @DisplayName("카테고리(FOOD, CLOTHES) 조회 조건을 가지고  조회한다.")
+    @DisplayName("카테고리(FOOD, CLOTHES) 조회 조건을 가지고  조회할 수 있다.")
     void getFundingListWithCategoryParam() throws Exception {
         //given
         List<FundingCategory> category = List.of(FOOD, CLOTHES);
