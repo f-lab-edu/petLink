@@ -54,17 +54,17 @@ public class GlobalExceptionHandler {
         FieldError fieldError = bindingResult.getFieldError();
         String fieldName = Objects.requireNonNull(fieldError).getField();
         Object rejectedValue = fieldError.getRejectedValue();
-        String errorMessage = "유효하지 않은 파라미터입니다: " + fieldName + " [" + rejectedValue + "]";
-
-        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, errorMessage);
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, getErrorMessage(fieldName, rejectedValue));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleTypeMismatchException(MethodArgumentTypeMismatchException exception) {
         String fieldName = exception.getName();
         String rejectedValue = Objects.requireNonNull(exception.getValue()).toString();
-        String errorMessage = "유효하지 않은 파라미터입니다: " + fieldName + " [" + rejectedValue + "]";
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, getErrorMessage(fieldName, rejectedValue));
+    }
 
-        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, errorMessage);
+    private String getErrorMessage(String fieldName, Object rejectedValue) {
+        return "유효하지 않은 파라미터입니다: " + fieldName + " [" + rejectedValue + "]";
     }
 }
