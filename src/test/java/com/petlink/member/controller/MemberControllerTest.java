@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.MemberInfoResponseDto;
+import com.petlink.member.exception.MemberException;
+import com.petlink.member.exception.MemberExceptionCode;
 import com.petlink.member.service.MemberService;
 
 @ExtendWith(MockitoExtension.class)
@@ -84,15 +86,11 @@ class MemberControllerTest {
 	void checkNameTest() {
 
 		String testName = "TestName";
-		Boolean nameDuplicated = true;
 
-		when(memberService.isNameDuplicated(testName)).thenReturn(nameDuplicated);
+		when(memberService.isNameDuplicated(testName)).thenThrow(
+			new MemberException(MemberExceptionCode.ALREADY_USED_NAME));
 
-		ResponseEntity<Boolean> responseEntity = memberController.checkName(testName);
-
-		verify(memberService, times(1)).isNameDuplicated(testName);
-		assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
-		assertEquals(nameDuplicated, responseEntity.getBody());
+		assertThrows(MemberException.class, () -> memberController.checkName(testName));
 	}
 
 }
