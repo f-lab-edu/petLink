@@ -3,6 +3,8 @@ package com.petlink.common.util.date;
 import com.petlink.common.exception.CommonException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 
@@ -10,6 +12,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 class DateConverterTest {
+
+    static final Logger log = LoggerFactory.getLogger(DateConverterTest.class);
+
 
     @Test
     @DisplayName("YYYYMM 형태의 데이터는 LocalDateTime으로 변환한다.")
@@ -22,7 +27,7 @@ class DateConverterTest {
         // then
         assertThat(localDateTime).isNotNull();
         assertThat(localDateTime.getYear()).isEqualTo(2021);
-        System.out.println(localDateTime);
+        log.info("localDateTime: {}", localDateTime);
     }
 
     @Test
@@ -36,7 +41,7 @@ class DateConverterTest {
         // then
         assertThat(localDateTime).isNotNull();
         assertThat(localDateTime.getYear()).isEqualTo(2021);
-        System.out.println(localDateTime);
+        log.info("localDateTime: {}", localDateTime);
     }
 
     @Test
@@ -50,6 +55,7 @@ class DateConverterTest {
 
         // then
         assertThat(throwable).isInstanceOf(CommonException.class);
+        log.info("throwable: {}", throwable.getMessage());
     }
 
     @Test
@@ -64,5 +70,6 @@ class DateConverterTest {
         // then
         assertThat(throwable).isInstanceOf(CommonException.class);
         assertThat(throwable.getMessage()).isEqualTo("날짜 형식이 올바르지 않습니다.");
+        log.info("throwable: {}", throwable.getMessage());
     }
 }
