@@ -1,60 +1,65 @@
 package com.petlink.funding.repository;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
-
 import com.petlink.funding.domain.Funding;
 import com.petlink.funding.domain.FundingCategory;
 import com.petlink.funding.domain.FundingState;
 import com.petlink.funding.domain.QFunding;
+import com.petlink.funding.dto.request.FundingSearchCriteriaDto;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 public class CustomFundingRepositoryImpl implements CustomFundingRepository {
 
-	private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
-	public CustomFundingRepositoryImpl(JPAQueryFactory queryFactory) {
-		this.queryFactory = queryFactory;
-	}
+    public CustomFundingRepositoryImpl(JPAQueryFactory queryFactory) {
+        this.queryFactory = queryFactory;
+    }
 
-	@Override
-	public Slice<Funding> findFundingList(LocalDateTime startDate, LocalDateTime endDate,
-		List<FundingCategory> categories,
-		List<FundingState> states, Pageable pageable) {
-		QFunding funding = QFunding.funding;
-		BooleanBuilder builder = new BooleanBuilder();
+    @Override
+    public Slice<Funding> findFundingList(FundingSearchCriteriaDto criteriaDto) {
+        LocalDateTime startDate = criteriaDto.getStartDate();
+        LocalDateTime endDate = criteriaDto.getEndDate();
+        List<FundingCategory> categories = criteriaDto.getCategories();
+        List<FundingState> states = criteriaDto.getStates();
+        Pageable pageable = criteriaDto.getPageable();
 
-		// 필수 필드 조건
-		builder.and(funding.startDate.goe(startDate)).and(funding.endDate.loe(endDate));
 
-		// 선택적 필드 조건
-		Optional.ofNullable(categories)
-			.filter(cats -> !cats.isEmpty())
-			.ifPresent(cats -> builder.and(funding.category.in(cats)));
+        QFunding funding = QFunding.funding;
+        BooleanBuilder builder = new BooleanBuilder();
 
-		Optional.ofNullable(states)
-			.filter(state -> !state.isEmpty())
-			.ifPresent(state -> builder.and(funding.state.in(state)));
+        // 필수 필드 조건
+        builder.and(funding.startDate.goe(startDate)).and(funding.endDate.loe(endDate));
 
-		List<Funding> results = queryFactory.selectFrom(funding)
-			.where(builder)
-			.offset(pageable.getOffset())
-			.limit(1L + pageable.getPageSize())
-			.orderBy(funding.id.asc())
-			.fetch();
+        // 선택적 필드 조건
+        Optional.ofNullable(categories)
+                .filter(cats -> !cats.isEmpty())
+                .ifPresent(cats -> builder.and(funding.category.in(cats)));
 
-		boolean hasNext = results.size() > pageable.getPageSize();
+        Optional.ofNullable(states)
+                .filter(state -> !state.isEmpty())
+                .ifPresent(state -> builder.and(funding.state.in(state)));
 
-		if (hasNext) {
-			results.remove(results.size() - 1);
-		}
+        List<Funding> results = queryFactory.selectFrom(funding)
+                .where(builder)
+                .offset(pageable.getOffset())
+                .limit(1L + pageable.getPageSize())
+                .orderBy(funding.id.asc())
+                .fetch();
 
-		return new SliceImpl<>(results, pageable, hasNext);
-	}
+        boolean hasNext = results.size() > pageable.getPageSize();
+
+        if (hasNext) {
+            results.remove(results.size() - 1);
+        }
+
+        return new SliceImpl<>(results, pageable, hasNext);
+    }
 }

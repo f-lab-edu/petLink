@@ -1,7 +1,7 @@
 package com.petlink.funding.controller;
 
-import com.petlink.funding.dto.request.FundingListRequestDto;
-import com.petlink.funding.dto.response.DetailInfoResponse;
+import com.petlink.funding.dto.request.FundingRequestDto;
+import com.petlink.funding.dto.response.FundingDetailResponse;
 import com.petlink.funding.dto.response.FundingListResponseDto;
 import com.petlink.funding.service.FundingService;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +24,14 @@ public class FundingQueryController {
 
     @GetMapping
     public ResponseEntity<Slice<FundingListResponseDto>> getFundingList(
-            @Validated FundingListRequestDto requestDto,
+            @Validated FundingRequestDto requestDto,
             @PageableDefault(value = 5) Pageable pageable
     ) {
         return ResponseEntity.ok(fundingService.getFundingList(requestDto, pageable));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DetailInfoResponse> getFunding(@PathVariable Long id) {
+    public ResponseEntity<FundingDetailResponse> getFunding(@PathVariable Long id) {
         return ResponseEntity.ok(fundingService.findById(id));
     }
 }

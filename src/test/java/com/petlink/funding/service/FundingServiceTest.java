@@ -2,8 +2,9 @@ package com.petlink.funding.service;
 
 import com.petlink.common.exception.CommonException;
 import com.petlink.funding.domain.Funding;
-import com.petlink.funding.dto.request.FundingListRequestDto;
-import com.petlink.funding.dto.response.DetailInfoResponse;
+import com.petlink.funding.dto.request.FundingRequestDto;
+import com.petlink.funding.dto.request.FundingSearchCriteriaDto;
+import com.petlink.funding.dto.response.FundingDetailResponse;
 import com.petlink.funding.dto.response.FundingListResponseDto;
 import com.petlink.funding.exception.FundingException;
 import com.petlink.funding.repository.FundingRepository;
@@ -41,7 +42,7 @@ class FundingServiceTest {
     @Test
     @DisplayName("펀딩 목록 조회")
     void testGetFundingList() {
-        FundingListRequestDto requestDto = FundingListRequestDto.builder()
+        FundingRequestDto requestDto = FundingRequestDto.builder()
                 .startDate("20230101")
                 .endDate("20231231")
                 .build();
@@ -61,8 +62,7 @@ class FundingServiceTest {
 
         Slice<Funding> fundingList = new SliceImpl<>(fundingListData, pageable, false);
 
-        when(fundingRepository.findFundingList(
-                any(), any(), any(), any(), any(Pageable.class)))
+        when(fundingRepository.findFundingList(any(FundingSearchCriteriaDto.class)))
                 .thenReturn(fundingList);
 
         Slice<FundingListResponseDto> result = fundingService.getFundingList(requestDto, pageable);
@@ -76,15 +76,14 @@ class FundingServiceTest {
     @Test
     @DisplayName("펀딩 목록 조회 - 검색 결과 없음")
     void testGetFundingList_NoSearchResultsFound() {
-        FundingListRequestDto requestDto = FundingListRequestDto.builder()
+        FundingRequestDto requestDto = FundingRequestDto.builder()
                 .startDate("20230101")
                 .endDate("20231231")
                 .build();
 
         Pageable pageable = mock(Pageable.class);
 
-        when(fundingRepository.findFundingList(
-                any(), any(), any(), any(), any(Pageable.class)))
+        when(fundingRepository.findFundingList(any(FundingSearchCriteriaDto.class)))
                 .thenThrow(new FundingException(NO_SEARCH_RESULTS_FOUND));
 
         assertThrows(FundingException.class, () -> fundingService.getFundingList(requestDto, pageable));
@@ -94,8 +93,8 @@ class FundingServiceTest {
     @DisplayName("펀딩 목록 조회 - 시작일 혹은 종요일이 Null 경우 예외가 발생한다.")
     void testGetFundingList_StartDateIsNull() {
         Pageable pageable = mock(Pageable.class);
-        FundingListRequestDto requestDtoA = FundingListRequestDto.builder().endDate("20231231").build();
-        FundingListRequestDto requestDtoB = FundingListRequestDto.builder().endDate("20231231").build();
+        FundingRequestDto requestDtoA = FundingRequestDto.builder().endDate("20231231").build();
+        FundingRequestDto requestDtoB = FundingRequestDto.builder().endDate("20231231").build();
 
         assertThrows(CommonException.class, () -> fundingService.getFundingList(requestDtoA, pageable));
         assertThrows(CommonException.class, () -> fundingService.getFundingList(requestDtoB, pageable));
@@ -115,7 +114,7 @@ class FundingServiceTest {
                 .category(TOY)
                 .build();
 
-        FundingListRequestDto requestDto = FundingListRequestDto.builder()
+        FundingRequestDto requestDto = FundingRequestDto.builder()
                 .startDate("20230501")
                 .endDate("20230731")
                 .category(List.of(TOY))
@@ -128,7 +127,7 @@ class FundingServiceTest {
         Slice<Funding> fundingSlice = new SliceImpl<>(fundingList, pageable, true);
 
         //when
-        when(fundingRepository.findFundingList(any(), any(), any(), any(), any()))
+        when(fundingRepository.findFundingList(any(FundingSearchCriteriaDto.class)))
                 .thenReturn(fundingSlice);
 
         Slice<FundingListResponseDto> resultSlice = fundingService.getFundingList(requestDto, pageable);
@@ -169,7 +168,7 @@ class FundingServiceTest {
         //when
         when(fundingRepository.findById(id)).thenReturn(Optional.of(funding));
 
-        DetailInfoResponse result = fundingService.findById(id);
+        FundingDetailResponse result = fundingService.findById(id);
 
         //then
         assertEquals(funding.getId(), result.getId());
