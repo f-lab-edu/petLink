@@ -722,10 +722,12 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 19
+Content-Length: 105
 
 {
-  "isOk" : true
+  "message" : "이미 사용중인 이름입니다.",
+  "code" : "DUPLICATED_NAME",
+  "result" : true
 }</code></pre>
 </div>
 </div>
@@ -749,10 +751,22 @@ Content-Length: 19
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isOk</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">중복 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">중복 여부 ( true: 중복, false: 중복 아님 )</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">코드</p></td>
 </tr>
 </tbody>
 </table>
@@ -814,7 +828,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Set-Cookie: jwt-token=dummy-token; Path=/; Max-Age=3600; Expires=Sun, 11 Jun 2023 09:51:35 GMT
+Set-Cookie: jwt-token=dummy-token; Path=/; Max-Age=3600; Expires=Sun, 11 Jun 2023 17:53:23 GMT
 Content-Type: application/json
 Content-Length: 29
 
@@ -1306,7 +1320,7 @@ Content-Length: 414
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-06-11 17:27:32 +0900
+Last updated 2023-06-11 23:25:30 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
