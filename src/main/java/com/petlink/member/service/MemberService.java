@@ -1,5 +1,6 @@
 package com.petlink.member.service;
 
+import com.petlink.common.util.jwt.JwtTokenProvider;
 import com.petlink.member.domain.Member;
 import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.MemberInfoResponseDto;
@@ -18,6 +19,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtTokenProvider tokenProvider;
 
     public MemberInfoResponseDto signUp(SignUpRequestDto signUpRequestDto) {
 
@@ -41,7 +43,10 @@ public class MemberService {
         return memberRepository.existsByName(name);
     }
 
-    public Boolean withDrawal(String token) {
-        return null;
+    public Boolean withdrawal(String token) {
+        Long id = tokenProvider.getIdByToken(token);
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new MemberException(MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION));
+        return member.withdrawal();
     }
 }

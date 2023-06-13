@@ -37,8 +37,8 @@ public class MemberController {
     }
 
     @GetMapping("/withdrawal")
-    public ResponseEntity<ResultResponse> withDrawal(String token) {
-        Boolean aBoolean = memberService.withDrawal(token);
+    public ResponseEntity<ResultResponse> withdrawal(String token) {
+        Boolean aBoolean = memberService.withdrawal(token);
         Message code = Boolean.TRUE.equals(aBoolean) ? Message.WITHDRAWAL_SUCCESS : Message.WITHDRAWAL_FAIL;
         ResultResponse resultResponse = new ResultResponse(aBoolean, code);
 
