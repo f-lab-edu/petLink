@@ -40,4 +40,8 @@ public class MemberService {
     public Boolean isNameDuplicated(String name) {
         return memberRepository.existsByName(name);
     }
+
+    public Boolean withDrawal(String token) {
+        return null;
+    }
 }

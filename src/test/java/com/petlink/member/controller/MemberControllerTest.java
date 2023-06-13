@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static com.petlink.member.dto.Message.AVAILABLE_NAME;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -97,9 +98,8 @@ class MemberControllerTest extends RestDocsSupport {
     @DisplayName("이름(닉네임)을 중복 검증 할 수 있다.")
     void checkNameTest() throws Exception {
         String testName = "TestName";
-        ResultResponse resultResponse = new ResultResponse(true);
-
-        when(memberService.isNameDuplicated(testName)).thenReturn(true);
+        ResultResponse resultResponse = new ResultResponse(false, AVAILABLE_NAME);
+        when(memberService.isNameDuplicated(testName)).thenReturn(false);
 
         mockMvc.perform(
                         RestDocumentationRequestBuilders.get("/members/duplicate/{name}", testName)
