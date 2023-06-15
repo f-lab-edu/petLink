@@ -1,12 +1,14 @@
 package com.petlink.member.controller;
 
 import com.petlink.RestDocsSupport;
+import com.petlink.common.exception.TokenException;
 import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.MemberInfoResponseDto;
 import com.petlink.member.dto.response.ResultResponse;
 import com.petlink.member.exception.MemberException;
 import com.petlink.member.exception.MemberExceptionCode;
 import com.petlink.member.service.MemberService;
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
+import static com.petlink.common.exception.TokenExceptionCode.INVALID_TOKEN_EXCEPTION;
 import static com.petlink.member.dto.Message.AVAILABLE_NAME;
+import static com.petlink.member.dto.Message.WITHDRAWAL_SUCCESS;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
@@ -135,4 +139,42 @@ class MemberControllerTest extends RestDocsSupport {
 
         verify(memberService, times(1)).isNameDuplicated(testName);
     }
+
+    @Test
+    @DisplayName("회원을 탈퇴를 진행할 수 있다.")
+    void withdrawalMemberTest() throws Exception {
+        String token = "로그인 토큰";
+        ResultResponse resultResponse = new ResultResponse(true, WITHDRAWAL_SUCCESS);
+
+
+        mockMvc.perform(post("/members/withdrawal")
+                        .cookie(new Cookie("token", token)))  // 쿠키 추가)
+                .andExpect(status().isOk())
+                .andDo(document("member/withdrawal",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("result").type(JsonFieldType.BOOLEAN).description("성공 여부"),
+                                fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
+                                fieldWithPath("code").type(JsonFieldType.STRING).description("코드")
+                        )
+                ))
+                .andDo(print());
+    }
+
+
+    @Test
+    @DisplayName("로그인 토큰이 유효하지 않으면 회원탈퇴가 실패 한다.")
+    void withdrawalMemberTestFail() throws Exception {
+        String token = "로그인 토큰";
+
+        doThrow(new TokenException(INVALID_TOKEN_EXCEPTION))
+                .when(memberService).withdrawal(token);
+
+        mockMvc.perform(post("/members/withdrawal")
+                        .cookie(new Cookie("token", token)))  // 쿠키에 토큰 추가
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
 }

@@ -36,7 +36,7 @@ public class MemberController {
     }
 
     @PostMapping("/withdrawal")
-    public ResponseEntity<ResultResponse> withdrawal(String token) {
+    public ResponseEntity<ResultResponse> withdrawal(@CookieValue("token") String token) {
         memberService.withdrawal(token);
         Message code = WITHDRAWAL_SUCCESS;
         ResultResponse resultResponse = new ResultResponse(true, code);
