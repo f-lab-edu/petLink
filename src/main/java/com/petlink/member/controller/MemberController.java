@@ -11,8 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.petlink.member.dto.Message.AVAILABLE_NAME;
-import static com.petlink.member.dto.Message.DUPLICATED_NAME;
+import static com.petlink.member.dto.Message.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -36,11 +35,11 @@ public class MemberController {
         return new ResponseEntity<>(resultResponse, code.getHttpStatus());
     }
 
-    @GetMapping("/withdrawal")
+    @PostMapping("/withdrawal")
     public ResponseEntity<ResultResponse> withdrawal(String token) {
-        Boolean aBoolean = memberService.withdrawal(token);
-        Message code = Boolean.TRUE.equals(aBoolean) ? Message.WITHDRAWAL_SUCCESS : Message.WITHDRAWAL_FAIL;
-        ResultResponse resultResponse = new ResultResponse(aBoolean, code);
+        memberService.withdrawal(token);
+        Message code = WITHDRAWAL_SUCCESS;
+        ResultResponse resultResponse = new ResultResponse(true, code);
 
         return new ResponseEntity<>(resultResponse, code.getHttpStatus());
     }

@@ -722,12 +722,12 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 105
+Content-Length: 102
 
 {
-  "message" : "이미 사용중인 이름입니다.",
-  "code" : "DUPLICATED_NAME",
-  "result" : true
+  "message" : "사용 가능한 이름입니다.",
+  "code" : "AVAILABLE_NAME",
+  "result" : false
 }</code></pre>
 </div>
 </div>
@@ -828,7 +828,7 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
-Set-Cookie: jwt-token=dummy-token; Path=/; Max-Age=3600; Expires=Sun, 11 Jun 2023 17:53:23 GMT
+Set-Cookie: jwt-token=dummy-token; Path=/; Max-Age=3600; Expires=Wed, 14 Jun 2023 13:30:05 GMT
 Content-Type: application/json
 Content-Length: 29
 
@@ -947,8 +947,8 @@ Content-Length: 827
   "pageable" : {
     "sort" : {
       "empty" : true,
-      "unsorted" : true,
-      "sorted" : false
+      "sorted" : false,
+      "unsorted" : true
     },
     "offset" : 0,
     "pageNumber" : 0,
@@ -964,8 +964,8 @@ Content-Length: 827
   "number" : 0,
   "sort" : {
     "empty" : true,
-    "unsorted" : true,
-    "sorted" : false
+    "sorted" : false,
+    "unsorted" : true
   },
   "numberOfElements" : 2,
   "empty" : false
@@ -1320,7 +1320,7 @@ Content-Length: 414
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-06-11 23:25:30 +0900
+Last updated 2023-06-13 20:39:18 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
