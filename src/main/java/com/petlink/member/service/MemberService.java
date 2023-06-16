@@ -57,4 +57,6 @@ public class MemberService {
                 .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER_EXCEPTION))
                 .withdrawal();
     }
+
+
 }

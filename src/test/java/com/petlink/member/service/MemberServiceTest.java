@@ -1,5 +1,7 @@
 package com.petlink.member.service;
 
+import com.petlink.common.exception.TokenException;
+import com.petlink.common.util.jwt.JwtTokenProvider;
 import com.petlink.member.domain.Member;
 import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.MemberInfoResponseDto;
@@ -13,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -29,6 +33,9 @@ class MemberServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private JwtTokenProvider tokenProvider;
 
     @Test
     @DisplayName("회원가입을 진행할 수 있다.")
@@ -152,6 +159,82 @@ class MemberServiceTest {
         // Then
         assertFalse(isDuplicated);
         verify(memberRepository, times(1)).existsByName(testName);
+    }
+
+    @Test
+    @DisplayName("유효한 토큰이 제공되고 해당 사용자가 존재하는 경우")
+    void testWithdrawalWithValidTokenAndExistingUser() {
+        // Given
+        String testToken = "testToken";
+        Long userId = 1L;
+        Member member = mock(Member.class);
+
+        when(tokenProvider.isTokenValid(testToken)).thenReturn(false);
+        when(tokenProvider.getIdByToken(testToken)).thenReturn(userId);
+        when(memberRepository.findById(userId)).thenReturn(Optional.of(member));
+
+        // When
+        memberService.withdrawal(testToken);
+
+        // Then
+        verify(member, times(1)).withdrawal();
+    }
+
+    @Test
+    @DisplayName("유효하지 않은 토큰이 제공되는 경우")
+    void testWithdrawalWithInvalidToken() {
+        // Given
+        String testToken = "testToken";
+
+        when(tokenProvider.isTokenValid(testToken)).thenReturn(true);
+
+        // When
+        assertThrows(TokenException.class, () -> memberService.withdrawal(testToken));
+    }
+
+    @Test
+    @DisplayName("유효한 토큰이 제공되었지만 해당 사용자가 존재하지 않는 경우")
+    void testWithdrawalWithValidTokenAndNonExistingUser() {
+        // Given
+        String testToken = "testToken";
+        Long userId = 1L;
+
+        when(tokenProvider.isTokenValid(testToken)).thenReturn(false);
+        when(tokenProvider.getIdByToken(testToken)).thenReturn(userId);
+        when(memberRepository.findById(userId)).thenReturn(Optional.empty());
+
+        // When
+        assertThrows(MemberException.class, () -> memberService.withdrawal(testToken));
+    }
+
+    @Test
+    @DisplayName("토큰으로부터 얻은 사용자 ID가 null인 경우")
+    void testWithdrawalWithNullUserId() {
+        // Given
+        String testToken = "testToken";
+
+        when(tokenProvider.isTokenValid(testToken)).thenReturn(false);
+        when(tokenProvider.getIdByToken(testToken)).thenReturn(null);
+
+        // When
+        assertThrows(MemberException.class, () -> memberService.withdrawal(testToken));
+    }
+
+    @Test
+    @DisplayName("Member 객체의 withdrawal 메소드가 실패하는 경우")
+    void testWithdrawalFailure() {
+        // Given
+        String testToken = "testToken";
+        Long userId = 1L;
+        Member member = mock(Member.class);
+
+        when(tokenProvider.isTokenValid(testToken)).thenReturn(false);
+        when(tokenProvider.getIdByToken(testToken)).thenReturn(userId);
+        when(memberRepository.findById(userId)).thenReturn(Optional.of(member));
+        doThrow(new RuntimeException()).when(member).withdrawal();
+
+        // When
+        assertThrows(RuntimeException.class, () -> memberService.withdrawal(testToken));
     }
 
 }
