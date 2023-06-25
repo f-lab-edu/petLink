@@ -39,19 +39,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {MemberException.class})
     public ResponseEntity<ErrorResponse> handleGenericException(MemberException exception) {
-        log.error("Exception occurred", exception);
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
     }
 
     @ExceptionHandler(value = {ManagerException.class})
     public ResponseEntity<ErrorResponse> handleGenericException(ManagerException exception) {
-        log.error("Exception occurred", exception);
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
     }
 
     @ExceptionHandler(value = {FundingException.class})
     public ResponseEntity<ErrorResponse> handleFundingException(FundingException exception) {
-        log.error("Exception occurred", exception);
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
     }
 
