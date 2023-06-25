@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -43,8 +42,4 @@ public class FundingPostDto {
     @NotBlank
     @Min(value = 100000, message = "최소 100,000원 이상의 목표 금액을 설정해야 합니다.")
     private Long targetDonation;
-
-    @NotBlank
-    @Size(min = 1, message = "최소 1개의 이미지를 업로드해야 합니다.")
-    private List<String> imagesPaths;
 }
