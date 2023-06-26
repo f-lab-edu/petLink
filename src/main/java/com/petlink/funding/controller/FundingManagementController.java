@@ -30,7 +30,7 @@ public class FundingManagementController {
         return ResponseEntity.ok(FundingCreateResponse
                 .builder()
                 .id(funding)
-                .createdAt(LocalDateTime.now())
+                .registeredAt(LocalDateTime.now())
                 .build());
     }
 

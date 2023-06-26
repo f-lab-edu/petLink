@@ -11,5 +11,5 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FundingCreateResponse {
     Long id;
-    LocalDateTime createdAt;
+    LocalDateTime registeredAt;
 }
