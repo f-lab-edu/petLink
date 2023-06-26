@@ -1,5 +1,6 @@
 package com.petlink.common.util.jwt;
 
+import com.petlink.manager.domain.Manager;
 import com.petlink.member.domain.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -22,7 +23,7 @@ public class JwtTokenProvider {
     private Long expireLength;
 
     /**
-     * 토큰 생성
+     * 매니저 토큰 생성
      */
     public String createToken(Member member) {
         Claims claims = Jwts.claims();
@@ -31,6 +32,22 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(member.getEmail())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expireLength))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    /**
+     * 매니저 토큰 생성
+     */
+    public String createToken(Manager manager) {
+        Claims claims = Jwts.claims();
+        claims.put("id", manager.getId());
+        claims.put("role", JwtRole.MANAGER);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(manager.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expireLength))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
@@ -69,13 +86,6 @@ public class JwtTokenProvider {
      */
     public String getEmailByToken(String token) {
         return extractClaim(token, Claims::getSubject);
-    }
-
-    /**
-     * 토큰에서 사용자 정보 추출
-     */
-    public Long getIdByToken(String token) {
-        return extractClaim(token, claims -> claims.get("id", Long.class));
     }
 
     /**
