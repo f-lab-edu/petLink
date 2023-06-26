@@ -9,7 +9,7 @@ import com.petlink.manager.exception.ManagerException;
 import com.petlink.manager.repository.ManagerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.HtmlUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.petlink.manager.exception.ManagerExceptionCode.MANAGER_NOT_FOUND;
 
@@ -20,6 +20,7 @@ public class FundingManagementService {
     private final ManagerRepository managerRepository;
 
 
+    @Transactional
     public Long createFunding(FundingPostDto fundingPostDto) {
         Manager manager = managerRepository
                 .findById(fundingPostDto.getManagerId())
@@ -30,17 +31,19 @@ public class FundingManagementService {
                         .manager(manager)
                         .title(fundingPostDto.getTitle())
                         .miniTitle(fundingPostDto.getMiniTitle())
-                        .content(
-                                HtmlUtils.htmlEscape(fundingPostDto.getContent())
-                        )
+                        .content(fundingPostDto.getContent())
                         .state(FundingState.SCHEDULED)
                         .category(fundingPostDto.getCategory())
                         .startDate(fundingPostDto.getStartDate())
                         .endDate(fundingPostDto.getEndDate())
                         .targetDonation(fundingPostDto.getTargetDonation())
-                        .successDonation(Math.round(fundingPostDto.getTargetDonation() * 0.8))
+                        .successDonation(calculateSuccessDonation(fundingPostDto.getTargetDonation()))
                         .build());
 
         return funding.getId();
+    }
+
+    private Long calculateSuccessDonation(Long targetDonation) {
+        return Math.round(targetDonation * 0.8);
     }
 }
