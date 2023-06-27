@@ -20,6 +20,7 @@ include::api/over-view.adoc[]
 include::api/member/sign-up.adoc[]
 include::api/member/name-duplicate.adoc[]
 include::api/member/login.adoc[]
+include::api/member/withdrawal.adoc[]
 
 [[Fundings]]
 == Funding API

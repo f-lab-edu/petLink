@@ -1,0 +1,13 @@
+[[withdrawal]]
+=== 회원탈퇴
+
+==== 회원탈퇴 요청
+
+include::{snippets}/member/withdrawal/http-request.adoc[]
+
+==== 회원탈퇴 응답
+
+include::{snippets}/member/withdrawal/http-response.adoc[]
+include::{snippets}/member/withdrawal/response-fields.adoc[]
+
+[[login]]
