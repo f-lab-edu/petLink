@@ -8,6 +8,7 @@ import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,19 +35,36 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(MEMBER.getRole()));
-        authorities.add(new SimpleGrantedAuthority(MANAGER.getRole()));
+        if (manager != null) {
+            authorities.add(new SimpleGrantedAuthority(MANAGER.getRole()));
+        }
+        if (member != null) {
+            authorities.add(new SimpleGrantedAuthority(MEMBER.getRole()));
+        }
         return authorities;
     }
 
+
     @Override
     public String getPassword() {
-        return manager.getPassword();
+        if (manager != null) {
+            return manager.getPassword();
+        }
+        if (member != null) {
+            return member.getPassword();
+        }
+        throw new UsernameNotFoundException("No user found.");
     }
 
     @Override
     public String getUsername() {
-        return manager.getEmail();
+        if (manager != null) {
+            return manager.getEmail();
+        }
+        if (member != null) {
+            return member.getEmail();
+        }
+        throw new UsernameNotFoundException("No user found.");
     }
 
     @Override
@@ -64,10 +82,14 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
+
     @Override
     public boolean isEnabled() {
-        MemberStatus status = member.getStatus();
-        return status.equals(MemberStatus.ACTIVE);
+        if (member != null) {
+            MemberStatus status = member.getStatus();
+            return status.equals(MemberStatus.ACTIVE);
+        }
+        return manager != null;
     }
 }
 

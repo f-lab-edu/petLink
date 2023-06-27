@@ -88,6 +88,11 @@ public class JwtTokenProvider {
         return extractClaim(token, Claims::getSubject);
     }
 
+
+    public String getRoleByToken(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
+    }
+
     /**
      * 토큰 유효성 검사
      */
@@ -108,4 +113,5 @@ public class JwtTokenProvider {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+
 }
