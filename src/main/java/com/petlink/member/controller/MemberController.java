@@ -27,7 +27,7 @@ public class MemberController {
     }
 
     @GetMapping("/duplicate/{name}")
-    public ResponseEntity<ResultResponse> checkName(@PathVariable String name) {
+    public ResponseEntity<ResultResponse> verifyNameExistence(@PathVariable String name) {
         Boolean aBoolean = memberService.isNameDuplicated(name);
         Message code = Boolean.TRUE.equals(aBoolean) ? DUPLICATED_NAME : AVAILABLE_NAME;
         ResultResponse resultResponse = new ResultResponse(aBoolean, code);
