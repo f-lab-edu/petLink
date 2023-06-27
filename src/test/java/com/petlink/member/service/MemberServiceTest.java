@@ -103,7 +103,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("비밀번호가 제대로 인코딩되는지 확인")
+    @DisplayName("평문이 주어질때 암호화된 문자열을 반환한다")
     void testPasswordEncoding() {
         // Given
         String rawPassword = "password";
@@ -130,7 +130,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("이름이 중복되는 경우")
+    @DisplayName("이름이 중복되는 경우 true를 반환한다.")
     void testNameDuplicated() {
         // Given
         String testName = "TestName";
@@ -146,7 +146,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("이름이 중복되지 않는 경우")
+    @DisplayName("이름이 중복되지 않는 경우 false를 반환한다.")
     void testNameNotDuplicated() {
         // Given
         String testName = "TestName";
@@ -162,7 +162,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 토큰이 제공되고 해당 사용자가 존재하는 경우")
+    @DisplayName("유효한 토큰이 제공되고 해당 사용자가 존재하는 경우 회원탈퇴를 진행한다.")
     void testWithdrawalWithValidTokenAndExistingUser() {
         // Given
         String testToken = "testToken";
@@ -181,7 +181,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효하지 않은 토큰이 제공되는 경우")
+    @DisplayName("유효하지 않은 토큰이 제공되는 경우 회원탈퇴를 진행할 수 없다.")
     void testWithdrawalWithInvalidToken() {
         // Given
         String testToken = "testToken";
@@ -193,7 +193,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("유효한 토큰이 제공되었지만 해당 사용자가 존재하지 않는 경우")
+    @DisplayName("유효한 토큰이 제공되었지만 해당 사용자가 존재하지 않는 경우  회원탈퇴를 진행할 수 없다.")
     void testWithdrawalWithValidTokenAndNonExistingUser() {
         // Given
         String testToken = "testToken";
@@ -208,7 +208,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("토큰으로부터 얻은 사용자 ID가 null인 경우")
+    @DisplayName("토큰으로부터 얻은 사용자 ID가 null인 경우 회원탈퇴를 진행할 수 없다.")
     void testWithdrawalWithNullUserId() {
         // Given
         String testToken = "testToken";
@@ -221,7 +221,7 @@ class MemberServiceTest {
     }
 
     @Test
-    @DisplayName("Member 객체의 withdrawal 메소드가 실패하는 경우")
+    @DisplayName("Member 객체의 withdrawal 메소드가 실패하는 경우 회원탈퇴를 진행할 수 없다.")
     void testWithdrawalFailure() {
         // Given
         String testToken = "testToken";
