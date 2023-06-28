@@ -33,11 +33,11 @@ jobs:
           ./gradlew clean build 
 
       - name: Copy files over ssh
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.SERVER_IP_ADDRESS }}
           username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           source: "build/libs/*.jar"
           target: "/var/www/petLink"
 
