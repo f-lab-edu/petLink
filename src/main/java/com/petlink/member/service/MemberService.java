@@ -1,5 +1,6 @@
 package com.petlink.member.service;
 
+import com.petlink.member.domain.InvalidEmail;
 import com.petlink.member.domain.Member;
 import com.petlink.member.dto.request.SignUpRequestDto;
 import com.petlink.member.dto.response.MemberInfoResponseDto;
@@ -20,6 +21,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public MemberInfoResponseDto signUp(SignUpRequestDto signUpRequestDto) {
+        checkNotAvailableEmail(signUpRequestDto.getEmail());
 
         signUpRequestDto.encodingPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
         Member member = signUpRequestDto.toEntity();
@@ -36,6 +38,15 @@ public class MemberService {
         memberRepository.save(member);
         return MemberInfoResponseDto.of(member);
     }
+
+    private void checkNotAvailableEmail(String email) {
+        for (InvalidEmail invalidEmail : InvalidEmail.values()) {
+            if (email.endsWith(invalidEmail.getEmailSuffix())) {
+                throw new MemberException(MemberExceptionCode.NOT_AVAILABLE_EMAIL);
+            }
+        }
+    }
+
 
     public Boolean isNameDuplicated(String name) {
         return memberRepository.existsByName(name);
