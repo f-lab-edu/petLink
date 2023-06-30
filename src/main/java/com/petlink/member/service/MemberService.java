@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.petlink.common.exception.TokenExceptionCode.INVALID_TOKEN_EXCEPTION;
+import static com.petlink.member.exception.MemberExceptionCode.ALREADY_REGISTERED_MEMBER;
+import static com.petlink.member.exception.MemberExceptionCode.ALREADY_USED_NAME;
 import static com.petlink.member.exception.MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION;
 
 @RequiredArgsConstructor
@@ -53,7 +55,6 @@ public class MemberService {
         }
     }
 
-
     public Boolean isNameDuplicated(String name) {
         return memberRepository.existsByName(name);
     }
@@ -69,6 +70,4 @@ public class MemberService {
                 .orElseThrow(() -> new MemberException(NOT_FOUND_MEMBER_EXCEPTION))
                 .withdrawal();
     }
-
-
 }

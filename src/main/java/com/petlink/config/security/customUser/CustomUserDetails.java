@@ -3,8 +3,8 @@ package com.petlink.config.security.customUser;
 import com.petlink.manager.domain.Manager;
 import com.petlink.member.domain.Member;
 import com.petlink.member.domain.MemberStatus;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,18 +18,23 @@ import static com.petlink.common.util.jwt.JwtRole.MANAGER;
 import static com.petlink.common.util.jwt.JwtRole.MEMBER;
 
 @Builder
-@AllArgsConstructor
+@Getter
 public class CustomUserDetails implements UserDetails {
 
     private Member member;
     private Manager manager;
 
-    public Member getMember() {
-        return this.member;
+    public CustomUserDetails(Member member) {
+        this.member = member;
     }
 
-    public Manager getManager() {
-        return this.manager;
+    public CustomUserDetails(Manager manager) {
+        this.manager = manager;
+    }
+
+    public CustomUserDetails(Member member, Manager manager) {
+        this.member = member;
+        this.manager = manager;
     }
 
     @Override
