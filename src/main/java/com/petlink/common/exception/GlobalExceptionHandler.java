@@ -52,6 +52,12 @@ public class GlobalExceptionHandler {
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
     }
 
+    @ExceptionHandler(value = {TokenException.class})
+    public ResponseEntity<ErrorResponse> handleFundingException(TokenException exception) {
+        log.error("Exception occurred", exception);
+        return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
@@ -71,4 +77,11 @@ public class GlobalExceptionHandler {
     private String getErrorMessage(String fieldName, Object rejectedValue) {
         return "유효하지 않은 파라미터입니다: " + fieldName + " [" + rejectedValue + "]";
     }
+
+    @ExceptionHandler(value = {Exception.class})
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception exception) {
+        log.error("Exception occurred", exception);
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
 }

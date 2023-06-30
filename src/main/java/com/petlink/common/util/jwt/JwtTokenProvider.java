@@ -99,6 +99,12 @@ public class JwtTokenProvider {
     public boolean isTokenValid(String token) {
         return (getEmailByToken(token) != null && !isTokenExpired(token));
     }
+    /**
+     * 토큰에서 사용자 정보 추출
+     */
+    public Long getIdByToken(String token) {
+        return extractClaim(token, claims -> claims.get("id", Long.class));
+    }
 
     /**
      * 토큰 만료일자 검사
