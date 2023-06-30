@@ -15,6 +15,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.petlink.config.filter.JwtAuthenticationEntryPoint;
+import com.petlink.config.filter.JwtAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Slf4j
 @Configuration
 @EnableWebSecurity
@@ -27,8 +33,6 @@ public class SecurityFilterChainConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-        //쿠키에서 token을 꺼내는 로직 추가
 
         return http
                 .csrf().disable()
