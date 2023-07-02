@@ -26,6 +26,8 @@ jobs:
           echo "DB_URL=${{ secrets.DB_URL }}" >> $GITHUB_ENV
           echo "DB_ID=${{ secrets.DB_ID }}" >> $GITHUB_ENV
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
+          echo "ACCESS_KEY=${{ secrets.ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
 
       - name: Build with Gradle
         run: |
@@ -48,11 +50,17 @@ jobs:
           host: ${{ secrets.SERVER_IP_ADDRESS }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          port:     ${{ secrets.SERVER_PORT }}
+          port: ${{ secrets.SERVER_PORT }}
           script: |
             cd /var/www/petLink/build/libs 
             pkill java
-            nohup java -jar petLink-0.0.1-SNAPSHOT.jar --DB_URL=${{ secrets.DB_URL }} --DB_ID=${{ secrets.DB_ID }} --DB_PASSWORD=${{ secrets.DB_PASSWORD }} > output.log 2>&1 &            
+            nohup java -jar petLink-0.0.1-SNAPSHOT.jar 
+                          --DB_URL=${{ secrets.DB_URL }} 
+                          --DB_ID=${{ secrets.DB_ID }} 
+                          --DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+                          --ACCESS_KEY=${{ secrets.ACCESS_KEY }}
+                          --SECRET_KEY=${{ secrets.SECRET_KEY }}
+                          > output.log 2>&1 &            
             if [[ $(find . -name "output.log" -size +500k) ]]; then
               echo "Log file is larger than 500kb, deleting..."
               rm output.log
