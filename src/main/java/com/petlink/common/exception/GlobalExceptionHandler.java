@@ -1,6 +1,7 @@
 package com.petlink.common.exception;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.petlink.common.storage.exception.StorageException;
 import com.petlink.funding.exception.FundingException;
 import com.petlink.manager.exception.ManagerException;
 import com.petlink.member.exception.MemberException;
@@ -55,6 +56,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {TokenException.class})
     public ResponseEntity<ErrorResponse> handleFundingException(TokenException exception) {
+        return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {StorageException.class})
+    public ResponseEntity<ErrorResponse> handleFundingException(StorageException exception) {
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
     }
 
