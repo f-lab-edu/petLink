@@ -5,6 +5,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -15,11 +16,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Component
 public class ImageUtils {
 
-    private final String endPoint = "https://kr.object.ncloudstorage.com";
-    private final String regionName = "kr-standard";
+    private static final String END_POINT = "https://kr.object.ncloudstorage.com";
+    private static final String REGION_NAME = "kr-standard";
 
     @Value("${object-storage:access-key}")
     private String accessKey;
@@ -31,14 +34,14 @@ public class ImageUtils {
     @PostConstruct
     void init() {
         s3 = AmazonS3ClientBuilder.standard()
-                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(END_POINT, REGION_NAME))
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .build();
 
     }
 
 
-    public ResultObject uploadImage(UploadObject uploadObject) throws Exception {
+    public ResultObject uploadImage(UploadObject uploadObject) throws AmazonS3Exception, IOException {
 
         MultipartFile imageFile = uploadObject.getImageFile();
         String objectName = uploadObject.getObjectName();
@@ -60,6 +63,6 @@ public class ImageUtils {
     }
 
     private String getImageLink(String bucketName, String objectName) {
-        return endPoint + "/" + bucketName + "/" + objectName;
+        return END_POINT + "/" + bucketName + "/" + objectName;
     }
 }
