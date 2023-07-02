@@ -10,6 +10,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.petlink.common.storage.dto.ResultObject;
 import com.petlink.common.storage.dto.UploadObject;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,14 +20,23 @@ public class ImageUtils {
 
     private final String endPoint = "https://kr.object.ncloudstorage.com";
     private final String regionName = "kr-standard";
-    @Value("${object-storage.access-key}")
+
+    @Value("${object-storage:access-key}")
     private String accessKey;
-    @Value("${object-storage.secret-key}")
+
+    @Value("${object-storage:secret-key}")
     private String secretKey;
-    private final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
-            .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
-            .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
-            .build();
+    private AmazonS3 s3;
+
+    @PostConstruct
+    void init() {
+        s3 = AmazonS3ClientBuilder.standard()
+                .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
+                .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
+                .build();
+
+    }
+
 
     public ResultObject uploadImage(UploadObject uploadObject) throws Exception {
 
