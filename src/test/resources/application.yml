@@ -27,3 +27,8 @@ spring:
 jwt:
   secret-key: flab-project-petlink-secret-key-sample # secret key
   expire-length: 86400000 # 1 days
+
+# Object Storage properties
+storage:
+  access-key: mock-access-key
+  secret-key: mock-secret-key
