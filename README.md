@@ -36,6 +36,7 @@
 ### v2
 
 - Object Storage를 신규 도입
+
   ![server_V2.png](ReadMe%2Fimages%2Fserver_V2.png)
 
 -----
