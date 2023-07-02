@@ -1,5 +1,6 @@
 package com.petlink.common.exception;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.petlink.funding.exception.FundingException;
 import com.petlink.manager.exception.ManagerException;
 import com.petlink.member.exception.MemberException;
@@ -54,8 +55,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {TokenException.class})
     public ResponseEntity<ErrorResponse> handleFundingException(TokenException exception) {
-        log.error("Exception occurred", exception);
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {AmazonS3Exception.class})
+    public ResponseEntity<ErrorResponse> handleTypeMismatchException(AmazonS3Exception exception) {
+        return buildAndReturnResponse(HttpStatus.valueOf(exception.getStatusCode()), exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -73,6 +78,7 @@ public class GlobalExceptionHandler {
         String rejectedValue = Objects.requireNonNull(exception.getValue()).toString();
         return buildAndReturnResponse(HttpStatus.BAD_REQUEST, getErrorMessage(fieldName, rejectedValue));
     }
+
 
     private String getErrorMessage(String fieldName, Object rejectedValue) {
         return "유효하지 않은 파라미터입니다: " + fieldName + " [" + rejectedValue + "]";
