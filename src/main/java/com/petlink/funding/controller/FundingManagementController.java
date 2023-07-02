@@ -9,6 +9,7 @@ import com.petlink.funding.service.FundingManagementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,7 +40,7 @@ public class FundingManagementController {
 
     //펀딩 등록 B - 단건 이미지 업로드
     @PostMapping("/image/upload")
-    public ResponseEntity<FundingImageResponse> uploadImage(@RequestBody @Valid FundingImageDto fundingImageDto) throws AmazonS3Exception, IOException {
+    public ResponseEntity<FundingImageResponse> uploadImage(@ModelAttribute @Valid FundingImageDto fundingImageDto) throws AmazonS3Exception, IOException {
         return ResponseEntity.ok(managementService.uploadImage(fundingImageDto));
     }
 

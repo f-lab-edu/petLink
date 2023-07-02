@@ -11,6 +11,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.petlink.common.storage.dto.ResultObject;
 import com.petlink.common.storage.dto.UploadObject;
+import com.petlink.common.storage.exception.StorageException;
+import com.petlink.common.storage.exception.StorageExceptionCode;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -24,10 +26,9 @@ public class ImageUtils {
     private static final String END_POINT = "https://kr.object.ncloudstorage.com";
     private static final String REGION_NAME = "kr-standard";
 
-    @Value("${object-storage:access-key}")
+    @Value("${storage.access-key}")
     private String accessKey;
-
-    @Value("${object-storage:secret-key}")
+    @Value("${storage.secret-key}")
     private String secretKey;
     private AmazonS3 s3;
 
@@ -40,10 +41,14 @@ public class ImageUtils {
 
     }
 
-
     public ResultObject uploadImage(UploadObject uploadObject) throws AmazonS3Exception, IOException {
 
         MultipartFile imageFile = uploadObject.getImageFile();
+
+        if (imageFile == null) {
+            throw new StorageException(StorageExceptionCode.NOT_NULL_IMAGE_FILE);
+        }
+
         String objectName = uploadObject.getObjectName();
         String bucketName = uploadObject.getBucket().getBucketName();
 
