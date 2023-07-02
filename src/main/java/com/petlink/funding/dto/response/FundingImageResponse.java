@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class FundingImageResponse {
+    Long id;
     String link;
     String name;
     LocalDateTime uploadedAt;
