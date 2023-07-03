@@ -11,6 +11,7 @@ import com.petlink.funding.repository.ImageRepository;
 import com.petlink.image.dto.ImageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -34,6 +35,7 @@ public class ImageService {
      * @return the result object
      * @throws IOException the io exception
      */
+    @Transactional
     public ResultObject uploadToImageServer(ImageDto imageDto) throws IOException, AmazonS3Exception {
         if (imageDto.getImage() == null) {
             throw new StorageException(NOT_FOUND_IMAGE_FILE);
