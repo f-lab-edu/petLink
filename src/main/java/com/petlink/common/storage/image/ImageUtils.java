@@ -46,7 +46,7 @@ public class ImageUtils {
         MultipartFile imageFile = uploadObject.getImageFile();
 
         if (imageFile == null) {
-            throw new StorageException(StorageExceptionCode.NOT_NULL_IMAGE_FILE);
+            throw new StorageException(StorageExceptionCode.NOT_FOUND_IMAGE_FILE);
         }
 
         String objectName = uploadObject.getObjectName();
