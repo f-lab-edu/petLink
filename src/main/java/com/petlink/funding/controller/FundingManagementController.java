@@ -1,11 +1,11 @@
 package com.petlink.funding.controller;
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.petlink.funding.dto.request.FundingImageDto;
 import com.petlink.funding.dto.request.FundingPostDto;
 import com.petlink.funding.dto.response.FundingCreateResponse;
 import com.petlink.funding.dto.response.FundingImageResponse;
 import com.petlink.funding.service.FundingManagementService;
+import com.petlink.image.dto.ImageDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +40,8 @@ public class FundingManagementController {
 
     //펀딩 등록 B - 단건 이미지 업로드
     @PostMapping("/image/upload")
-    public ResponseEntity<FundingImageResponse> uploadImage(@ModelAttribute @Valid FundingImageDto fundingImageDto) throws AmazonS3Exception, IOException {
-        return ResponseEntity.ok(managementService.uploadImage(fundingImageDto));
+    public ResponseEntity<FundingImageResponse> uploadImage(@ModelAttribute @Valid ImageDto imageDto) throws AmazonS3Exception, IOException {
+        return ResponseEntity.ok(managementService.uploadImage(imageDto));
     }
 
 

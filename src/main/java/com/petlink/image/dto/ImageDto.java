@@ -1,4 +1,4 @@
-package com.petlink.funding.dto.request;
+package com.petlink.image.dto;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class FundingImageDto implements Serializable {
+public class ImageDto implements Serializable {
     MultipartFile image;
     String objectName;
 
