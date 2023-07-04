@@ -40,7 +40,9 @@ public class ImageService {
         if (imageDto.getImage() == null) {
             throw new StorageException(NOT_FOUND_IMAGE_FILE);
         }
-
+        if (imageDto.getObjectName().isBlank()) {
+            throw new StorageException(NOT_FOUND_FILE_NAME);
+        }
         return imageUtils.uploadImage(UploadObject.builder()
                 .objectName(getNameWithFolder(imageDto.getObjectName()))
                 .imageFile(imageDto.getImage())
@@ -72,14 +74,13 @@ public class ImageService {
      * @return the image
      */
     public Image saveImageInfo(ResultObject resultObject) {
+        if (resultObject == null) throw new StorageException(NOT_FOUND_IMAGE_FILE);
+
         String link = resultObject.getImageLink();
-        if (link.isEmpty()) {
-            throw new StorageException(NOT_FOUND_FILE_NAME);
-        }
+        if (link == null || link.isBlank()) throw new StorageException(NOT_FOUND_FILE_NAME);
+
         String name = resultObject.getObjectName();
-        if (name.isEmpty()) {
-            throw new StorageException(NOT_FOUND_IMAGE_LINK);
-        }
+        if (name == null || name.isBlank()) throw new StorageException(NOT_FOUND_IMAGE_LINK);
 
         return imageRepository.save(Image.builder()
                 .path(link)
