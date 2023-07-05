@@ -37,12 +37,12 @@ public class ImageService {
      */
     @Transactional
     public ResultObject uploadToImageServer(ImageDto imageDto) throws IOException, AmazonS3Exception {
-        if (imageDto.getImage() == null) {
+        if (imageDto.getImage() == null || imageDto.getImage().isEmpty())
             throw new StorageException(NOT_FOUND_IMAGE_FILE);
-        }
-        if (imageDto.getObjectName().isBlank()) {
+
+        if (imageDto.getObjectName() == null || imageDto.getObjectName().isBlank())
             throw new StorageException(NOT_FOUND_FILE_NAME);
-        }
+
         return imageUtils.uploadImage(UploadObject.builder()
                 .objectName(getNameWithFolder(imageDto.getObjectName()))
                 .imageFile(imageDto.getImage())
