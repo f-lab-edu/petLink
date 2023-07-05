@@ -9,16 +9,19 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.petlink.common.storage.dto.ResultObject;
 import com.petlink.common.storage.dto.UploadObject;
 import com.petlink.common.storage.exception.StorageException;
-import com.petlink.common.storage.exception.StorageExceptionCode;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+
+import static com.petlink.common.storage.exception.StorageExceptionCode.FAILED_UPLOAD_IMAGE;
+import static com.petlink.common.storage.exception.StorageExceptionCode.NOT_FOUND_IMAGE_FILE;
 
 @Component
 public class ImageUtils {
@@ -45,8 +48,8 @@ public class ImageUtils {
 
         MultipartFile imageFile = uploadObject.getImageFile();
 
-        if (imageFile == null) {
-            throw new StorageException(StorageExceptionCode.NOT_FOUND_IMAGE_FILE);
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new StorageException(NOT_FOUND_IMAGE_FILE);
         }
 
         String objectName = uploadObject.getObjectName();
@@ -59,7 +62,11 @@ public class ImageUtils {
         PutObjectRequest request = new PutObjectRequest(bucketName, objectName, imageFile.getInputStream(), metadata);
         request.setCannedAcl(CannedAccessControlList.PublicRead);
 
-        s3.putObject(request);
+        PutObjectResult result = s3.putObject(request);
+
+        if (result.getETag().isBlank() || result.getETag().isEmpty()) {
+            throw new StorageException(FAILED_UPLOAD_IMAGE);
+        }
 
         return ResultObject.builder()
                 .objectName(objectName)
