@@ -71,19 +71,19 @@ public class Funding extends BaseEntity {
     @Column(nullable = false)
     private Long successDonation;
 
+    @Builder.Default
     @OneToMany(mappedBy = "funding", fetch = FetchType.LAZY)
     private List<FundingItem> fundingItems = new ArrayList<>();
 
     @Override
     public String toString() {
         return "Funding{" + "id=" + id + ", title='" + title + '\'' + ", miniTitle='" + miniTitle + '\'' +
-                ", content='" + content + '\'' +
-                ", state=" + state +
-                ", category=" + category +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", targetDonation=" + targetDonation +
-                ", successDonation=" + successDonation +
+                "\ncontent : " + content +
+                "\nstate   : " + state +
+                "\ncategory : " + category +
+                "\ndate=" + startDate + "~" + endDate +
+                "\ntargetDonation : " + targetDonation +
+                "\nsuccessDonation : " + successDonation +
                 '}';
     }
 }
