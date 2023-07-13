@@ -36,7 +36,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.projectlombok:lombok'
 
@@ -54,6 +53,9 @@ dependencies {
     asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
+    // object Storage
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.481'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
 }
 
 tasks.named('test') {
