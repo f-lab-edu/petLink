@@ -1,6 +1,7 @@
 package com.petlink.common.exception;
 
 import com.petlink.funding.exception.FundingException;
+import com.petlink.manager.exception.ManagerException;
 import com.petlink.member.exception.MemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,13 +39,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {MemberException.class})
     public ResponseEntity<ErrorResponse> handleGenericException(MemberException exception) {
-        log.error("Exception occurred", exception);
+        return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {ManagerException.class})
+    public ResponseEntity<ErrorResponse> handleGenericException(ManagerException exception) {
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
     }
 
     @ExceptionHandler(value = {FundingException.class})
     public ResponseEntity<ErrorResponse> handleFundingException(FundingException exception) {
-        log.error("Exception occurred", exception);
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
     }
 
