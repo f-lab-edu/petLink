@@ -43,7 +43,6 @@ public class ItemService {
                 .filter(isSuccess -> isSuccess)
                 .count();
 
-        // 실패한 아이템 수를 계산
         long failCount = itemDtoList.size() - successCount;
 
         // 등록 성공/실패한 아이템 수와 실패한 아이템 목록을 담은 응답 객체 반환
