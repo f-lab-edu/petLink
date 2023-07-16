@@ -1,7 +1,6 @@
 package com.petlink.funding.domain;
 
 import com.petlink.common.domain.base.BaseEntity;
-import com.petlink.funding.item.domain.FundingItem;
 import com.petlink.manager.domain.Manager;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,8 +20,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Builder
@@ -71,19 +67,18 @@ public class Funding extends BaseEntity {
     @Column(nullable = false)
     private Long successDonation;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "funding", fetch = FetchType.LAZY)
-    private List<FundingItem> fundingItems = new ArrayList<>();
-
     @Override
     public String toString() {
         return "Funding{" + "id=" + id + ", title='" + title + '\'' + ", miniTitle='" + miniTitle + '\'' +
-                "\ncontent : " + content +
-                "\nstate   : " + state +
-                "\ncategory : " + category +
-                "\ndate=" + startDate + "~" + endDate +
-                "\ntargetDonation : " + targetDonation +
-                "\nsuccessDonation : " + successDonation +
+                ", content='" + content + '\'' +
+                ", state=" + state +
+                ", category=" + category +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", targetDonation=" + targetDonation +
+                ", successDonation=" + successDonation +
                 '}';
     }
+
+
 }
