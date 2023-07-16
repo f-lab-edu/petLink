@@ -12,10 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FundingItemResponseDto {
-    //등록 성공 갯수 여부
     private Long failCount;
-    //등록 실패 갯수 여부
     private Long successCount;
-    //등록 실패한 아이템 목록
-    private List<String> failList;
+    private List<FailedItem> failList;
+
+    @Getter
+    @AllArgsConstructor
+    public static class FailedItem {
+        private String title;
+        private String reason;
+    }
 }

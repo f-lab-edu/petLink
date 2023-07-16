@@ -2,6 +2,7 @@ package com.petlink.funding.item.controller;
 
 
 import com.petlink.funding.item.dto.request.FundingItemRequestDto;
+import com.petlink.funding.item.dto.response.FundingItemResponseDto;
 import com.petlink.funding.item.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,8 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping("/{fundingId}")
-    public ResponseEntity<Void> registerItems(@PathVariable Long fundingId, @Validated @RequestBody List<FundingItemRequestDto> itemDtoList) {
-        itemService.registerItems(fundingId, itemDtoList);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<FundingItemResponseDto> registerItems(@PathVariable Long fundingId, @Validated @RequestBody List<FundingItemRequestDto> itemDtoList) {
+        FundingItemResponseDto fundingItemResponseDto = itemService.registerItems(fundingId, itemDtoList);
+        return ResponseEntity.ok(fundingItemResponseDto);
     }
-
-
 }
