@@ -24,12 +24,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         CustomUserDetails.CustomUserDetailsBuilder userDetailsBuilder = CustomUserDetails.builder();
 
         if (email.endsWith("@petlink.co.kr")) {
-            Optional<Manager> optionalManager = managerRepository.findByEmail(email);
-            optionalManager.ifPresent(userDetailsBuilder::manager);
+            buildManagerUserDetails(userDetailsBuilder, email);
         } else {
-            Optional<Member> optionalMember = memberRepository.findByEmail(email);
-            optionalMember.ifPresent(userDetailsBuilder::member);
+            buildMemberUserDetails(userDetailsBuilder, email);
         }
+
         UserDetails userDetails = userDetailsBuilder.build();
         if (userDetails.getAuthorities().isEmpty()) {
             throw new UsernameNotFoundException("Not found with email: " + email);
@@ -37,4 +36,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return userDetails;
     }
+
+    private void buildManagerUserDetails(CustomUserDetails.CustomUserDetailsBuilder userDetailsBuilder, String email) {
+        Optional<Manager> optionalManager = managerRepository.findByEmail(email);
+        optionalManager.ifPresent(userDetailsBuilder::manager);
+    }
+
+    private void buildMemberUserDetails(CustomUserDetails.CustomUserDetailsBuilder userDetailsBuilder, String email) {
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        optionalMember.ifPresent(userDetailsBuilder::member);
+    }
+
 }
