@@ -21,6 +21,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        if (email == null || email.isBlank()) {
+            throw new UsernameNotFoundException("Not found with email: " + email);
+        }
+
         CustomUserDetails.CustomUserDetailsBuilder userDetailsBuilder = CustomUserDetails.builder();
 
         if (email.endsWith("@petlink.co.kr")) {
