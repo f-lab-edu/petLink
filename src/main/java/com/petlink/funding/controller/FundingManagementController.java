@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping("/fundings/manage")
 @RequiredArgsConstructor
@@ -26,12 +24,7 @@ public class FundingManagementController {
     //펀딩 등록 A - 게시글 작성
     @PostMapping("/create")
     public ResponseEntity<FundingCreateResponse> createFunding(@RequestBody @Valid FundingPostDto fundingPostDto) {
-        Long funding = managementService.createFunding(fundingPostDto);
-        return ResponseEntity.ok(FundingCreateResponse
-                .builder()
-                .id(funding)
-                .registeredAt(LocalDateTime.now())
-                .build());
+        return ResponseEntity.ok(managementService.createFunding(fundingPostDto));
     }
 
     //펀딩 등록 B - 단건 이미지 업로드
