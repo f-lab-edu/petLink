@@ -19,7 +19,7 @@ import static com.petlink.manager.exception.ManagerExceptionCode.MANAGER_NOT_FOU
 public class FundingManagementService {
     private final FundingRepository fundingRepository;
     private final ManagerRepository managerRepository;
-
+    private final double rate = 0.8;
 
     @Transactional
     public FundingCreateResponse createFunding(FundingPostDto fundingPostDto) {
@@ -48,6 +48,6 @@ public class FundingManagementService {
     }
 
     private Long calculateSuccessDonation(Long targetDonation) {
-        return Math.round(targetDonation * 0.8);
+        return Math.round(targetDonation * rate);
     }
 }
