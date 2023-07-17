@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.petlink.common.util.date.DateConverter.toLocalDateTime;
 import static com.petlink.manager.exception.ManagerExceptionCode.MANAGER_NOT_FOUND;
 
 @Service
@@ -35,8 +36,8 @@ public class FundingManagementService {
                         .content(fundingPostDto.getContent())
                         .state(FundingState.SCHEDULED)
                         .category(fundingPostDto.getCategory())
-                        .startDate(fundingPostDto.getStartDate())
-                        .endDate(fundingPostDto.getEndDate())
+                        .startDate(toLocalDateTime(fundingPostDto.getStartDate()))
+                        .endDate(toLocalDateTime(fundingPostDto.getEndDate()))
                         .targetDonation(fundingPostDto.getTargetDonation())
                         .successDonation(calculateSuccessDonation(fundingPostDto.getTargetDonation()))
                         .build());

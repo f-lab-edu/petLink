@@ -1,5 +1,6 @@
 package com.petlink.common.util.jwt;
 
+import com.petlink.manager.domain.Manager;
 import com.petlink.member.domain.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -22,17 +23,37 @@ public class JwtTokenProvider {
     private Long expireLength;
 
     /**
-     * 토큰 생성
+     * 매니저 토큰 생성
      */
     public String createToken(Member member) {
         Claims claims = Jwts.claims();
         claims.put("id", member.getId());
         claims.put("role", JwtRole.MEMBER);
+        long systemTime = System.currentTimeMillis();
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(member.getEmail())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expireLength))
+                .setIssuedAt(new Date(systemTime))
+                .setExpiration(new Date(systemTime + expireLength))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    /**
+     * 매니저 토큰 생성
+     */
+    public String createToken(Manager manager) {
+        Claims claims = Jwts.claims();
+        claims.put("id", manager.getId());
+        claims.put("role", JwtRole.MANAGER);
+        long systemTime = System.currentTimeMillis();
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(manager.getEmail())
+                .setIssuedAt(new Date(systemTime))
+                .setExpiration(new Date(systemTime + expireLength))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -71,11 +92,9 @@ public class JwtTokenProvider {
         return extractClaim(token, Claims::getSubject);
     }
 
-    /**
-     * 토큰에서 사용자 정보 추출
-     */
-    public Long getIdByToken(String token) {
-        return extractClaim(token, claims -> claims.get("id", Long.class));
+
+    public String getRoleByToken(String token) {
+        return extractClaim(token, claims -> claims.get("role", String.class));
     }
 
     /**
@@ -83,6 +102,13 @@ public class JwtTokenProvider {
      */
     public boolean isTokenValid(String token) {
         return (getEmailByToken(token) != null && !isTokenExpired(token));
+    }
+
+    /**
+     * 토큰에서 사용자 정보 추출
+     */
+    public Long getIdByToken(String token) {
+        return extractClaim(token, claims -> claims.get("id", Long.class));
     }
 
     /**
@@ -98,4 +124,5 @@ public class JwtTokenProvider {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+
 }
