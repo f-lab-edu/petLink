@@ -12,8 +12,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CustomUserDetailsServiceTest {
 
@@ -64,6 +70,24 @@ public class CustomUserDetailsServiceTest {
     }
 
     @Test
+    @DisplayName("이메일이 @petlink.co.kr로 끝나지 않는 경우 Member 객체를 반환한다.")
+    public void testLoadUserByUsername_NotManagerExists() {
+        String email = "member@notpetlink.co.kr";
+        Member member = Member.builder()
+                .email(email)
+                .name("물범")
+                .build();
+        when(memberRepository.findByEmail(email)).thenReturn(Optional.of(member));
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+        assertNotNull(userDetails);
+        assertEquals(email, userDetails.getUsername());
+
+        verify(managerRepository, never()).findByEmail(anyString());
+    }
+
+    @Test
     @DisplayName("멤버와 매니저가 존재하지 않는 경우 UsernameNotFoundException을 던진다.")
     public void testLoadUserByUsername_UserNotFound() {
         String email = "nonexistent@example.com";
@@ -76,6 +100,36 @@ public class CustomUserDetailsServiceTest {
 
         verify(memberRepository).findByEmail(email);
         verify(managerRepository, never()).findByEmail(email);
+    }
+
+    @Test
+    @DisplayName("이메일이 null인 경우 UsernameNotFoundException을 던진다.")
+    public void testLoadUserByUsername_NullEmail() {
+        assertThrows(UsernameNotFoundException.class, () -> {
+            userDetailsService.loadUserByUsername(null);
+        });
+    }
+
+    @Test
+    @DisplayName("이메일이 비어있는 문자열인 경우 UsernameNotFoundException을 던진다.")
+    public void testLoadUserByUsername_EmptyEmail() {
+        assertThrows(UsernameNotFoundException.class, () -> {
+            userDetailsService.loadUserByUsername("");
+        });
+    }
+
+    @Test
+    @DisplayName("이메일이 @petlink.co.kr로 끝나지만 Manager가 존재하지 않는 경우 UsernameNotFoundException을 던진다.")
+    public void testLoadUserByUsername_ManagerEmailButNoManager() {
+        String email = "manager@petlink.co.kr";
+        when(managerRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        assertThrows(UsernameNotFoundException.class, () -> {
+            userDetailsService.loadUserByUsername(email);
+        });
+
+        verify(managerRepository).findByEmail(email);
+        verify(memberRepository, never()).findByEmail(anyString());
     }
 
 }
