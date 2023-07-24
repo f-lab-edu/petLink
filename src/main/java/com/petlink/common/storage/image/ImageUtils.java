@@ -5,11 +5,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.*;
 import com.petlink.common.storage.dto.ResultObject;
 import com.petlink.common.storage.dto.UploadObject;
 import com.petlink.common.storage.exception.StorageException;
@@ -64,7 +60,7 @@ public class ImageUtils {
 
         PutObjectResult result = s3.putObject(request);
 
-        if (result.getETag().isBlank() || result.getETag().isEmpty()) {
+        if (result.getETag() == null || result.getETag().isBlank()) {
             throw new StorageException(FAILED_UPLOAD_IMAGE);
         }
 
