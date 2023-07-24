@@ -29,11 +29,13 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims();
         claims.put("id", member.getId());
         claims.put("role", JwtRole.MEMBER);
+        long systemTime = System.currentTimeMillis();
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(member.getEmail())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expireLength))
+                .setIssuedAt(new Date(systemTime))
+                .setExpiration(new Date(systemTime + expireLength))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -45,11 +47,13 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims();
         claims.put("id", manager.getId());
         claims.put("role", JwtRole.MANAGER);
+        long systemTime = System.currentTimeMillis();
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(manager.getEmail())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expireLength))
+                .setIssuedAt(new Date(systemTime))
+                .setExpiration(new Date(systemTime + expireLength))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -99,6 +103,7 @@ public class JwtTokenProvider {
     public boolean isTokenValid(String token) {
         return (getEmailByToken(token) != null && !isTokenExpired(token));
     }
+
     /**
      * 토큰에서 사용자 정보 추출
      */

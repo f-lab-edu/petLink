@@ -46,14 +46,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.getWriter().println("{ \"message\": \"" + message + "\" }");
     }
 
-    private String parseJwtFromCookie(HttpServletRequest request) {
+    private Optional<String> parseJwtFromCookie(HttpServletRequest request) {
         return Optional.ofNullable(request.getCookies())
                 .stream()
                 .flatMap(Arrays::stream)
                 .filter(cookie -> JwtToken.JWT_TOKEN.getTokenName().equals(cookie.getName()))
                 .map(Cookie::getValue)
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     private Authentication getAuthentication(String token) {
@@ -75,15 +74,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        
+        Optional<String> tokenOptional = parseJwtFromCookie(request);
 
-        String token = parseJwtFromCookie(request);
-
-        if (token == null) {
+        if (tokenOptional.isEmpty()) {
             generateTokenExceptionMessage(response, "인증을 위해 JWT 토큰이 필요합니다.");
             filterChain.doFilter(request, response);
             return;
         }
 
+        String token = tokenOptional.get();
         log.info(jwtTokenProvider.getRoleByToken(token));
         if (Objects.equals(jwtTokenProvider.getRoleByToken(token), JwtRole.MANAGER.getRole())) {
             filterChain.doFilter(request, response);
