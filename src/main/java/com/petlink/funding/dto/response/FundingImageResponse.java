@@ -1,5 +1,6 @@
 package com.petlink.funding.dto.response;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,10 +9,10 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FundingImageResponse {
-    Long id;
-    String link;
-    String name;
-    LocalDateTime uploadedAt;
+    private Long id;
+    private String link;
+    private String name;
+    private LocalDateTime uploadedAt;
 }
