@@ -6,6 +6,7 @@ import com.petlink.funding.domain.FundingState;
 import com.petlink.funding.dto.request.FundingPostDto;
 import com.petlink.funding.dto.response.FundingCreateResponse;
 import com.petlink.funding.dto.response.FundingImageResponse;
+import com.petlink.funding.item.repository.ItemRepository;
 import com.petlink.funding.repository.FundingRepository;
 import com.petlink.image.domain.Image;
 import com.petlink.image.dto.ImageDto;
@@ -25,6 +26,7 @@ import static com.petlink.manager.exception.ManagerExceptionCode.MANAGER_NOT_FOU
 @Service
 @RequiredArgsConstructor
 public class FundingManagementService {
+    private final ItemRepository itemRepository;
     private final FundingRepository fundingRepository;
     private final ManagerRepository managerRepository;
     private final double rate = 0.8;
@@ -75,4 +77,5 @@ public class FundingManagementService {
                 .uploadedAt(image.getCreatedDate())
                 .build();
     }
+
 }
