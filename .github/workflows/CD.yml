@@ -52,6 +52,15 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /var/www/petLink/build/libs 
-            pkill java
-            nohup java -jar petLink-0.0.1-SNAPSHOT.jar  --DB_URL=${{ secrets.DB_URL }}  --DB_ID=${{ secrets.DB_ID }}  --DB_PASSWORD=${{ secrets.DB_PASSWORD }} --ACCESS_KEY=${{ secrets.ACCESS_KEY }} --SECRET_KEY=${{ secrets.SECRET_KEY }}
+               cd /var/www/petLink/build/libs 
+               pkill java
+                nohup java -jar petLink-0.0.1-SNAPSHOT.jar  --DB_URL=${{ secrets.DB_URL }}  --DB_ID=${{ secrets.DB_ID }}  --DB_PASSWORD=${{ secrets.DB_PASSWORD }} --ACCESS_KEY=${{ secrets.ACCESS_KEY }} --SECRET_KEY=${{ secrets.SECRET_KEY }} > output.log 2>&1 & 
+                echo $! > run.pid
+               sleep 10
+                if ps -p $(cat run.pid) > /dev/null
+                then
+                echo "Process is running."
+               else
+                echo "Process not running."
+                exit 1
+              fi
