@@ -3,7 +3,7 @@ package com.petlink.funding.item.service;
 import com.petlink.funding.domain.Funding;
 import com.petlink.funding.exception.FundingException;
 import com.petlink.funding.item.domain.FundingItem;
-import com.petlink.funding.item.dto.request.FundingItemRequestDto;
+import com.petlink.funding.item.dto.request.ItemRequestDto;
 import com.petlink.funding.item.dto.response.FundingItemResponseDto;
 import com.petlink.funding.item.repository.ItemRepository;
 import com.petlink.funding.repository.FundingRepository;
@@ -23,7 +23,7 @@ public class ItemService {
     private final FundingRepository fundingRepository;
 
     @Transactional
-    public FundingItemResponseDto registerItems(Long fundingId, List<FundingItemRequestDto> itemDtoList) {
+    public FundingItemResponseDto registerItems(Long fundingId, List<ItemRequestDto> itemDtoList) {
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
 
@@ -36,7 +36,7 @@ public class ItemService {
                         registerItem(funding, itemDto);
                         return true;
                     } catch (Exception e) {
-                        failList.add(new FundingItemResponseDto.FailedItem(itemDto.getTitle(), e.getMessage()));
+                        failList.add(FundingItemResponseDto.FailedItem.of(itemDto.getTitle(), e.getMessage()));
                         return false;
                     }
                 })
@@ -54,7 +54,7 @@ public class ItemService {
     }
 
     // 리워드 아이템을 등록하는 별도의 메소드
-    private void registerItem(Funding funding, FundingItemRequestDto itemDto) {
+    private void registerItem(Funding funding, ItemRequestDto itemDto) {
         FundingItem fundingItem = itemDto.toEntity(funding);
         itemRepository.save(fundingItem);
     }

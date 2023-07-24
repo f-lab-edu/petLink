@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FundingItemRequestDto {
+public class ItemRequestDto {
 
     @NotNull(message = "리워드 제목은 필수입니다.")
     @Size(min = 1, max = 100, message = "리워드 제목은 1자 이상 100자 이하입니다.")
