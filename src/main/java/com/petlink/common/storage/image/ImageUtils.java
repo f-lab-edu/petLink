@@ -5,12 +5,10 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.petlink.common.storage.dto.ResultObject;
 import com.petlink.common.storage.dto.UploadObject;
+import com.petlink.common.storage.exception.StorageException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,16 +16,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+import static com.petlink.common.storage.exception.StorageExceptionCode.FAILED_UPLOAD_IMAGE;
+import static com.petlink.common.storage.exception.StorageExceptionCode.NOT_FOUND_IMAGE_FILE;
+
 @Component
 public class ImageUtils {
 
     private static final String END_POINT = "https://kr.object.ncloudstorage.com";
     private static final String REGION_NAME = "kr-standard";
 
-    @Value("${object-storage:access-key}")
+    @Value("${storage.access-key}")
     private String accessKey;
-
-    @Value("${object-storage:secret-key}")
+    @Value("${storage.secret-key}")
     private String secretKey;
     private AmazonS3 s3;
 
@@ -40,10 +40,14 @@ public class ImageUtils {
 
     }
 
-
     public ResultObject uploadImage(UploadObject uploadObject) throws AmazonS3Exception, IOException {
 
         MultipartFile imageFile = uploadObject.getImageFile();
+
+        if (imageFile == null || imageFile.isEmpty()) {
+            throw new StorageException(NOT_FOUND_IMAGE_FILE);
+        }
+
         String objectName = uploadObject.getObjectName();
         String bucketName = uploadObject.getBucket().getBucketName();
 
@@ -54,7 +58,11 @@ public class ImageUtils {
         PutObjectRequest request = new PutObjectRequest(bucketName, objectName, imageFile.getInputStream(), metadata);
         request.setCannedAcl(CannedAccessControlList.PublicRead);
 
-        s3.putObject(request);
+        PutObjectResult result = s3.putObject(request);
+
+        if (result.getETag() == null || result.getETag().isBlank()) {
+            throw new StorageException(FAILED_UPLOAD_IMAGE);
+        }
 
         return ResultObject.builder()
                 .objectName(objectName)
