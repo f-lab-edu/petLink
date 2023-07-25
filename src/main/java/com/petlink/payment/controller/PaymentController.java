@@ -1,6 +1,7 @@
 package com.petlink.payment.controller;
 
 import com.petlink.payment.dto.request.PaymentRequest;
+import com.petlink.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/payment")
 public class PaymentController {
+
+    private final PaymentService paymentService;
 
     // todo 결제를 생성하는 기능.
     @PostMapping
