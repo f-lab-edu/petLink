@@ -9,9 +9,9 @@ public class ResultResponse {
     Message code;
     Boolean result;
 
-    public ResultResponse(Boolean result) {
+    public ResultResponse(Boolean result, Message code) {
         this.result = result;
-        this.code = Boolean.TRUE.equals(result) ? Message.DUPLICATED_NAME : Message.AVAILABLE_NAME;
+        this.code = code;
         this.message = this.code.getMessage();
     }
 }

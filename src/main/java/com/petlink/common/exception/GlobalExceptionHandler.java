@@ -1,6 +1,9 @@
 package com.petlink.common.exception;
 
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.petlink.common.storage.exception.StorageException;
 import com.petlink.funding.exception.FundingException;
+import com.petlink.manager.exception.ManagerException;
 import com.petlink.member.exception.MemberException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,14 +41,32 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {MemberException.class})
     public ResponseEntity<ErrorResponse> handleGenericException(MemberException exception) {
-        log.error("Exception occurred", exception);
+        return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {ManagerException.class})
+    public ResponseEntity<ErrorResponse> handleGenericException(ManagerException exception) {
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
     }
 
     @ExceptionHandler(value = {FundingException.class})
     public ResponseEntity<ErrorResponse> handleFundingException(FundingException exception) {
-        log.error("Exception occurred", exception);
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {TokenException.class})
+    public ResponseEntity<ErrorResponse> handleFundingException(TokenException exception) {
+        return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {StorageException.class})
+    public ResponseEntity<ErrorResponse> handleFundingException(StorageException exception) {
+        return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {AmazonS3Exception.class})
+    public ResponseEntity<ErrorResponse> handleTypeMismatchException(AmazonS3Exception exception) {
+        return buildAndReturnResponse(HttpStatus.valueOf(exception.getStatusCode()), exception.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -64,7 +85,15 @@ public class GlobalExceptionHandler {
         return buildAndReturnResponse(HttpStatus.BAD_REQUEST, getErrorMessage(fieldName, rejectedValue));
     }
 
+
     private String getErrorMessage(String fieldName, Object rejectedValue) {
         return "유효하지 않은 파라미터입니다: " + fieldName + " [" + rejectedValue + "]";
     }
+
+    @ExceptionHandler(value = {Exception.class})
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception exception) {
+        log.error("Exception occurred", exception);
+        return buildAndReturnResponse(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
 }

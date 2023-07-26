@@ -24,9 +24,21 @@
 
 ### 🌐 서버 구조 🌐
 
-### v1
+<details>
+<summary>V1</summary>
+<div markdown="1">
 
 ![server_V1.png](ReadMe%2Fimages%2Fserver_V1.png)
+
+</div>
+</details>
+
+### v2
+
+- Object Storage를 신규 도입
+
+  ![server_V2.png](ReadMe%2Fimages%2Fserver_V2.png)
+
 -----
 
 ### 🖥️ 사용 기술 및 환경 🖥️
@@ -51,6 +63,18 @@
 </div>
 </details>
 
-### v2
+<details>
+<summary>V2</summary>
+<div markdown="1">
 
 ![erd_V2.png](ReadMe%2Fimages%2Ferd_V2.png)
+
+</div>
+</details>
+
+### v3
+
+- 이미지 처리를 별도의 독립된 테이블로 구분하며 관리하기 위해 수정
+  ![erd_V3.png](ReadMe%2Fimages%2Ferd_V3.png)
+
+-----

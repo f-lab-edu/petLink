@@ -23,5 +23,9 @@ logging:
 # JWT properties
 jwt:
   secret-key: flab-project-petlink-secret-key-sample
-  expire-length: 86400000 # 1 days
+  expire-length: 86400000
 
+# Object Storage properties
+storage:
+  access-key: ${ACCESS_KEY}
+  secret-key: ${SECRET_KEY}
