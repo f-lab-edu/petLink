@@ -92,7 +92,7 @@ class FundingManagementControllerTest extends RestDocsSupport {
     @DisplayName("펀딩등록-B(이미지 업로드) : API_DOCS")
     void uploadImageForApiDocs() throws Exception {
         MockMultipartFile image = new MockMultipartFile("image", "펀딩 이미지 파일명", "image/png", "펀딩 이미지 파일내용".getBytes());
-        ImageDto request = new ImageDto(image, "펀딩 이미지 파일명");
+        ImageDto request = ImageDto.of(image);
 
         FundingImageResponse response = FundingImageResponse.builder()
                 .id(1L)
@@ -113,7 +113,7 @@ class FundingManagementControllerTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 .andDo(document("funding-management/upload-image",
                         requestParts(
-                                partWithName("image").description(image)
+                                partWithName("image").description("이미지 파일")
                         ),
                         responseFields(
                                 fieldWithPath("id").description("펀딩 이미지 ID"),
