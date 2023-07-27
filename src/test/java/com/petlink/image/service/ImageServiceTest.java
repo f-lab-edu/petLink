@@ -40,7 +40,7 @@ public class ImageServiceTest {
     void uploadToImageTest() throws IOException, AmazonS3Exception {
         //given
         MockMultipartFile mockMultipartFile = new MockMultipartFile("image", "image.jpg", "image/jpeg", "image".getBytes());
-        ImageDto imageDto = new ImageDto(mockMultipartFile, "image.jpg");
+        ImageDto imageDto = ImageDto.of(mockMultipartFile);
         ResultObject result = ResultObject.builder()
                 .imageLink("https://image.petlink.kr/2021/08/25/image.jpg")
                 .objectName("2021/08/25/image.jpg")
@@ -59,33 +59,14 @@ public class ImageServiceTest {
     void uploadToImageExceptionTest() throws IOException, AmazonS3Exception {
         //given
         MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "image".getBytes());
-        ImageDto imageDto = new ImageDto(image, "image.jpg");
+        ImageDto imageDto = ImageDto.of(image);
+
 
         //when
         when(imageUtils.uploadImage(any())).thenThrow(StorageException.class);
 
         //then
         assertThrows(StorageException.class, () -> imageService.uploadToImageServer(imageDto));
-    }
-
-    @Test
-    @DisplayName("이미지 파일 이름이 null일 경우 예외가 발생한다.")
-    void uploadToImageServerWithNullFileNameTest() {
-        //given
-        MockMultipartFile image = new MockMultipartFile("image", null, "image/jpeg", "image".getBytes());
-
-        //when & then
-        assertThrows(StorageException.class, () -> new ImageDto(image, null));
-    }
-
-    @Test
-    @DisplayName("이미지 파일 이름이 빈 문자열일 경우 예외가 발생한다.")
-    void uploadToImageServerWithEmptyFileNameTest() throws AmazonS3Exception {
-        //given
-        MockMultipartFile image = new MockMultipartFile("image", "", "image/jpeg", "image".getBytes());
-
-        //when & then
-        assertThrows(StorageException.class, () -> new ImageDto(image, null));
     }
 
     @Test

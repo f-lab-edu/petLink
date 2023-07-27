@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 import static com.petlink.common.exception.ExceptionCode.INVALID_DATE_FORMAT;
 import static com.petlink.common.exception.ExceptionCode.NULL_IS_NOT_ALLOWED;
@@ -18,13 +17,12 @@ import static com.petlink.common.exception.ExceptionCode.NULL_IS_NOT_ALLOWED;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DateConverter {
     public static LocalDateTime toLocalDateTime(String date) {
-        return Optional.ofNullable(date)
-                .map(d -> switch (d.length()) {
-                    case 8 -> parseDateWithDay(d);
-                    case 6 -> parseDateWithoutDay(d);
-                    default -> throw new CommonException(INVALID_DATE_FORMAT);
-                })
-                .orElseThrow(() -> new CommonException(NULL_IS_NOT_ALLOWED));
+        if (date == null) throw new CommonException(NULL_IS_NOT_ALLOWED);
+        return switch (date.length()) {
+            case 8 -> parseDateWithDay(date);
+            case 6 -> parseDateWithoutDay(date);
+            default -> throw new CommonException(INVALID_DATE_FORMAT);
+        };
     }
 
     private static LocalDateTime parseDateWithDay(String date) {
