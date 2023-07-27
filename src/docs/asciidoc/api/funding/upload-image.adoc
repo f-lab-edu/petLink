@@ -1,0 +1,13 @@
+[[create-funding]]
+=== 펀딩 이미지 등록
+
+==== 펀딩 이미지 등록 요청
+
+include::{snippets}/funding-management/upload-image/http-request.adoc[]
+include::{snippets}/funding-management/upload-image/request-parts.adoc[]
+
+==== 펀딩 이미지 등록 응답
+
+include::{snippets}/funding-management/upload-image/http-response.adoc[]
+include::{snippets}/funding-management/upload-image/response-fields.adoc[]
+
