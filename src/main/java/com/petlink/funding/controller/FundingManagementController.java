@@ -20,7 +20,6 @@ public class FundingManagementController {
 
     private final FundingManagementService managementService;
 
-
     //펀딩 등록 A - 게시글 작성
     @PostMapping("/create")
     public ResponseEntity<FundingCreateResponse> createFunding(@RequestBody @Valid FundingPostDto fundingPostDto) {
@@ -32,6 +31,5 @@ public class FundingManagementController {
     public ResponseEntity<FundingImageResponse> uploadImage(@ModelAttribute @Valid ImageDto imageDto) throws AmazonS3Exception, IOException {
         return ResponseEntity.ok(managementService.uploadImage(imageDto));
     }
-
 }
 

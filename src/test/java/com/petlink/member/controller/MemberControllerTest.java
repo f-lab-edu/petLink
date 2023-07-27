@@ -73,9 +73,9 @@ class MemberControllerTest extends RestDocsSupport {
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )
-                .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").value(response.getId()))
                 .andExpect(status().isCreated())
+                .andDo(print())
                 .andDo(document("member/sign-up",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),

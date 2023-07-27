@@ -27,3 +27,4 @@ include::api/member/withdrawal.adoc[]
 
 include::api/funding/get-list.adoc[]
 include::api/funding/get-by-id.adoc[]
+include::api/funding/create-funding.adoc[]
