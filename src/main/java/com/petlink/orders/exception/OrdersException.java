@@ -1,4 +1,4 @@
-package com.petlink.order.exception;
+package com.petlink.orders.exception;
 
 import org.springframework.http.HttpStatus;
 

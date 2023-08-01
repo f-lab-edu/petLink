@@ -1,4 +1,4 @@
-package com.petlink.order.repository;
+package com.petlink.orders.repository;
 
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.petlink.order.service;
+package com.petlink.orders.service;
 
 import org.springframework.stereotype.Service;
 

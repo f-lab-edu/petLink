@@ -1,7 +1,7 @@
-package com.petlink.order.controller;
+package com.petlink.orders.controller;
 
-import com.petlink.order.dto.request.OrderRequest;
-import com.petlink.order.service.OrderService;
+import com.petlink.orders.dto.request.OrderRequest;
+import com.petlink.orders.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

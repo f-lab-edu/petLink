@@ -1,4 +1,4 @@
-package com.petlink.order.domain;
+package com.petlink.orders.domain;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

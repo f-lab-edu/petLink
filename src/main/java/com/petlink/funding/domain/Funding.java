@@ -2,7 +2,7 @@ package com.petlink.funding.domain;
 
 import com.petlink.common.domain.base.BaseEntity;
 import com.petlink.manager.domain.Manager;
-import com.petlink.order.domain.Orders;
+import com.petlink.orders.domain.Orders;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

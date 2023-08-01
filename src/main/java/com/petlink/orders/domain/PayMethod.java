@@ -1,7 +1,7 @@
-package com.petlink.order.domain;
+package com.petlink.orders.domain;
 
-import com.petlink.order.exception.OrdersException;
-import com.petlink.order.exception.OrdersExceptionCode;
+import com.petlink.orders.exception.OrdersException;
+import com.petlink.orders.exception.OrdersExceptionCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

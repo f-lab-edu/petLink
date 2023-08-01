@@ -3,7 +3,7 @@ package com.petlink.member.domain;
 import com.petlink.common.domain.Address;
 import com.petlink.common.domain.base.BaseTimeEntity;
 import com.petlink.member.exception.MemberException;
-import com.petlink.order.domain.Orders;
+import com.petlink.orders.domain.Orders;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
