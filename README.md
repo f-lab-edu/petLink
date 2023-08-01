@@ -22,25 +22,6 @@
 
 -----
 
-### 🌐 서버 구조 🌐
-
-<details>
-<summary>V1</summary>
-<div markdown="1">
-
-![server_V1.png](ReadMe%2Fimages%2Fserver_V1.png)
-
-</div>
-</details>
-
-### v2
-
-- Object Storage를 신규 도입
-
-  ![server_V2.png](ReadMe%2Fimages%2Fserver_V2.png)
-
------
-
 ### 🖥️ 사용 기술 및 환경 🖥️
 
 - JAVA 17
@@ -48,6 +29,34 @@
 - MySql 8.0
 - JPA
 - QueryDSL
+- Redis
+
+----
+
+### 🌐 서버 구조 🌐
+
+<details>
+<summary>v1 - 초기단계</summary>
+<div markdown="1">
+
+![server_V1.png](readme-resources%2Fimages%2Fserver_V1.png)
+
+</div>
+</details>
+
+<details>
+
+<summary>v2 - Object Storage 신규 도입 </summary>
+<div markdown="1">
+
+- Object Storage를 신규 도입
+
+</div>
+</details>
+
+### 분산락 처리를 위한 Redis-server 도입
+
+![server-v3.png](readme-resources%2Fimages%2Fserver-v3.png)
 
 -----
 
@@ -55,26 +64,29 @@
 
 [ERD LINK ](https://www.erdcloud.com/d/D6fkbZKiwQHX7kddG)
 <details>
-<summary>V1</summary>
+<summary>v1 - 초기단계</summary>
 <div markdown="1">
 
-![erd_V1.png](ReadMe%2Fimages%2Ferd_V1.png)
-
+![erd_V1.png](readme-resources%2Fimages%2Ferd_V1.png)
 </div>
 </details>
 
 <details>
-<summary>V2</summary>
+<summary>v2 - 테이블 개선 </summary>
 <div markdown="1">
 
-![erd_V2.png](ReadMe%2Fimages%2Ferd_V2.png)
-
+![erd_V2.png](readme-resources%2Fimages%2Ferd_V2.png)
 </div>
 </details>
 
-### v3
+<details>
+<summary>v3 - 이미지 처리를 별도의 독립된 테이블로 구분하며 관리하기 위해 수정 </summary>
+<div markdown="1">
 
-- 이미지 처리를 별도의 독립된 테이블로 구분하며 관리하기 위해 수정
-  ![erd_V3.png](ReadMe%2Fimages%2Ferd_V3.png)
+![erd_V3.png](readme-resources%2Fimages%2Ferd_V3.png)
+</div>
+</details>
 
------
+### v4 - 택배 정보를 Order 테이블에서 관리하도록 수정
+
+![erd_V4.png](readme-resources%2Fimages%2Ferd_V4.png)
