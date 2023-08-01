@@ -2,8 +2,12 @@ package com.petlink.member.domain;
 
 import com.petlink.common.domain.base.BaseTimeEntity;
 import com.petlink.member.exception.MemberException;
+import com.petlink.order.domain.Orders;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.petlink.member.exception.MemberExceptionCode.ALREADY_WITHDRAWAL_MEMBER;
 
@@ -37,6 +41,14 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MemberStatus status;
+
+    @OneToMany(mappedBy = "member"
+            , cascade = CascadeType.ALL // member가 삭제되면 orders도 삭제된다.
+            , orphanRemoval = true      // member가 삭제되면 orders의 member를 null로 변경한다.
+            , fetch = FetchType.LAZY    // member를 조회할 때 orders는 조회하지 않는다.
+    )
+    @Builder.Default
+    private List<Orders> ordersList = new ArrayList<>();
 
     public void withdrawal() {
         if (this.status.equals(MemberStatus.INACTIVE)) {
