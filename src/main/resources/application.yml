@@ -12,7 +12,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        ddl-auto: update
+        hbm2ddl:
+          auto: update
 
 
 # AWS properties
