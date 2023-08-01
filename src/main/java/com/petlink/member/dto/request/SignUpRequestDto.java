@@ -1,9 +1,8 @@
 package com.petlink.member.dto.request;
 
-import com.petlink.member.domain.Address;
+import com.petlink.common.domain.Address;
 import com.petlink.member.domain.Member;
 import com.petlink.member.domain.MemberStatus;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -47,13 +46,13 @@ public class SignUpRequestDto {
 	public Member toEntity() {
 		Address addressInfo = new Address(zipCode, address, detailAddress);
 		return Member.builder()
-			.name(name)
-			.email(email)
-			.password(password)
-			.tel(tel)
-			.address(addressInfo)
-			.status(MemberStatus.ACTIVE)
-			.build();
+				.name(name)
+				.email(email)
+				.password(password)
+				.tel(tel)
+				.address(addressInfo)
+				.status(MemberStatus.ACTIVE)
+				.build();
 	}
 
 	public void encodingPassword(String password) {

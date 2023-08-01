@@ -5,6 +5,7 @@ import com.petlink.common.storage.exception.StorageException;
 import com.petlink.funding.exception.FundingException;
 import com.petlink.manager.exception.ManagerException;
 import com.petlink.member.exception.MemberException;
+import com.petlink.order.exception.OrdersException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +62,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {StorageException.class})
     public ResponseEntity<ErrorResponse> handleFundingException(StorageException exception) {
+        return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
+    }
+
+    @ExceptionHandler(value = {OrdersException.class})
+    public ResponseEntity<ErrorResponse> handleFundingException(OrdersException exception) {
         return buildAndReturnResponse(exception.getHttpStatus(), exception.getMessage());
     }
 

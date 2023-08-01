@@ -4,7 +4,14 @@ import com.petlink.order.dto.request.OrderRequest;
 import com.petlink.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,16 +20,23 @@ public class OrderController {
 
     private final OrderService OrderService;
 
-    // todo 결제를 생성하는 기능.
+    // todo 결제를 생성하는 기능. ( 회원 구매 )
     @PostMapping
-    public ResponseEntity<Object> createOrder(@RequestBody OrderRequest OrderRequest) {
+    public ResponseEntity<Object> createOrderByNonMember(@RequestBody OrderRequest OrderRequest, @PathVariable Long member_id) {
+        // 결제 생성 코드
+        return ResponseEntity.ok("결제가 성공적으로 생성되었습니다.");
+    }
+
+    // todo 결제를 생성하는 기능. ( 회원 구매 )
+    @PostMapping("/{memberId}")
+    public ResponseEntity<Object> createOrderByMember(@RequestBody OrderRequest OrderRequest, @PathVariable Long memberId) {
         // 결제 생성 코드
         return ResponseEntity.ok("결제가 성공적으로 생성되었습니다.");
     }
 
     // todo  특정 결제의 상세 정보를 조회하는 기능
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOrder(@PathVariable Long id) {
+    public ResponseEntity<Object> getOrderInfo(@PathVariable Long id) {
         // 결제 정보 조회 코드
         return ResponseEntity.ok("결제가 성공적으로 생성되었습니다.");
     }
