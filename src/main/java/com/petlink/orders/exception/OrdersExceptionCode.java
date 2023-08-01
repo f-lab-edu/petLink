@@ -1,4 +1,4 @@
-package com.petlink.order.exception;
+package com.petlink.orders.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.petlink.order.dto.request;
+package com.petlink.orders.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;

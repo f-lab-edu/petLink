@@ -5,7 +5,7 @@ import com.petlink.common.storage.exception.StorageException;
 import com.petlink.funding.exception.FundingException;
 import com.petlink.manager.exception.ManagerException;
 import com.petlink.member.exception.MemberException;
-import com.petlink.order.exception.OrdersException;
+import com.petlink.orders.exception.OrdersException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
