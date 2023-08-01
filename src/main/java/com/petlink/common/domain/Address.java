@@ -1,4 +1,4 @@
-package com.petlink.member.domain;
+package com.petlink.common.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

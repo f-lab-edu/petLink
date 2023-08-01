@@ -2,6 +2,8 @@ package com.petlink.funding.domain;
 
 import com.petlink.common.domain.base.BaseEntity;
 import com.petlink.manager.domain.Manager;
+import com.petlink.order.domain.Orders;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,6 +23,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -66,6 +71,16 @@ public class Funding extends BaseEntity {
 
     @Column(nullable = false)
     private Long successDonation;
+
+
+    @OneToMany(mappedBy = "funding"
+            , cascade = CascadeType.ALL // member가 삭제되면 orders도 삭제된다.
+            , orphanRemoval = true      // member가 삭제되면 orders의 member를 null로 변경한다.
+            , fetch = FetchType.LAZY    // member를 조회할 때 orders는 조회하지 않는다.
+    )
+    @Builder.Default
+    private List<Orders> ordersList = new ArrayList<>();
+
 
     @Override
     public String toString() {

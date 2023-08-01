@@ -15,7 +15,6 @@ spring:
         hbm2ddl:
           auto: update
 
-
 # AWS properties
 logging:
   level:
