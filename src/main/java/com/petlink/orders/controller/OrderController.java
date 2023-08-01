@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/order")
+@RequestMapping("/orders")
 public class OrderController {
 
     private final OrderService OrderService;
 
     // todo 결제를 생성하는 기능. ( 회원 구매 )
     @PostMapping
-    public ResponseEntity<Object> createOrderByNonMember(@RequestBody OrderRequest OrderRequest, @PathVariable Long member_id) {
+    public ResponseEntity<Object> createOrderByNonMember(@RequestBody OrderRequest OrderRequest) {
         // 결제 생성 코드
-        return ResponseEntity.ok("결제가 성공적으로 생성되었습니다.");
+        return ResponseEntity.ok(OrderRequest);
     }
 
     // todo 결제를 생성하는 기능. ( 회원 구매 )
