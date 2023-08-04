@@ -20,11 +20,9 @@ public class OrderRequest {
     @NotNull(message = "결제 방법은 필수 값입니다.")
     private PayMethod payMethod;
 
-    @Builder.Default
-    private boolean amountOpen = false;
+    private boolean amountOpen;
 
-    @Builder.Default
-    private boolean nameOpen = false;
+    private boolean nameOpen;
 
     @NotEmpty(message = "펀딩 아이템은 최소 1개 이상이어야 합니다.")
     private List<FundingItemDto> fundingItems;
