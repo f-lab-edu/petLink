@@ -6,14 +6,7 @@ import com.petlink.orders.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +17,7 @@ public class OrderController {
 
     // todo 결제를 생성 하는 기능. ( 비회원 구매 )
     @PostMapping
-    public ResponseEntity<OrderResponseDto> createOrderByGuest(@RequestBody @Valid OrderRequest OrderRequest) {
-        // 결제 생성 코드
+    public ResponseEntity<OrderResponseDto> createOrderByGuest(@RequestBody @Valid OrderRequest OrderRequest) throws Exception {
         return ResponseEntity.ok(OrderService.createOrderByGuest(OrderRequest));
     }
 
