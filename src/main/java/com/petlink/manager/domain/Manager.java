@@ -1,10 +1,7 @@
 package com.petlink.manager.domain;
 
-import java.util.List;
-
 import com.petlink.common.domain.base.BaseTimeEntity;
 import com.petlink.funding.domain.Funding;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,6 +16,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -26,27 +25,27 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "manager")
 public class Manager extends BaseTimeEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false, unique = true, name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true, name = "id")
+    private Long id;
 
-	@Column(unique = true, name = "email", nullable = false)
-	private String email;
+    @Column(unique = true, name = "email", nullable = false)
+    private String email;
 
-	@Column(name = "name", nullable = false)
-	private String name;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-	@Column(name = "password", nullable = false)
-	private String password;
+    @Column(name = "password", nullable = false)
+    private String password;
 
-	@Column(name = "phone_number", nullable = false)
-	private String phoneNumber;
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
 
-	@Column(name = "office_number", nullable = false)
-	private String officeNumber;
+    @Column(name = "office_number", nullable = false)
+    private String officeNumber;
 
-	@OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
-	private List<Funding> fundingList;
+    @OneToMany(mappedBy = "manager", fetch = FetchType.LAZY)
+    private List<Funding> fundingList;
 
 }

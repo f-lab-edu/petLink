@@ -6,24 +6,31 @@ import com.petlink.orders.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final OrderService OrderService;
+    private final OrderService orderService;
 
     // todo 결제를 생성 하는 기능. ( 비회원 구매 )
     @PostMapping
-    public ResponseEntity<OrderResponseDto> createOrderByGuest(@RequestBody @Valid OrderRequest OrderRequest) throws Exception {
-        return ResponseEntity.ok(OrderService.createOrderByGuest(OrderRequest));
+    public ResponseEntity<OrderResponseDto> createOrderByGuest(@RequestBody @Valid OrderRequest orderRequest) throws Exception {
+        return ResponseEntity.ok(orderService.createOrderByGuest(orderRequest));
     }
 
     // todo 결제를 생성하는 기능. ( 회원 구매 )
     @PostMapping("/{memberId}")
-    public ResponseEntity<Object> createOrderByMember(@RequestBody @Valid OrderRequest OrderRequest, @PathVariable Long memberId) {
+    public ResponseEntity<Object> createOrderByMember(@RequestBody @Valid OrderRequest orderRequest, @PathVariable Long memberId) {
         // 결제 생성 코드
         return ResponseEntity.ok("결제가 성공적으로 생성되었습니다.");
     }
