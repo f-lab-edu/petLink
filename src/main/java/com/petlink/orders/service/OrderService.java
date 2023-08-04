@@ -50,6 +50,8 @@ public class OrderService {
                 .priceOpen(orderRequest.isAmountOpen())
                 .recipient(orderRequest.getRecipient())
                 .address(Address.of(orderRequest.getZipCode(), orderRequest.getAddress(), orderRequest.getDetailAddress()))
+                .mobilePhone(orderRequest.getPhone())
+                .subPhone(orderRequest.getSubPhone())
                 .build();
 
         orderRepository.saveAndFlush(orders);
