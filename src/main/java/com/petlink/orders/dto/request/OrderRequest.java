@@ -1,7 +1,10 @@
 package com.petlink.orders.dto.request;
 
 import com.petlink.orders.domain.PayMethod;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -25,6 +28,7 @@ public class OrderRequest {
 
     @NotEmpty(message = "펀딩 아이템은 최소 1개 이상이어야 합니다.")
     private List<FundingItemDto> fundingItems;
+
     @NotBlank(message = "우편 번호는 필수 값입니다.")
     private String zipCode;
 
@@ -44,15 +48,4 @@ public class OrderRequest {
 
     @Pattern(regexp = "^\\d{10,11}$", message = "전화번호 형식이 올바르지 않습니다.")
     private String subPhone;
-
-    @Getter
-    @Builder
-    private static class FundingItemDto {
-
-        @NotNull(message = "펀딩 아이템 ID는 필수 값입니다.")
-        private Long fundingItemId;
-
-        @Min(value = 1, message = "구매 수량은 1 이상이어야 합니다.")
-        private Integer buyCount;
-    }
 }
