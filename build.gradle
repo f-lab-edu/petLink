@@ -56,6 +56,12 @@ dependencies {
     // object Storage
     implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.481'
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
+
+    //redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    //redisson
+    implementation group: 'org.redisson', name: 'redisson-spring-boot-starter', version: '3.23.2'
+
 }
 
 tasks.named('test') {
