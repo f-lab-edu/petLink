@@ -12,5 +12,5 @@ public class FundingItemDto {
     private Long fundingItemId;
 
     @Min(value = 1, message = "구매 수량은 1 이상이어야 합니다.")
-    private Integer buyCount;
+    private Long quantity;
 }

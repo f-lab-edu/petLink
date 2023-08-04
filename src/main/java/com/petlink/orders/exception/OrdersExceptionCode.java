@@ -8,7 +8,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum OrdersExceptionCode {
     PAY_METHOD_NOT_FOUND(HttpStatus.BAD_REQUEST, "결제수단을 찾을 수 없습니다."),
-    REWARD_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "리워드가 부족합니다.");
+    REWARD_NOT_ENOUGH(HttpStatus.BAD_REQUEST, "리워드가 부족합니다."),
+    //현재 구매할 수 없습니다
+    CANNOT_BUY_NOW(HttpStatus.BAD_REQUEST, "현재 구매할 수 없습니다.");
+
 
     private final HttpStatus httpStatus;
     private final String message;

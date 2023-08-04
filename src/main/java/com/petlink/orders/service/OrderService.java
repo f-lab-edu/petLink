@@ -38,6 +38,7 @@ public class OrderService {
         // step 1 : 리워드 재고 감소
         itemFacadeService.decrease(orderRequest.getFundingItems());
 
+
         // step 2 , 3 : 결제 번호 채번  결제 생성
         Funding funding = fundingRepository.findById(orderRequest.getFundingId())
                 .orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
