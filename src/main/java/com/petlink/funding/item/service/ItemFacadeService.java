@@ -20,8 +20,8 @@ import java.util.concurrent.TimeUnit;
 import static com.petlink.funding.item.exception.ItemExceptionCode.ITEM_NOT_FOUND;
 import static com.petlink.orders.exception.OrdersExceptionCode.CANNOT_BUY_NOW;
 
-@Component
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class ItemFacadeService {
     private final RedissonClient redissonClient;
@@ -30,10 +30,8 @@ public class ItemFacadeService {
     // 주어진 펀딩 아이템 목록의 수량을 감소시킵니다.
     public void decrease(List<FundingItemDto> fundingItems) throws ItemException, OrdersException, InterruptedException {
         for (FundingItemDto item : fundingItems) {
-
             FundingItem fundingItem = itemRepository.findById(item.getFundingItemId()).orElseThrow(() -> new ItemException(ITEM_NOT_FOUND));
             RLock lock = tryLockItem(item.getFundingItemId(), fundingItem.getTitle());
-
             try {
                 fundingItem.decrease(item.getQuantity());
             } finally {
@@ -56,4 +54,5 @@ public class ItemFacadeService {
 
         return lock;
     }
+
 }
