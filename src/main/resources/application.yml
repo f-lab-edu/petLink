@@ -29,3 +29,10 @@ jwt:
 storage:
   access-key: ${ACCESS_KEY}
   secret-key: ${SECRET_KEY}
+
+worker:
+  id: ${WORKER_ID}
+
+data:
+  center:
+    id: ${DATA_CENTER_ID}
