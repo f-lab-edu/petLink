@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderNumberUtils {
+public class OrderNumbersGenerator {
 
     // 시퀀스 번호를 위한 비트 수. 비트는 컴퓨터에서 데이터를 표현하는 최소 단위.
     // 여기서는 12비트를 사용하여 시퀀스 번호를 표현.
