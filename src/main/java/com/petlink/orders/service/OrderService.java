@@ -21,7 +21,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final FundingRepository fundingRepository;
     private final ItemFacadeService itemFacadeService;
-    private final OrderNumberUtils orderNumberUtils;  // 주입된 OrderNumberUtils
+    private final OrderNumbersGenerator generator;  // 주입된 OrderNumberUtils
 
 
     // TODO 주문을 생성하는 기능. ( 비회원 구매 )
@@ -35,10 +35,9 @@ public class OrderService {
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
 
-
         Orders orders = orderRepository.saveAndFlush(Orders.builder()
                 .funding(funding)
-                .paymentNumber(orderNumberUtils.generateOrderNumber())  // step 2 : 결제 번호 생성
+                .paymentNumber(generator.generateOrderNumber())  // step 2 : 결제 번호 생성
                 .payMethod(orderRequest.getPayMethod())
                 .nameOpen(orderRequest.isNameOpen())
                 .priceOpen(orderRequest.isAmountOpen())
