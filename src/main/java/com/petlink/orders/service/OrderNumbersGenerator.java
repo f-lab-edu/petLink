@@ -37,7 +37,6 @@ public class OrderNumbersGenerator {
     // 주문번호가 연속적으로 생성될 때마다 1씩 증가하며, MAX_SEQUENCE에 도달하면 0으로 초기화됩니다.
     private long sequence = 0L;
 
-
     /**
      * 주문 번호를 생성하는 메서드.
      * 주문 번호는 현재 시간, 워커 ID, 데이터 센터 ID, 시퀀스 번호를 조합하여 생성.
