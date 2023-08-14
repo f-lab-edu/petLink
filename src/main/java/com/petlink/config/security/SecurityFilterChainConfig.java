@@ -41,6 +41,7 @@ public class SecurityFilterChainConfig {
                                 .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/fundings").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/fundings/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/orders/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement()

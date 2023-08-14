@@ -38,7 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/members/duplicate/**",
             "/members/signup",
             "/auth/login",
-            "/fundings");
+            "/fundings",
+            "/orders");
     private final PathMatcher pathMatcher = new AntPathMatcher();
 
     private static void generateTokenExceptionMessage(HttpServletResponse response, String message) throws IOException {
@@ -74,7 +75,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        
+
         Optional<String> tokenOptional = parseJwtFromCookie(request);
 
         if (tokenOptional.isEmpty()) {
