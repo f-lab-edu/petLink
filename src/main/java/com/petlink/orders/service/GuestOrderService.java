@@ -16,27 +16,34 @@ import static com.petlink.funding.exception.FundingExceptionCode.FUNDING_NOT_FOU
 
 @Service
 @RequiredArgsConstructor
-public class GuestOrderService {
+public class GuestOrderService implements OrderService {
 
     private final OrderRepository orderRepository;
     private final FundingRepository fundingRepository;
     private final ItemFacadeService itemFacadeService;
     private final OrderNumbersGenerator generator;  // 결제 번호 생성기
 
-
-    //주문을 생성하는 기능. ( 비회원 구매 )
-    public OrderResponseDto createOrderByGuest(OrderRequest orderRequest) throws InterruptedException {
+    @Override
+    public OrderResponseDto createOrder(OrderRequest orderRequest) throws Exception {
 
         // step 1 : 리워드 재고 감소
-        itemFacadeService.decrease(orderRequest.getFundingItems());
+        decreaseStock(orderRequest.getFundingItems(), itemFacadeService);
 
         // step 2 , 3 : 결제 번호 채번  결제 생성
         Long fundingId = orderRequest.getFundingId();
         Funding funding = fundingRepository.findById(fundingId).orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
 
-        Orders orders = orderRepository.saveAndFlush(Orders.builder()
+        String paymentNumber = generatePaymentNumber("G-", generator);
+
+        Orders orders = saveOrder(orderRequest, funding, paymentNumber);
+
+        return buildOrderResponse(orders, fundingId);
+    }
+
+    private Orders saveOrder(OrderRequest orderRequest, Funding funding, String paymentNumber) {
+        return orderRepository.saveAndFlush(Orders.builder()
                 .funding(funding)
-                .paymentNumber("G-" + generator.generateOrderNumber())  // step 2 : 결제 번호 생성
+                .paymentNumber(paymentNumber)
                 .payMethod(orderRequest.getPayMethod())
                 .nameOpen(orderRequest.isNameOpen())
                 .priceOpen(orderRequest.isAmountOpen())
@@ -45,15 +52,5 @@ public class GuestOrderService {
                 .mobilePhone(orderRequest.getPhone())
                 .subPhone(orderRequest.getSubPhone())
                 .build());
-
-        return OrderResponseDto.builder()
-                .orderNumber(orders.getPaymentNumber())
-                .orderId(orders.getId())
-                .fundingId(fundingId)
-                .recipientInfo(OrderResponseDto.RecipientInfo.of(orders.getRecipient(), orders.getAddress(), orders.getMobilePhone(), orders.getSubPhone()))
-                .orderedRewards(orders.getFundingItemOrders().stream().map(fio -> fio.getFundingItem().getTitle()).toList())
-                .isAmountOpen(orders.getPriceOpen())
-                .isNameOpen(orders.getNameOpen())
-                .build();
     }
 }
