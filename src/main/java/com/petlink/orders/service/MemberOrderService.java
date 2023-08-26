@@ -18,7 +18,7 @@ import static com.petlink.funding.exception.FundingExceptionCode.FUNDING_NOT_FOU
 
 @Service
 @RequiredArgsConstructor
-public class MemberOrderService {
+public class MemberOrderService implements OrderService {
 
     private final OrderRepository orderRepository;
     private final FundingRepository fundingRepository;
@@ -26,22 +26,32 @@ public class MemberOrderService {
     private final ItemFacadeService itemFacadeService;
     private final OrderNumbersGenerator generator;  // 결제 번호 생성기
 
-
-    //주문을 생성하는 기능. ( 비회원 구매 )
-    public OrderResponseDto createOrderByMember(OrderRequest orderRequest, Long memberId) throws InterruptedException {
+    @Override
+    public OrderResponseDto createOrder(OrderRequest orderRequest) throws Exception {
 
         // step 1 : 리워드 재고 감소
-        itemFacadeService.decrease(orderRequest.getFundingItems());
+        decreaseStock(orderRequest.getFundingItems(), itemFacadeService);
 
         // step 2 , 3 : 결제 번호 채번  결제 생성
+        Long memberId = orderRequest.getMemberId();
         Long fundingId = orderRequest.getFundingId();
         Funding funding = fundingRepository.findById(fundingId).orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
 
-        Orders orders = orderRepository.saveAndFlush(Orders.builder()
+        String paymentNumber = generatePaymentNumber("M-", generator);
+
+        // 주문 정보 저장
+        Orders orders = saveOrder(orderRequest, member, funding, paymentNumber);
+
+        // 응답 생성 (디폴트 메서드 사용)
+        return buildOrderResponse(orders, fundingId);
+    }
+
+    private Orders saveOrder(OrderRequest orderRequest, Member member, Funding funding, String paymentNumber) {
+        return orderRepository.saveAndFlush(Orders.builder()
                 .funding(funding)
                 .member(member)
-                .paymentNumber("M-" + generator.generateOrderNumber())  // step 2 : 결제 번호 생성
+                .paymentNumber(paymentNumber)
                 .payMethod(orderRequest.getPayMethod())
                 .nameOpen(orderRequest.isNameOpen())
                 .priceOpen(orderRequest.isAmountOpen())
@@ -50,15 +60,5 @@ public class MemberOrderService {
                 .mobilePhone(orderRequest.getPhone())
                 .subPhone(orderRequest.getSubPhone())
                 .build());
-
-        return OrderResponseDto.builder()
-                .orderNumber(orders.getPaymentNumber())
-                .orderId(orders.getId())
-                .fundingId(fundingId)
-                .recipientInfo(OrderResponseDto.RecipientInfo.of(orders.getRecipient(), orders.getAddress(), orders.getMobilePhone(), orders.getSubPhone()))
-                .orderedRewards(orders.getFundingItemOrders().stream().map(fio -> fio.getFundingItem().getTitle()).toList())
-                .isAmountOpen(orders.getPriceOpen())
-                .isNameOpen(orders.getNameOpen())
-                .build();
     }
 }

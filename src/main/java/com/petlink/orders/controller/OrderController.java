@@ -24,18 +24,14 @@ public class OrderController {
     private final GuestOrderService guestOrderService;
     private final MemberOrderService memberOrderService;
 
-    // todo 결제를 생성 하는 기능. ( 비회원 구매 )
-    @PostMapping
+    @PostMapping("/guest")
     public ResponseEntity<OrderResponseDto> createOrderByGuest(@RequestBody @Valid OrderRequest orderRequest) throws Exception {
-        return ResponseEntity.ok(guestOrderService.createOrderByGuest(orderRequest));
+        return ResponseEntity.ok(guestOrderService.createOrder(orderRequest));
     }
 
-    // todo 결제를 생성하는 기능. ( 회원 구매 )
-    @PostMapping("/{memberId}")
-    public ResponseEntity<OrderResponseDto> createOrderByMember(@RequestBody @Valid OrderRequest orderRequest, @PathVariable Long memberId) throws Exception {
-        // 결제 생성 코드
-        return ResponseEntity.ok(memberOrderService.createOrderByMember(orderRequest, memberId));
-
+    @PostMapping("/member")
+    public ResponseEntity<OrderResponseDto> createOrderByMember(@RequestBody @Valid OrderRequest orderRequest) throws Exception {
+        return ResponseEntity.ok(memberOrderService.createOrder(orderRequest));
     }
 
     // todo  특정 결제의 상세 정보를 조회하는 기능
