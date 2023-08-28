@@ -6,6 +6,8 @@ import com.petlink.funding.exception.FundingException;
 import com.petlink.funding.item.service.ItemFacadeService;
 import com.petlink.funding.repository.FundingRepository;
 import com.petlink.member.domain.Member;
+import com.petlink.member.exception.MemberException;
+import com.petlink.member.exception.MemberExceptionCode;
 import com.petlink.member.repository.MemberRepository;
 import com.petlink.orders.domain.Orders;
 import com.petlink.orders.dto.request.OrderRequest;
@@ -36,14 +38,12 @@ public class MemberOrderService implements OrderService {
         Long memberId = orderRequest.getMemberId();
         Long fundingId = orderRequest.getFundingId();
         Funding funding = fundingRepository.findById(fundingId).orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("회원이 존재하지 않습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION));
 
         String paymentNumber = generatePaymentNumber("M-", generator);
 
-        // 주문 정보 저장
         Orders orders = saveOrder(orderRequest, member, funding, paymentNumber);
 
-        // 응답 생성 (디폴트 메서드 사용)
         return buildOrderResponse(orders, fundingId);
     }
 

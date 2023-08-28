@@ -35,8 +35,10 @@ public class GuestOrderService implements OrderService {
 
         String paymentNumber = generatePaymentNumber("G-", generator);
 
+        // 주문 정보 저장
         Orders orders = saveOrder(orderRequest, funding, paymentNumber);
 
+        // 응답 생성 (디폴트 메서드 사용)
         return buildOrderResponse(orders, fundingId);
     }
 
