@@ -1,0 +1,14 @@
+[[order-by-member]]
+=== 회원 주문
+
+==== 회원 주문 요청
+
+include::{snippets}/orders/create-by-member/http-request.adoc[]
+include::{snippets}/orders/create-by-member/request-fields.adoc[]
+
+==== 회원 주문 응답
+
+include::{snippets}/orders/create-by-member/http-response.adoc[]
+include::{snippets}/orders/create-by-member/response-fields.adoc[]
+
+[[order-by-member]]
