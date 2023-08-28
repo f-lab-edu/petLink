@@ -1,0 +1,14 @@
+[[order-by-guest]]
+=== 비회원 주문
+
+==== 비회원 주문 요청
+
+include::{snippets}/orders/create-by-guest/http-request.adoc[]
+include::{snippets}/orders/create-by-guest/request-fields.adoc[]
+
+==== 비회원 주문 응답
+
+include::{snippets}/orders/create-by-guest/http-response.adoc[]
+include::{snippets}/orders/create-by-guest/response-fields.adoc[]
+
+[[order-by-guest]]
