@@ -1,9 +1,8 @@
 package com.petlink.member.exception;
 
-import org.springframework.http.HttpStatus;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -15,7 +14,7 @@ public enum MemberExceptionCode {
     NOT_MATCHED_INFOMATION(HttpStatus.UNAUTHORIZED, "정보가 일치하지 않습니다."),
     ALREADY_USED_NAME(HttpStatus.CONFLICT, "이미 사용중인 이름입니다."),
     NOT_AVAILABLE_EMAIL(HttpStatus.CONFLICT, "사용할 수 없는 이메일입니다."),
-	ALREADY_WITHDRAWAL_MEMBER(HttpStatus.BAD_REQUEST, "이미 탈퇴한 회원입니다.");
+    ALREADY_WITHDRAWAL_MEMBER(HttpStatus.BAD_REQUEST, "이미 탈퇴한 회원입니다.");
 
 
     private final HttpStatus httpStatus;

@@ -29,7 +29,9 @@ import static com.petlink.funding.domain.FundingState.PROGRESS;
 import static com.petlink.funding.exception.FundingExceptionCode.NO_SEARCH_RESULTS_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FundingServiceTest {
