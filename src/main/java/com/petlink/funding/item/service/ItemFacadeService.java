@@ -46,7 +46,7 @@ public class ItemFacadeService {
         boolean available = lock.tryLock(20, 2, TimeUnit.SECONDS);
 
         if (!available) {
-            log.info("lock is not available : 락 점유 실패.({}) : {}",
+            log.error("lock is not available : 락 점유 실패.({}) : {}",
                     itemTitle,
                     LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
             throw new OrdersException(CANNOT_BUY_NOW); //현재 구매할 수 없습니다(락 점유 실패)
