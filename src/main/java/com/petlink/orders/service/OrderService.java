@@ -1,53 +1,27 @@
 package com.petlink.orders.service;
 
-import com.petlink.common.domain.Address;
-import com.petlink.funding.domain.Funding;
-import com.petlink.funding.exception.FundingException;
 import com.petlink.funding.item.service.ItemFacadeService;
-import com.petlink.funding.repository.FundingRepository;
 import com.petlink.orders.domain.Orders;
+import com.petlink.orders.dto.request.FundingItemDto;
 import com.petlink.orders.dto.request.OrderRequest;
 import com.petlink.orders.dto.response.OrderResponseDto;
-import com.petlink.orders.repository.OrderRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import static com.petlink.funding.exception.FundingExceptionCode.FUNDING_NOT_FOUND;
+import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class OrderService {
+public interface OrderService {
+    OrderResponseDto createOrder(OrderRequest orderRequest) throws Exception;
 
-    private final OrderRepository orderRepository;
-    private final FundingRepository fundingRepository;
-    private final ItemFacadeService itemFacadeService;
-    private final OrderNumberUtils orderNumberUtils;  // 주입된 OrderNumberUtils
+    // 재고 감소 디폴트 메소드
+    default void decreaseStock(List<FundingItemDto> items, ItemFacadeService itemFacadeService) throws Exception {
+        itemFacadeService.decrease(items);
+    }
 
+    // 결제 번호 생성 디폴트 메소드
+    default String generatePaymentNumber(String prefix, OrderNumbersGenerator generator) {
+        return prefix + "-" + generator.generateOrderNumber();
+    }
 
-    // TODO 주문을 생성하는 기능. ( 비회원 구매 )
-    public OrderResponseDto createOrderByGuest(OrderRequest orderRequest) throws Exception {
-
-        // step 1 : 리워드 재고 감소
-        itemFacadeService.decrease(orderRequest.getFundingItems());
-
-        // step 2 , 3 : 결제 번호 채번  결제 생성
-        Long fundingId = orderRequest.getFundingId();
-        Funding funding = fundingRepository.findById(fundingId)
-                .orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
-
-
-        Orders orders = orderRepository.saveAndFlush(Orders.builder()
-                .funding(funding)
-                .paymentNumber(orderNumberUtils.generateOrderNumber())  // step 2 : 결제 번호 생성
-                .payMethod(orderRequest.getPayMethod())
-                .nameOpen(orderRequest.isNameOpen())
-                .priceOpen(orderRequest.isAmountOpen())
-                .recipient(orderRequest.getRecipient())
-                .address(Address.of(orderRequest.getZipCode(), orderRequest.getAddress(), orderRequest.getDetailAddress()))
-                .mobilePhone(orderRequest.getPhone())
-                .subPhone(orderRequest.getSubPhone())
-                .build());
-
+    default OrderResponseDto buildOrderResponse(Orders orders, Long fundingId) {
         return OrderResponseDto.builder()
                 .orderNumber(orders.getPaymentNumber())
                 .orderId(orders.getId())

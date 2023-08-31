@@ -15,6 +15,12 @@ spring:
         hbm2ddl:
           auto: update
 
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+
 # AWS properties
 logging:
   level:
@@ -36,3 +42,4 @@ worker:
 data:
   center:
     id: ${DATA_CENTER_ID}
+

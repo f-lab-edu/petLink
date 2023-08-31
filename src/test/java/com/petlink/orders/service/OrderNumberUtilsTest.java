@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class OrderNumberUtilsTest {
-    private final OrderNumberUtils orderNumberUtils = new OrderNumberUtils();
+    private final OrderNumbersGenerator orderNumbersGenerator = new OrderNumbersGenerator();
 
     @Test
     @DisplayName("동시에 100개의 요청이 올 수 있다.")
@@ -25,7 +25,7 @@ class OrderNumberUtilsTest {
         for (int i = 0; i < THREAD_COUNT; i++) {
             executorService.submit(() -> { // 100개의 스레드가 병렬로 주문번호를 생성
                 try {
-                    String orderNumber = orderNumberUtils.generateOrderNumber();
+                    String orderNumber = orderNumbersGenerator.generateOrderNumber();
                     orderNumbers.add(orderNumber);
                 } finally {
                     countDownLatch.countDown();

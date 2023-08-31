@@ -23,7 +23,6 @@ public class OrderResponseDto {
     private Boolean isAmountOpen;  // 금액공개여부
     private Boolean isNameOpen;   // 이름공개여부
 
-
     // RecipientInfo 내부 클래스
     @Getter
     @Builder(access = AccessLevel.PRIVATE)
@@ -41,7 +40,14 @@ public class OrderResponseDto {
                     .subPhone(subPhone)
                     .build();
         }
-    }
 
+        public static RecipientInfo of(String name, Address address, String phone) {
+            return RecipientInfo.builder()
+                    .name(name)
+                    .address(address)
+                    .phone(phone)
+                    .build();
+        }
+    }
 }
 
