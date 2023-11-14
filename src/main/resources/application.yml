@@ -1,11 +1,10 @@
 # DB properties
 spring:
   datasource:
-    driver-class-name: 'com.mysql.cj.jdbc.Driver'
-    url: ${DB_URL}
-    username: ${DB_ID}
-    password: ${DB_PASSWORD}
-
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MySQL;
+    username: sa
+    password:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
@@ -13,13 +12,15 @@ spring:
       hibernate:
         format_sql: true
         hbm2ddl:
-          auto: update
-
+          auto: create-drop
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD}
+      host: # 레디스 주소
+      port: # 레디스 포트
+
+  profiles:
+    active: dev # dev, prod , test
+
 
 # AWS properties
 logging:
@@ -33,13 +34,13 @@ jwt:
 
 # Object Storage properties
 storage:
-  access-key: ${ACCESS_KEY}
-  secret-key: ${SECRET_KEY}
+  access-key: mock-access-key
+  secret-key: mock-secret-key
 
 worker:
-  id: ${WORKER_ID}
+  id: 1
 
 data:
   center:
-    id: ${DATA_CENTER_ID}
+    id: 1
 
