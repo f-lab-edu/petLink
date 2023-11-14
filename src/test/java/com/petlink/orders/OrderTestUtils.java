@@ -8,7 +8,7 @@ import com.petlink.orders.dto.response.OrderResponseDto;
 
 import java.util.List;
 
-public class OrderTest�Helper {
+public class OrderTestUtils {
     private final String ORDER_NUMBER = "20210701-0001";
     private final String PHONE = "01012345678";
 
