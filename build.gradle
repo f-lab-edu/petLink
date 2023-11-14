@@ -60,7 +60,8 @@ dependencies {
     //redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     //redisson
-    implementation group: 'org.redisson', name: 'redisson-spring-boot-starter', version: '3.23.2'
+    implementation group: 'org.redisson', name: 'redisson', version: '3.24.2'
+
 
 }
 

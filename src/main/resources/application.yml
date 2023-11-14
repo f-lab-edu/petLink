@@ -12,15 +12,11 @@ spring:
       hibernate:
         format_sql: true
         hbm2ddl:
-          auto: create-drop
+          auto: update
   data:
     redis:
-      host: # 레디스 주소
-      port: # 레디스 포트
-
-  profiles:
-    active: dev # dev, prod , test
-
+      host: ${redis.host}
+      port: ${redis.port}
 
 # AWS properties
 logging:

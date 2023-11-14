@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class RedissonConfig {
 
     private static final String REDISSON_HOST_PREFIX = "redis://";
+
     @Value("${spring.data.redis.host}")
     private String redisHost;
     @Value("${spring.data.redis.port}")
