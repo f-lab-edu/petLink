@@ -17,6 +17,8 @@ spring:
     redis:
       host: ${redis.host}
       port: ${redis.port}
+      jwt:
+        port: ${redis.jwt.port}
 
 # AWS properties
 logging:
