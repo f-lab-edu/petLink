@@ -40,3 +40,4 @@ out/
 ### Project specific ###
 db.properties
 /src/main/generated/
+!/.env
