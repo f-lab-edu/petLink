@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      - redis     # Resource Lock storage
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+volumes:
+  mysql-data:

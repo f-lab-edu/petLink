@@ -1,10 +1,10 @@
 # DB properties
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;MODE=MySQL;
-    username: sa
-    password:
+    driver-class-name: ${database.driver}
+    url: ${database.host}
+    username: ${database.user}
+    password: ${database.password}
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
@@ -27,13 +27,13 @@ logging:
 
 # JWT properties
 jwt:
-  secret-key: flab-project-petlink-secret-key-sample
-  expire-length: 86400000
+  secret-key: ${jwt.secret.key}
+  expire-length: ${jwt.expire.length}
 
 # Object Storage properties
 storage:
-  access-key: mock-access-key
-  secret-key: mock-secret-key
+  access-key: ${storage.access.key}
+  secret-key: ${storage.secret.key}
 
 worker:
   id: 1
