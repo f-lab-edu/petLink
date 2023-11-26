@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-      - feature/cicd
   pull_request:
     types: [ opened, reopened, synchronize ]
 

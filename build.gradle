@@ -65,6 +65,11 @@ dependencies {
 
 }
 
+// plane jar 파일 생성 안함
+jar {
+    enabled = false
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
