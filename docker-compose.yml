@@ -1,7 +1,7 @@
-version: '3.8'
+version: '3.9'
 services:
   app:
-    build: .
+    image: deadwhale/petlink:0.1.0
     ports:
       - "8080:8080"
     env_file:
@@ -12,5 +12,3 @@ services:
     image: redis:alpine
     ports:
       - "6379:6379"
-volumes:
-  mysql-data:
