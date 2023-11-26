@@ -28,7 +28,7 @@ jobs:
           script: mkdir -p /home/ubuntu/app/petlink
 
       - name: copy project # ssh key를 이용해 현재 푸시된 소스를 서버에 복사한다.
-        uses: burnett01/rsync-deployments@6.0
+        uses: burnett01/rsync-deployments@6.0.0
         with:
           switches: -avzr --delete
           remote_path: /home/ubuntu/srv/ubuntu/
