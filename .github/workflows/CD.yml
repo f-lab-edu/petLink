@@ -32,12 +32,10 @@ jobs:
           remote_key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
 
       - name: Copy .env to remote server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.APP_SERVER_IP }}
-          username: ubuntu
-          key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
-          script: scp .env ubuntu@${{ secrets.APP_SERVER_IP }}:/home/ubuntu/app/petlink/
+        run: |
+          echo "${{ secrets.env }}" >> .env
+          scp .env ubuntu@${{ secrets.APP_SERVER_IP }}:/home/ubuntu/app/petlink/
+
 
 
           
