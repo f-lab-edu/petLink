@@ -31,8 +31,8 @@ jobs:
           remote_user: ubuntu
           remote_key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
 
+      - name: Copy .env to remote server
+        run: scp .env ubuntu@${{ secrets.APP_SERVER_IP }}:/home/ubuntu/app/petlink/
 
-      - name: copy to env file # home/ubuntu/app/petlink ${{ secrets.ENV }} env파일 복제
-        run: |
-          cp ${{ secrets.ENV }} /home/ubuntu/app/petlink/.env
+
           
