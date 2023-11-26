@@ -24,8 +24,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Run Tests
-        run: ./gradlew test  # Java Spring 애플리케이션 테스트를 실행합니다.
+      - name: Build with Gradle
+        run: ./gradlew build  # jar 파일을 빌드하고 테스트를 실행합니다.
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3  # Docker Buildx를 설정합니다.
