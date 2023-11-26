@@ -33,7 +33,7 @@ jobs:
 
       - name: Copy .env to remote server
         run: |
-          echo "${{ secrets.env }}" >> .env
+          echo "${{ secrets.ENV }}" >> .env
           scp .env ubuntu@${{ secrets.APP_SERVER_IP }}:/home/ubuntu/app/petlink/
 
 
