@@ -31,7 +31,7 @@ jobs:
         uses: burnett01/rsync-deployments@6.0.0
         with:
           switches: -avzr --delete
-          remote_path: /home/ubuntu/srv/ubuntu/
+          remote_path: /home/ubuntu/app/petlink
           remote_host: ${{ secrets.APP_SERVER_IP }}
           remote_user: ubuntu
           remote_key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
