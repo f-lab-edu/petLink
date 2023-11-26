@@ -6,9 +6,9 @@ on:
       - main
 
   # 실제 실행될 내용들을 정의합니다.
-  jobs:
-    build:
-      runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
+jobs:
+  build:
+    runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
 
     steps:
       # 지정한 저장소(현재 REPO)에서 코드를 워크플로우 환경으로 가져오도록 하는 github action
