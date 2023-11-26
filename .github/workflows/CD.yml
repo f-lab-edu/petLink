@@ -14,11 +14,6 @@ jobs:
       # 지정한 저장소(현재 REPO)에서 코드를 워크플로우 환경으로 가져오도록 하는 github action
       - uses: actions/checkout@v4
 
-      - name: copy to env file #깃헙 설정에 복사한 ENV 값을 모두 .env file로 만든다.
-        run: |
-          touch .env
-          echo "${{ secrets.ENV }}" >> .env
-
       - name: create remote directory # ec2 서버에 디렉토리를 하나 만들어준다.
         uses: appleboy/ssh-action@master
         with:
@@ -35,3 +30,9 @@ jobs:
           remote_host: ${{ secrets.APP_SERVER_IP }}
           remote_user: ubuntu
           remote_key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
+
+
+      - name: copy to env file # home/ubuntu/app/petlink ${{ secrets.ENV }} env파일 복제
+        run: |
+          cp ${{ secrets.ENV }} /home/ubuntu/app/petlink/.env
+          
