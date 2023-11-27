@@ -49,5 +49,5 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: "Docker CD"
-          token: ${{ secrets.GITHUB_ACTION_TOKEN }}
+          token: ${{ secrets.ACTION_TOKEN }}
           ref: "main"
