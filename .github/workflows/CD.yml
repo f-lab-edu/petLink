@@ -31,7 +31,7 @@ jobs:
           remote_user: ubuntu
           remote_key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
 
-      - name: Set up .env file #
+      - name: Set up .env file # 원격서버에 .env 파일을 만들어준다.
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.APP_SERVER_IP }}
@@ -41,3 +41,16 @@ jobs:
             cd /home/ubuntu/app/petlink
             touch ./.env
             echo "${{ secrets.ENV }}" > ./.env
+
+      ## docker compose up
+      - name: docker compose up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.APP_SERVER_IP }}
+          username: ubuntu
+          key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
+          script: |
+            sudo docker rm -f $(docker ps -qa) # 기존에 실행되고 있는 컨테이너를 모두 삭제한다.
+            sudo docker pull ${{ secrets.DOCKER_ID }}/petlink:latest # docker hub에서 이미지를 가져온다.
+            docker-compose up -d # docker-compose.yml 파일을 실행한다.
+            docker image prune -f # 사용하지 않는 이미지를 삭제한다.
