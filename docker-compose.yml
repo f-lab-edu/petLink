@@ -1,14 +1,19 @@
 version: '3.9'
 services:
   app:
-    image: deadwhale/petlink:0.1.0
+    image: deadwhale/petlink:latest
     ports:
       - "8080:8080"
     env_file:
       - .env
     depends_on:
       - redis     # Resource Lock storage
+      - jwt-session-redis # JWT storage
   redis:
     image: redis:alpine
     ports:
       - "6379:6379"
+  jwt-session-redis:
+    image: redis:alpine
+    ports:
+      - "6380:6380"
