@@ -49,6 +49,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
           script: |
+            cd /home/ubuntu/app/petlink
             sudo docker ps -q | xargs -r sudo docker rm -f         
             sudo docker pull ${{ secrets.DOCKER_ID }}/petlink:latest  
             docker-compose up -d                                      
