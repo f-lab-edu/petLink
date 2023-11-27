@@ -43,3 +43,11 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: deadwhale/petlink:latest  # 'latest' 태그로 이미지를 푸시
+
+      - name: Trigger CD Workflow
+        if: success() && github.ref == 'refs/heads/main'
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: "Docker CD"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: "main"
