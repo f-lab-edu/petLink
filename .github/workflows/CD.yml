@@ -31,13 +31,13 @@ jobs:
           remote_user: ubuntu
           remote_key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
 
-      # 환경변수 추가
-      - name: Copy to Env
-        run: |
-          cd /home/ubuntu/app/petlink
-          touch ./.env
-          echo "${{ secrets.ENV }}" > ./.env
-        shell: bash	 
-
-
-          
+      - name: Set up .env file
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.APP_SERVER_IP }}
+          username: ubuntu
+          key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/app/petlink
+            touch ./.env
+            echo "${{ secrets.ENV }}" > ./.env
