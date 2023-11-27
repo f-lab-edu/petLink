@@ -1,18 +1,21 @@
 name: Docker CD
 
 on:
-  push:
-    branches:
-      - main
+  # 워크플로우가 수동으로 실행되거나, CI 워크플로우가 성공적으로 완료되면 실행됩니다.
+  workflow_dispatch:
+    workflows: [ "Docker CI" ]
+    branches: [ main ]
+    types:
+      - completed
 
-  # 실제 실행될 내용들을 정의합니다.
 jobs:
   build:
     runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
 
     steps:
       # 지정한 저장소(현재 REPO)에서 코드를 워크플로우 환경으로 가져오도록 하는 github action
-      - uses: actions/checkout@v4
+      - name: checkout code
+        uses: actions/checkout@v4
 
       - name: create remote directory # ec2 서버에 디렉토리를 하나 만들어준다.
         uses: appleboy/ssh-action@master
@@ -31,7 +34,7 @@ jobs:
           remote_user: ubuntu
           remote_key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
 
-      - name: Set up .env file # 원격서버에 .env 파일을 만들어준다.
+      - name: Set up .env file # 원격서버에 .env 파일을 만들며 복제해준다
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.APP_SERVER_IP }}
@@ -50,7 +53,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.AWS_GENERAL_SSH_KEY }}
           script: |
-            sudo docker rm -f $(docker ps -qa) # 기존에 실행되고 있는 컨테이너를 모두 삭제한다.
-            sudo docker pull ${{ secrets.DOCKER_ID }}/petlink:latest # docker hub에서 이미지를 가져온다.
-            docker-compose up -d # docker-compose.yml 파일을 실행한다.
-            docker image prune -f # 사용하지 않는 이미지를 삭제한다.
+            sudo docker rm -f $(docker ps -qa)                        
+            sudo docker pull ${{ secrets.DOCKER_ID }}/petlink:latest  
+            docker-compose up -d                                      
+            docker image prune -f
