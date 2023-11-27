@@ -3,11 +3,7 @@ name: Docker CD
 on:
   # 워크플로우가 수동으로 실행되거나, CI 워크플로우가 성공적으로 완료되면 실행됩니다.
   workflow_dispatch:
-    workflows: [ "Docker CI" ]
-    branches: [ main ]
-    types:
-      - completed
-
+    
 jobs:
   build:
     runs-on: ubuntu-latest # ubuntu 최신 버전에서 script를 실행
