@@ -124,10 +124,10 @@ tasks.register('cleanDocs', Delete) {
 }
 
 tasks.register('copyRestDocs', Copy) {
-    dependsOn asciidoctor, cleanDocs
-    from file("build/docs/asciidoc/index.html") // 복사할 파일 위치
-    into 'docs' // 경로 수정
-}
+                dependsOn asciidoctor, cleanDocs
+                from file("build/docs/asciidoc/index.html") // 복사할 파일 위치
+                into 'docs' // 경로 수정
+            }
 
 build {
     dependsOn copyRestDocs
