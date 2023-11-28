@@ -2,20 +2,12 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.6'
     id 'io.spring.dependency-management' version '1.1.0'
-    id "org.asciidoctor.jvm.convert" version "3.3.2"
+    id 'com.epages.restdocs-api-spec' version '0.18.2'
 }
 
 group = 'com'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
-
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    asciidoctorExt
-}
 
 repositories {
     mavenCentral()
@@ -50,8 +42,10 @@ dependencies {
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
     // RestDocs
-    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    // restdocs-openapi3
+    testImplementation("org.springdoc:springdoc-openapi-ui:1.6.11")
+    testImplementation('com.epages:restdocs-api-spec-mockmvc:0.18.2') //2.2
 
     // object Storage
     implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.481'
@@ -61,20 +55,28 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     //redisson
     implementation group: 'org.redisson', name: 'redisson', version: '3.24.2'
-
-
 }
 
-// plane jar 파일 생성 안함
+// restdocs-openapi3 설정 ===============================================================
+openapi3 {
+    server = 'http://localhost:8080'
+    title = 'Petlink API'
+    description = 'Petlink API description'
+    version = '0.1.0'
+    format = 'yaml'
+}
+
+
+// 기타 설정부분 ===============================================================
 jar {
+    // plane jar 파일 생성 안함
     enabled = false
 }
-
 tasks.named('test') {
     useJUnitPlatform()
 }
 
-// Querydsl 설정부분
+// Querydsl 설정부분 ===============================================================
 def generated = 'src/main/generated'
 
 // querydsl QClass 파일 생성 위치를 지정
@@ -90,45 +92,4 @@ sourceSets {
 // gradle clean 시에 QClass 디렉토리 삭제
 clean {
     delete file(generated)
-}
-
-ext { // 전역 변수
-    snippetsDir = file('build/generated-snippets')
-}
-
-test {
-    outputs.dir snippetsDir
-}
-
-asciidoctor {
-    inputs.dir snippetsDir
-    configurations 'asciidoctorExt'
-
-    sources { // 특정 파일만 html로 만든다.
-        include("**/index.adoc")
-    }
-    baseDirFollowsSourceFile() // 다른 adoc 파일을 include 할 때 경로를 baseDir로 맞춘다.
-    dependsOn test
-}
-
-bootJar {
-    dependsOn asciidoctor
-    from("${asciidoctor.outputDir}") {
-        into 'static/docs'
-    }
-}
-
-
-tasks.register('cleanDocs', Delete) {
-    delete 'docs'
-}
-
-tasks.register('copyRestDocs', Copy) {
-                dependsOn asciidoctor, cleanDocs
-                from file("build/docs/asciidoc/index.html") // 복사할 파일 위치
-                into 'docs' // 경로 수정
-            }
-
-build {
-    dependsOn copyRestDocs
 }

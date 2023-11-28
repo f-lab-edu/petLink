@@ -1,5 +1,6 @@
 package com.petlink.member.controller;
 
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.petlink.RestDocsSupport;
 import com.petlink.common.exception.TokenException;
 import com.petlink.member.dto.request.SignUpRequestDto;
@@ -77,14 +78,14 @@ class MemberControllerTest extends RestDocsSupport {
         when(memberService.signUp(any(SignUpRequestDto.class))).thenReturn(response);
 
         mockMvc.perform(
-                        post("/members/signup")
+                        RestDocumentationRequestBuilders.post("/members/signup")
                                 .content(objectMapper.writeValueAsString(request))
                                 .contentType(APPLICATION_JSON)
                 )
                 .andExpect(jsonPath("id").value(response.getId()))
                 .andExpect(status().isCreated())
                 .andDo(print())
-                .andDo(document("member/sign-up",
+                .andDo(MockMvcRestDocumentationWrapper.document("member/sign-up",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
@@ -117,7 +118,7 @@ class MemberControllerTest extends RestDocsSupport {
                         RestDocumentationRequestBuilders.get("/members/duplicate/{name}", testName)
                 )
                 .andExpect(status().isOk())
-                .andDo(document("member/name-duplicate",
+                .andDo(MockMvcRestDocumentationWrapper.document("member/name-duplicate",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(

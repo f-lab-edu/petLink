@@ -1,5 +1,6 @@
 package com.petlink.member.controller;
 
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.petlink.RestDocsSupport;
 import com.petlink.member.dto.request.LoginRequest;
 import com.petlink.member.dto.response.LoginResponse;
@@ -11,7 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import static com.petlink.member.exception.MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION;
 import static com.petlink.member.exception.MemberExceptionCode.NOT_MATCHED_INFOMATION;
@@ -19,10 +22,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -63,24 +62,23 @@ class AuthenticationControllerTest extends RestDocsSupport {
 
         // when
         when(authenticationService.login(email, password)).thenReturn(token);
-        mockMvc.perform(post("/auth/login")
+
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/auth/login")
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(loginRequest))
                 )
                 // then
                 .andExpect(status().isOk())
-                .andDo(document("member/login",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(MockMvcRestDocumentationWrapper.document("member/login",
                         requestFields(
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("로그인할 이메일"),
-                                fieldWithPath("password").type(JsonFieldType.STRING).description("로그인할 비밀번호")
+                                fieldWithPath("email").description("로그인할 이메일"),
+                                fieldWithPath("password").description("로그인할 비밀번호")
                         ),
                         responseFields(
                                 fieldWithPath("token").type(JsonFieldType.STRING).description("JWT 토큰")
                         )
                 ))
-                .andDo(print());
+                .andDo(MockMvcResultHandlers.print());
 
         verify(authenticationService, times(1)).login(email, password);
     }
