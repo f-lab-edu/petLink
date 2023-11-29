@@ -87,11 +87,11 @@ paths:
                     endDate\":[2023,12,31,0,0]},{\"id\":2,\"title\":\"Test Title 2\"\
                     ,\"state\":\"PROGRESS\",\"category\":\"TOY\",\"startDate\":[2023,1,1,0,0],\"\
                     endDate\":[2023,12,31,0,0]}],\"pageable\":{\"sort\":{\"empty\"\
-                    :true,\"unsorted\":true,\"sorted\":false},\"offset\":0,\"pageSize\"\
-                    :2,\"pageNumber\":0,\"unpaged\":false,\"paged\":true},\"totalElements\"\
-                    :2,\"totalPages\":1,\"last\":true,\"size\":2,\"number\":0,\"sort\"\
-                    :{\"empty\":true,\"unsorted\":true,\"sorted\":false},\"first\"\
-                    :true,\"numberOfElements\":2,\"empty\":false}"
+                    :true,\"sorted\":false,\"unsorted\":true},\"offset\":0,\"pageNumber\"\
+                    :0,\"pageSize\":2,\"paged\":true,\"unpaged\":false},\"totalPages\"\
+                    :1,\"totalElements\":2,\"last\":true,\"size\":2,\"number\":0,\"\
+                    sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"\
+                    numberOfElements\":2,\"first\":true,\"empty\":false}"
   /fundings/{id}:
     get:
       tags:
@@ -113,14 +113,23 @@ paths:
                 $ref: '#/components/schemas/fundings-id1140910618'
               examples:
                 fundings/get-by-id:
-                  value: "{\r\n  \"id\" : 1,\r\n  \"managerId\" : 1,\r\n  \"managerName\"\
-                    \ : \"Test Manager\",\r\n  \"managerEmail\" : \"test@manager.com\"\
-                    ,\r\n  \"phoneNumber\" : \"012-3456-7890\",\r\n  \"title\" : \"\
-                    Test Title\",\r\n  \"miniTitle\" : \"Test Mini Title\",\r\n  \"\
-                    content\" : \"Test Content\",\r\n  \"state\" : \"PROGRESS\",\r\
-                    \n  \"category\" : \"FOOD\",\r\n  \"startDate\" : [ 2023, 1, 1,\
-                    \ 0, 0 ],\r\n  \"endDate\" : [ 2023, 12, 1, 0, 0 ],\r\n  \"targetDonation\"\
-                    \ : 1000000,\r\n  \"successDonation\" : 500000\r\n}"
+                  value: |-
+                    {
+                      "id" : 1,
+                      "managerId" : 1,
+                      "managerName" : "Test Manager",
+                      "managerEmail" : "test@manager.com",
+                      "phoneNumber" : "012-3456-7890",
+                      "title" : "Test Title",
+                      "miniTitle" : "Test Mini Title",
+                      "content" : "Test Content",
+                      "state" : "PROGRESS",
+                      "category" : "FOOD",
+                      "startDate" : [ 2023, 1, 1, 0, 0 ],
+                      "endDate" : [ 2023, 12, 1, 0, 0 ],
+                      "targetDonation" : 1000000,
+                      "successDonation" : 500000
+                    }
   /fundings/manage/create:
     post:
       tags:
@@ -133,11 +142,17 @@ paths:
               $ref: '#/components/schemas/fundings-manage-create2003668828'
             examples:
               funding-management/create-funding:
-                value: "{\r\n  \"managerId\" : 1,\r\n  \"title\" : \"펀딩 제목\",\r\n\
-                  \  \"miniTitle\" : \"펀딩 소제목\",\r\n  \"content\" : \"펀딩 내용\",\r\n\
-                  \  \"category\" : \"FOOD\",\r\n  \"startDate\" : \"20210801\",\r\
-                  \n  \"endDate\" : \"20210831\",\r\n  \"targetDonation\" : 100000\r\
-                  \n}"
+                value: |-
+                  {
+                    "managerId" : 1,
+                    "title" : "펀딩 제목",
+                    "miniTitle" : "펀딩 소제목",
+                    "content" : "펀딩 내용",
+                    "category" : "FOOD",
+                    "startDate" : "20210801",
+                    "endDate" : "20210831",
+                    "targetDonation" : 100000
+                  }
       responses:
         "200":
           description: "200"
@@ -147,8 +162,11 @@ paths:
                 $ref: '#/components/schemas/fundings-manage-create39299276'
               examples:
                 funding-management/create-funding:
-                  value: "{\r\n  \"id\" : 1,\r\n  \"registeredAt\" : [ 2021, 8, 1,\
-                    \ 0, 0 ]\r\n}"
+                  value: |-
+                    {
+                      "id" : 1,
+                      "registeredAt" : [ 2021, 8, 1, 0, 0 ]
+                    }
   /fundings/manage/image/upload:
     post:
       tags:
@@ -163,9 +181,13 @@ paths:
                 $ref: '#/components/schemas/fundings-manage-image-upload204345988'
               examples:
                 funding-management/upload-image:
-                  value: "{\r\n  \"id\" : 1,\r\n  \"link\" : \"펀딩 이미지 링크\",\r\n  \"\
-                    name\" : \"펀딩 이미지 파일명\",\r\n  \"uploadedAt\" : [ 2021, 8, 1, 0,\
-                    \ 0 ]\r\n}"
+                  value: |-
+                    {
+                      "id" : 1,
+                      "link" : "펀딩 이미지 링크",
+                      "name" : "펀딩 이미지 파일명",
+                      "uploadedAt" : [ 2021, 8, 1, 0, 0 ]
+                    }
   /members/signup:
     post:
       tags:
@@ -178,10 +200,16 @@ paths:
               $ref: '#/components/schemas/members-signup1017061083'
             examples:
               member/sign-up:
-                value: "{\r\n  \"name\" : \"TestName\",\r\n  \"email\" : \"test@example.com\"\
-                  ,\r\n  \"password\" : \"password\",\r\n  \"tel\" : \"1234567890\"\
-                  ,\r\n  \"zipCode\" : \"12345\",\r\n  \"address\" : \"TestAddress\"\
-                  ,\r\n  \"detailAddress\" : \"TestDetailAddress\"\r\n}"
+                value: |-
+                  {
+                    "name" : "TestName",
+                    "email" : "test@example.com",
+                    "password" : "password",
+                    "tel" : "1234567890",
+                    "zipCode" : "12345",
+                    "address" : "TestAddress",
+                    "detailAddress" : "TestDetailAddress"
+                  }
       responses:
         "201":
           description: "201"
@@ -191,8 +219,12 @@ paths:
                 $ref: '#/components/schemas/members-signup-779979142'
               examples:
                 member/sign-up:
-                  value: "{\r\n  \"id\" : 1,\r\n  \"name\" : \"TestName\",\r\n  \"\
-                    email\" : \"test@example.com\"\r\n}"
+                  value: |-
+                    {
+                      "id" : 1,
+                      "name" : "TestName",
+                      "email" : "test@example.com"
+                    }
   /members/withdrawal:
     post:
       tags:
@@ -230,8 +262,12 @@ paths:
                 $ref: '#/components/schemas/members-duplicate-name-1386254058'
               examples:
                 member/name-duplicate:
-                  value: "{\r\n  \"message\" : \"사용 가능한 이름입니다.\",\r\n  \"code\" :\
-                    \ \"AVAILABLE_NAME\",\r\n  \"result\" : false\r\n}"
+                  value: |-
+                    {
+                      "message" : "사용 가능한 이름입니다.",
+                      "code" : "AVAILABLE_NAME",
+                      "result" : false
+                    }
   /orders/guest:
     post:
       tags:
@@ -277,14 +313,27 @@ paths:
               $ref: '#/components/schemas/orders-member-1397712321'
             examples:
               orders/create-by-member:
-                value: "{\r\n  \"fundingId\" : 1,\r\n  \"memberId\" : 1,\r\n  \"payMethod\"\
-                  \ : \"BANK_TRANSFER\",\r\n  \"amountOpen\" : true,\r\n  \"nameOpen\"\
-                  \ : true,\r\n  \"fundingItems\" : [ {\r\n    \"fundingItemId\" :\
-                  \ 1,\r\n    \"quantity\" : 1\r\n  }, {\r\n    \"fundingItemId\"\
-                  \ : 2,\r\n    \"quantity\" : 1\r\n  } ],\r\n  \"zipCode\" : \"12345\"\
-                  ,\r\n  \"address\" : \"서울시 강남구\",\r\n  \"detailAddress\" : \"테헤란\
-                  로 427\",\r\n  \"recipient\" : \"홍길동\",\r\n  \"phone\" : \"01012345678\"\
-                  ,\r\n  \"subPhone\" : \"01012345678\"\r\n}"
+                value: |-
+                  {
+                    "fundingId" : 1,
+                    "memberId" : 1,
+                    "payMethod" : "BANK_TRANSFER",
+                    "amountOpen" : true,
+                    "nameOpen" : true,
+                    "fundingItems" : [ {
+                      "fundingItemId" : 1,
+                      "quantity" : 1
+                    }, {
+                      "fundingItemId" : 2,
+                      "quantity" : 1
+                    } ],
+                    "zipCode" : "12345",
+                    "address" : "서울시 강남구",
+                    "detailAddress" : "테헤란로 427",
+                    "recipient" : "홍길동",
+                    "phone" : "01012345678",
+                    "subPhone" : "01012345678"
+                  }
       responses:
         "200":
           description: "200"
@@ -294,15 +343,26 @@ paths:
                 $ref: '#/components/schemas/orders-member1541140646'
               examples:
                 orders/create-by-member:
-                  value: "{\r\n  \"orderNumber\" : \"20210701-0001\",\r\n  \"orderId\"\
-                    \ : 1,\r\n  \"fundingId\" : 1,\r\n  \"recipientInfo\" : {\r\n\
-                    \    \"name\" : \"홍길동\",\r\n    \"address\" : {\r\n      \"addressInfo\"\
-                    \ : \"서울시\",\r\n      \"detailAddress\" : \"관진구\",\r\n      \"\
-                    zipCode\" : \"123456\"\r\n    },\r\n    \"phone\" : \"01012345678\"\
-                    ,\r\n    \"subPhone\" : \"01012345678\"\r\n  },\r\n  \"orderedRewards\"\
-                    \ : [ \"리워드1\", \"리워드2\", \"리워드3\", \"리워드4\" ],\r\n  \"orderStatus\"\
-                    \ : \"ORDERED\",\r\n  \"isAmountOpen\" : true,\r\n  \"isNameOpen\"\
-                    \ : false\r\n}"
+                  value: |-
+                    {
+                      "orderNumber" : "20210701-0001",
+                      "orderId" : 1,
+                      "fundingId" : 1,
+                      "recipientInfo" : {
+                        "name" : "홍길동",
+                        "address" : {
+                          "addressInfo" : "서울시",
+                          "detailAddress" : "관진구",
+                          "zipCode" : "123456"
+                        },
+                        "phone" : "01012345678",
+                        "subPhone" : "01012345678"
+                      },
+                      "orderedRewards" : [ "리워드1", "리워드2", "리워드3", "리워드4" ],
+                      "orderStatus" : "ORDERED",
+                      "isAmountOpen" : true,
+                      "isNameOpen" : false
+                    }
 components:
   schemas:
     fundings-918017013:

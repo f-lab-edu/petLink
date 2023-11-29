@@ -6,8 +6,6 @@ plugins {
     id 'org.hidetake.swagger.generator' version '2.18.2' //swagger - ui
 }
 def generated = 'src/main/generated' // querydsl QClass 파일 생성 위치
-def snippetsDir = file('build/generated-snippets') // restdocs-openapi3 스펙 파일 생성 위치
-def restdocsApiSpecVersion = '0.18.2' // restdocs-openapi3 버전
 
 group = 'com'
 version = '0.0.1-SNAPSHOT'
@@ -54,9 +52,9 @@ dependencies {
 
     // RestDocs
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation("org.springdoc:springdoc-openapi-ui:1.6.11") // restdocs-openapi3
-    testImplementation('com.epages:restdocs-api-spec-mockmvc:' + restdocsApiSpecVersion) // restdocs-openapi3
-    swaggerUI 'org.webjars:swagger-ui:4.11.1'
+    testImplementation "org.springdoc:springdoc-openapi-ui:1.6.11" // restdocs-openapi3
+    testImplementation 'com.epages:restdocs-api-spec-mockmvc:0.18.2' // restdocs-openapi3
+    swaggerUI 'org.webjars:swagger-ui:5.9.0'
 
     // object Storage
     implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.481'
@@ -76,7 +74,7 @@ openapi3 {
     description = 'Petlink API description'
     version = '0.1.0'
     format = 'yaml'
-    outputDirectory = "/docs"
+    outputDirectory = "docs"
 }
 
 tasks.withType(GenerateSwaggerUI).configureEach {
@@ -84,12 +82,12 @@ tasks.withType(GenerateSwaggerUI).configureEach {
     doFirst {
         def swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
 
-        def securitySchemesContent = "  securitySchemes:\n" +             \
-                                                 "    APIKey:\n" +             \
-                                                 "      type: apiKey\n" +             \
-                                                 "      name: Authorization\n" +             \
-                                                 "      in: header\n" +            \
-                                                 "security:\n" +
+        def securitySchemesContent = "  securitySchemes:\n" +                   \
+                                                       "    APIKey:\n" +                   \
+                                                       "      type: apiKey\n" +                   \
+                                                       "      name: Authorization\n" +                   \
+                                                       "      in: header\n" +                  \
+                                                       "security:\n" +
                 "  - APIKey: []  # Apply the security scheme here"
         swaggerUIFile.append securitySchemesContent
     }
