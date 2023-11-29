@@ -2,15 +2,26 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.6'
     id 'io.spring.dependency-management' version '1.1.0'
-    id 'com.epages.restdocs-api-spec' version '0.18.2'
+    id 'com.epages.restdocs-api-spec' version '0.18.2' //rest-docs-openapi3
+    id 'org.hidetake.swagger.generator' version '2.18.2' //swagger - ui
 }
+def generated = 'src/main/generated' // querydsl QClass 파일 생성 위치
+def snippetsDir = file('build/generated-snippets') // restdocs-openapi3 스펙 파일 생성 위치
+def restdocsApiSpecVersion = '0.18.2' // restdocs-openapi3 버전
 
 group = 'com'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+
 repositories {
     mavenCentral()
+}
+
+swaggerSources {
+    sample {
+        setInputFile(file("docs/openapi3.yaml"))
+    }
 }
 
 dependencies {
@@ -43,9 +54,9 @@ dependencies {
 
     // RestDocs
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    // restdocs-openapi3
-    testImplementation("org.springdoc:springdoc-openapi-ui:1.6.11")
-    testImplementation('com.epages:restdocs-api-spec-mockmvc:0.18.2') //2.2
+    testImplementation("org.springdoc:springdoc-openapi-ui:1.6.11") // restdocs-openapi3
+    testImplementation('com.epages:restdocs-api-spec-mockmvc:' + restdocsApiSpecVersion) // restdocs-openapi3
+    swaggerUI 'org.webjars:swagger-ui:4.11.1'
 
     // object Storage
     implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.481'
@@ -58,26 +69,57 @@ dependencies {
 }
 
 // restdocs-openapi3 설정 ===============================================================
+
 openapi3 {
     server = 'http://localhost:8080'
     title = 'Petlink API'
     description = 'Petlink API description'
     version = '0.1.0'
     format = 'yaml'
+    outputDirectory = "/docs"
 }
 
+tasks.withType(GenerateSwaggerUI).configureEach {
+    dependsOn 'openapi3'
+    doFirst {
+        def swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
+
+        def securitySchemesContent = "  securitySchemes:\n" +             \
+                                                 "    APIKey:\n" +             \
+                                                 "      type: apiKey\n" +             \
+                                                 "      name: Authorization\n" +             \
+                                                 "      in: header\n" +            \
+                                                 "security:\n" +
+                "  - APIKey: []  # Apply the security scheme here"
+        swaggerUIFile.append securitySchemesContent
+    }
+}
+
+// 11. 생성된 openapi3 스펙을 기반으로 SwaggerUISample 생성 및 static/docs 패키지에 복사
+bootJar {
+    dependsOn generateSwaggerUISample
+    doLast {
+        copy {
+            from "${generateSwaggerUISample.outputDir}" // 'swagger-ui-sample' 디렉토리
+            into "${project.rootDir}/docs"             // 프로젝트 루트의 'docs' 디렉토리로 복사
+        }
+    }
+    println("Files copied from ${generateSwaggerUISample.outputDir} to ${project.rootDir}/docs")
+}
 
 // 기타 설정부분 ===============================================================
+
 jar {
     // plane jar 파일 생성 안함
     enabled = false
 }
+
 tasks.named('test') {
     useJUnitPlatform()
 }
 
 // Querydsl 설정부분 ===============================================================
-def generated = 'src/main/generated'
+
 
 // querydsl QClass 파일 생성 위치를 지정
 tasks.withType(JavaCompile).configureEach {

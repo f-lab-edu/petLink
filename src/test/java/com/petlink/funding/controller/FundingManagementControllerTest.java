@@ -1,5 +1,6 @@
 package com.petlink.funding.controller;
 
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.petlink.RestDocsSupport;
 import com.petlink.funding.dto.request.FundingPostDto;
 import com.petlink.funding.dto.response.FundingCreateResponse;
@@ -14,13 +15,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import static com.petlink.common.util.date.DateConverter.toLocalDateTime;
 import static com.petlink.funding.domain.FundingCategory.FOOD;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -29,9 +30,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -68,12 +66,11 @@ class FundingManagementControllerTest extends RestDocsSupport {
 
         when(fundingManagementService.createFunding(any(FundingPostDto.class))).thenReturn(response);
 
-        mockMvc.perform(post("/fundings/manage/create")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/fundings/manage/create")
                         .content(objectMapper.writeValueAsString(postDto))
                         .contentType(APPLICATION_JSON))
-                .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("funding-management/create-funding",
+                .andDo(MockMvcRestDocumentationWrapper.document("funding-management/create-funding",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestFields(
@@ -111,14 +108,12 @@ class FundingManagementControllerTest extends RestDocsSupport {
 
         // JSON 문자열을 멀티파트 요청에 추가합니다.
 
-        mockMvc.perform(multipart("/fundings/manage/image/upload")
+        mockMvc.perform(RestDocumentationRequestBuilders.multipart("/fundings/manage/image/upload")
                         .file(image)
                         .param("objectName", "펀딩 이미지 파일명")
                         .contentType(MediaType.MULTIPART_FORM_DATA))
                 .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("funding-management/upload-image",
+                .andDo(MockMvcRestDocumentationWrapper.document("funding-management/upload-image",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         requestParts(

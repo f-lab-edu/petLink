@@ -1,5 +1,6 @@
 package com.petlink.funding.controller;
 
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.petlink.RestDocsSupport;
 import com.petlink.funding.domain.FundingCategory;
 import com.petlink.funding.domain.FundingState;
@@ -37,7 +38,6 @@ import static org.hamcrest.Matchers.everyItem;
 import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -47,7 +47,6 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -111,7 +110,7 @@ class FundingQueryControllerTest extends RestDocsSupport {
                 ArgumentMatchers.any(Pageable.class))).thenReturn(
                 mockSlice);
 
-        mockMvc.perform(get("/fundings")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/fundings")
                         .param("startDate", "20230101")
                         .param("endDate", "20231231")
                         .param("category", "TOY, FOOD, ETC")
@@ -120,10 +119,7 @@ class FundingQueryControllerTest extends RestDocsSupport {
                         .param("size", "2")
                 )
                 .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("fundings/get-list",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(MockMvcRestDocumentationWrapper.document("fundings/get-list",
                         queryParameters(
                                 parameterWithName("startDate").description("조회 시작일"),
                                 parameterWithName("endDate").description("조회 종료일"),
@@ -180,15 +176,14 @@ class FundingQueryControllerTest extends RestDocsSupport {
                 ArgumentMatchers.any(Pageable.class))).thenReturn(
                 mockSlice);
 
-        mockMvc.perform(get("/fundings")
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/fundings")
                         .param("startDate", "20230101")
                         .param("endDate", "20231231"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(5))
                 .andExpect(jsonPath("$.pageable.pageNumber").value(0))
                 .andExpect(jsonPath("$.pageable.pageSize").value(5))
-                .andExpect(jsonPath("$.pageable.offset").value(0))
-                .andDo(print());
+                .andExpect(jsonPath("$.pageable.offset").value(0));
     }
 
     @Test
@@ -217,7 +212,7 @@ class FundingQueryControllerTest extends RestDocsSupport {
                 .andExpect(status().isOk())
                 //모든 state가 정상인지 체크
                 .andExpect(jsonPath("$.content[*].state", everyItem(is("PROGRESS"))))
-                .andDo(print());
+        ;
     }
 
     @Test
@@ -244,8 +239,7 @@ class FundingQueryControllerTest extends RestDocsSupport {
                         .param("page", String.valueOf(pageable.getPageNumber()))
                         .param("size", String.valueOf(pageable.getPageSize())))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.[*].category", everyItem(in(Arrays.asList("FOOD", "CLOTHES")))))
-                .andDo(print());
+                .andExpect(jsonPath("$.content.[*].category", everyItem(in(Arrays.asList("FOOD", "CLOTHES")))));
     }
 
     @Test
@@ -257,7 +251,7 @@ class FundingQueryControllerTest extends RestDocsSupport {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.timestamp").exists())
-                .andDo(print());
+        ;
     }
 
     @Test
@@ -268,7 +262,7 @@ class FundingQueryControllerTest extends RestDocsSupport {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.timestamp").exists())
-                .andDo(print());
+        ;
     }
 
     @Test
@@ -281,7 +275,7 @@ class FundingQueryControllerTest extends RestDocsSupport {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.timestamp").exists())
-                .andDo(print());
+        ;
     }
 
     @Test
@@ -294,7 +288,7 @@ class FundingQueryControllerTest extends RestDocsSupport {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.timestamp").exists())
-                .andDo(print());
+        ;
     }
 
     @Test
@@ -322,8 +316,7 @@ class FundingQueryControllerTest extends RestDocsSupport {
         when(fundingService.findById(id)).thenReturn(mockResponse);
 
         // When & Then
-        mockMvc.perform(
-                        RestDocumentationRequestBuilders.get("/fundings/{id}", id))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/fundings/{id}", id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.managerId").value(mockResponse.getManagerId()))
@@ -337,8 +330,8 @@ class FundingQueryControllerTest extends RestDocsSupport {
                 .andExpect(jsonPath("$.category").value(mockResponse.getCategory().toString()))
                 .andExpect(jsonPath("$.targetDonation").value(mockResponse.getTargetDonation()))
                 .andExpect(jsonPath("$.successDonation").value(mockResponse.getSuccessDonation()))
-                .andDo(print())
-                .andDo(document("fundings/get-by-id",
+
+                .andDo(MockMvcRestDocumentationWrapper.document("fundings/get-by-id",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(

@@ -28,7 +28,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -84,7 +83,6 @@ class MemberControllerTest extends RestDocsSupport {
                 )
                 .andExpect(jsonPath("id").value(response.getId()))
                 .andExpect(status().isCreated())
-                .andDo(print())
                 .andDo(MockMvcRestDocumentationWrapper.document("member/sign-up",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -129,7 +127,7 @@ class MemberControllerTest extends RestDocsSupport {
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("code").type(JsonFieldType.STRING).description("코드")
                         )
-                )).andDo(print());
+                ));
 
         verify(memberService, times(1)).isNameDuplicated(testName);
     }
@@ -155,20 +153,17 @@ class MemberControllerTest extends RestDocsSupport {
         String token = "로그인 토큰";
         ResultResponse resultResponse = new ResultResponse(true, WITHDRAWAL_SUCCESS);
 
-
-        mockMvc.perform(post("/members/withdrawal")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/members/withdrawal")
                         .cookie(new Cookie("token", token)))  // 쿠키 추가)
                 .andExpect(status().isOk())
-                .andDo(document("member/withdrawal",
-                        preprocessRequest(prettyPrint()),
-                        preprocessResponse(prettyPrint()),
+                .andDo(MockMvcRestDocumentationWrapper.document("member/withdrawal",
                         responseFields(
                                 fieldWithPath("result").type(JsonFieldType.BOOLEAN).description("성공 여부"),
                                 fieldWithPath("message").type(JsonFieldType.STRING).description("메시지"),
                                 fieldWithPath("code").type(JsonFieldType.STRING).description("코드")
                         )
                 ))
-                .andDo(print());
+                ;
     }
 
 
@@ -183,7 +178,7 @@ class MemberControllerTest extends RestDocsSupport {
         mockMvc.perform(post("/members/withdrawal")
                         .cookie(new Cookie("token", token)))  // 쿠키에 토큰 추가
                 .andExpect(status().isBadRequest())
-                .andDo(print());
+                ;
     }
 
 }
