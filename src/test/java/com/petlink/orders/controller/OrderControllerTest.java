@@ -1,5 +1,6 @@
 package com.petlink.orders.controller;
 
+import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.petlink.RestDocsSupport;
 import com.petlink.orders.OrderTestUtils;
 import com.petlink.orders.dto.request.OrderRequest;
@@ -13,17 +14,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,8 +36,7 @@ class OrderControllerTest extends RestDocsSupport {
     private GuestOrderService guestOrderService;
     @Mock
     private MemberOrderService memberOrderService;
-
-    private OrderTestUtils testUtils = new OrderTestUtils();
+    private final OrderTestUtils testUtils = new OrderTestUtils();
 
     @Override
     protected Object initController() {
@@ -55,16 +54,11 @@ class OrderControllerTest extends RestDocsSupport {
         when(guestOrderService.createOrder(any(OrderRequest.class))).thenReturn(response);
 
         // then
-        mockMvc.perform(post("/orders/guest")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/orders/guest")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andDo(print())
-
-                .andDo(
-                        document("orders/create-by-guest",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
+                .andDo(MockMvcRestDocumentationWrapper.document("orders/create-by-guest",
                                 requestFields(
                                         fieldWithPath("fundingId").description("펀딩 ID"),
                                         fieldWithPath("memberId").description("회원 ID (비회원 주문시 NULL)"),
@@ -116,14 +110,14 @@ class OrderControllerTest extends RestDocsSupport {
         when(memberOrderService.createOrder(any(OrderRequest.class))).thenReturn(response);
 
         // then
-        mockMvc.perform(post("/orders/member")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/orders/member")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andDo(print())
 
                 .andDo(
-                        document("orders/create-by-member",
+                        MockMvcRestDocumentationWrapper.document("orders/create-by-member",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestFields(
