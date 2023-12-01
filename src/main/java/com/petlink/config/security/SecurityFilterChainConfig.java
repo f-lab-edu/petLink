@@ -4,16 +4,16 @@ import com.petlink.config.filter.JwtAuthenticationEntryPoint;
 import com.petlink.config.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static com.petlink.common.util.jwt.JwtRole.MANAGER;
+import static org.springframework.http.HttpMethod.POST;
 
 @Slf4j
 @Configuration
@@ -21,37 +21,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityFilterChainConfig {
 
-    private final AuthenticationProvider authenticationProvider;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final AuthenticationProvider authenticationProvider; // 커스텀 인증 프로바이더(유저 정보를 DB에서 가져오는 역할)
+    private final JwtAuthenticationFilter jwtAuthenticationFilter; // JWT 인증 필터
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; // JWT 인증 필터에서 발생하는 예외 처리
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         return http
-                .csrf().disable()
-                .httpBasic().disable()
-                .formLogin().disable()
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                                .requestMatchers(HttpMethod.GET, "/docs/index.html").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/members/duplicate/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/members/signup").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/fundings").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/fundings/**").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/orders/**").permitAll()
-                                .anyRequest().authenticated()
+                .csrf().disable()  // CSRF 공격 방지 필터 비활성화
+                .cors().disable()  // CORS 필터 비활성화
+                .httpBasic().disable()  // http
+                .formLogin().disable() // 시큐리티 기본 로그인 페이지 사용 안함
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers(POST, "/fundings/manage/**").hasRole(MANAGER.getRole()) // 펀딩 관리자 권한이 필요한 요청
+                        .anyRequest().permitAll() // 모든 요청에 대해 접근 허용
                 )
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 생성 정책 설정: STATELESS (상태 정보를 서버에 저장하지 않음)
-                .and()
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and()
-                .authenticationProvider(authenticationProvider)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 생성 정책 설정: STATELESS (상태 정보를 서버에 저장하지 않음)
+                .and().addFilter(jwtAuthenticationFilter) // JWT 인증 필터 추가
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint) // JWT 인증 필터에서 발생하는 예외 처리
+                .and().authenticationProvider(authenticationProvider) // 커스텀 인증 프로바이더 추가
                 .build();
     }
 }
