@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.petlink.common.util.jwt.JwtRole.MANAGER;
-import static com.petlink.common.util.jwt.JwtRole.MEMBER;
+import static com.petlink.common.util.jwt.UserRole.MANAGER;
+import static com.petlink.common.util.jwt.UserRole.MEMBER;
 
 @Builder
 @Getter
