@@ -17,3 +17,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           LANGUAGE: Korean
+          OPENAI_API_ENDPOINT : https://api.openai.com/v1/models
+
