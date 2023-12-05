@@ -1,6 +1,7 @@
 package com.petlink.manager.domain;
 
 import com.petlink.common.domain.user.BaseUser;
+import com.petlink.common.util.jwt.UserRole;
 import com.petlink.funding.domain.Funding;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -81,6 +82,7 @@ public class Manager extends BaseUser {
             manager.id = this.id;
             manager.email = this.email;
             manager.name = this.name;
+            manager.role = UserRole.MANAGER;
             manager.password = this.password;
             manager.phoneNumber = this.phoneNumber;
             manager.officeNumber = this.officeNumber;

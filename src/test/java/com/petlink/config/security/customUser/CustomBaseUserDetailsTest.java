@@ -18,19 +18,16 @@ class CustomBaseUserDetailsTest {
     @DisplayName("매니저 이메일일 경우 ROLE_MANAGER 권한을 가진 CustomUserDetails 객체를 생성한다.")
     public void testCustomUserDetails_WithManager() {
         String email = "manager@petlink.co.kr";
-        String password = "password";
         Manager manager = Manager.builder()
                 .email(email)
-                .password(password)
                 .build();
 
         CustomUserDetails userDetails = CustomUserDetails.builder()
-                .manager(manager)
+                .user(manager)
                 .build();
 
         assertNotNull(userDetails);
         assertEquals(email, userDetails.getUsername());
-        assertEquals(password, userDetails.getPassword());
 
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         assertEquals(1, authorities.size());
@@ -41,20 +38,17 @@ class CustomBaseUserDetailsTest {
     @DisplayName("회원 이메일일 경우 ROLE_MEMBER 권한을 가진 CustomUserDetails 객체를 생성한다.")
     public void testCustomUserDetails_WithMember() {
         String email = "member@example.com";
-        String password = "password";
         Member member = Member.builder()
                 .email(email)
-                .password(password)
                 .status(MemberStatus.ACTIVE)
                 .build();
 
         CustomUserDetails userDetails = CustomUserDetails.builder()
-                .member(member)
+                .user(member)
                 .build();
 
         assertNotNull(userDetails);
         assertEquals(email, userDetails.getUsername());
-        assertEquals(password, userDetails.getPassword());
 
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
         assertEquals(1, authorities.size());

@@ -1,6 +1,5 @@
 package com.petlink.config.security.customUser;
 
-import com.petlink.manager.domain.Manager;
 import com.petlink.manager.repository.ManagerRepository;
 import com.petlink.member.domain.Member;
 import com.petlink.member.repository.MemberRepository;
@@ -24,14 +23,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (email == null || email.isBlank()) {
             throw new UsernameNotFoundException("Not found with email: " + email);
         }
-
         CustomUserDetails.CustomUserDetailsBuilder userDetailsBuilder = CustomUserDetails.builder();
 
-        if (email.endsWith("@petlink.co.kr")) {
-            buildManagerUserDetails(userDetailsBuilder, email);
-        } else {
-            buildMemberUserDetails(userDetailsBuilder, email);
-        }
+        buildUserDetails(userDetailsBuilder, email);
 
         UserDetails userDetails = userDetailsBuilder.build();
         if (userDetails.getAuthorities().isEmpty()) {
@@ -41,14 +35,21 @@ public class CustomUserDetailsService implements UserDetailsService {
         return userDetails;
     }
 
-    private void buildManagerUserDetails(CustomUserDetails.CustomUserDetailsBuilder userDetailsBuilder, String email) {
-        Optional<Manager> optionalManager = managerRepository.findByEmail(email);
-        optionalManager.ifPresent(userDetailsBuilder::manager);
-    }
 
-    private void buildMemberUserDetails(CustomUserDetails.CustomUserDetailsBuilder userDetailsBuilder, String email) {
+    private void buildUserDetails(CustomUserDetails.CustomUserDetailsBuilder userDetailsBuilder, String email) {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        optionalMember.ifPresent(userDetailsBuilder::member);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            userDetailsBuilder.user(member);
+        } else {
+            managerRepository.findByEmail(email)
+                    .ifPresentOrElse(
+                            manager -> userDetailsBuilder.user(manager),
+                            () -> {
+                                throw new UsernameNotFoundException("존재하지 않는 계정입니다.: " + email);
+                            }
+                    );
+        }
     }
 
 }

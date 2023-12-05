@@ -2,6 +2,7 @@ package com.petlink.member.domain;
 
 import com.petlink.common.domain.Address;
 import com.petlink.common.domain.user.BaseUser;
+import com.petlink.common.util.jwt.UserRole;
 import com.petlink.member.exception.MemberException;
 import com.petlink.orders.domain.Orders;
 import jakarta.persistence.CascadeType;
@@ -46,24 +47,28 @@ public class Member extends BaseUser {
 
     private List<Orders> ordersList = new ArrayList<>();
 
-    public void withdrawal() {
-        if (this.status.equals(MemberStatus.INACTIVE)) {
-            throw new MemberException(ALREADY_WITHDRAWAL_MEMBER);
-        }
-        this.status = MemberStatus.INACTIVE;
+    private Member(MemberBuilder builder) {
+        this.id = builder.id;
+        this.email = builder.email;
+        this.name = builder.name;
+        this.role = UserRole.MEMBER;
+        this.password = builder.password;
+        this.tel = builder.tel;
+        this.address = builder.address;
+        this.status = builder.status;
     }
 
     protected Member() {
     }
 
-    private Member(MemberBuilder builder) {
-        this.id = builder.id;
-        this.email = builder.email;
-        this.name = builder.name;
-        this.password = builder.password;
-        this.tel = builder.tel;
-        this.address = builder.address;
-        this.status = builder.status;
+    /**
+     * Withdrawal.(탈퇴)
+     */
+    public void withdrawal() {
+        if (this.status.equals(MemberStatus.INACTIVE)) {
+            throw new MemberException(ALREADY_WITHDRAWAL_MEMBER);
+        }
+        this.status = MemberStatus.INACTIVE;
     }
 
     // 빌더 인스턴스 생성 메소드

@@ -1,6 +1,7 @@
 package com.petlink.common.domain.user;
 
 import com.petlink.common.domain.base.BaseTimeEntity;
+import com.petlink.common.util.jwt.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,4 +22,7 @@ public class BaseUser extends BaseTimeEntity {
 
     @Column(name = "name", nullable = false)
     protected String name;
+
+    @Column
+    protected UserRole role;
 }
