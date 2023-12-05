@@ -24,12 +24,13 @@ public class SecurityFilterChainConfig {
     private final AuthenticationProvider authenticationProvider; // 커스텀 인증 프로바이더(유저 정보를 DB에서 가져오는 역할)
     private final JwtAuthenticationFilter jwtAuthenticationFilter; // JWT 인증 필터
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; // JWT 인증 필터에서 발생하는 예외 처리
+    private final CorsConfig corsConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf().disable()  // CSRF 공격 방지 필터 비활성화
-                .cors().disable()  // CORS 필터 비활성화
+                .addFilter(corsConfig.corsFilter()) // CORS 필터 추가
                 .httpBasic().disable()  // http
                 .formLogin().disable() // 시큐리티 기본 로그인 페이지 사용 안함
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
