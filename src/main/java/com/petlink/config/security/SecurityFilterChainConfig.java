@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 
-import static com.petlink.common.util.jwt.JwtRole.MANAGER;
+import static com.petlink.common.util.jwt.UserRole.MANAGER;
 import static org.springframework.http.HttpMethod.POST;
 
 @Slf4j
@@ -28,16 +28,13 @@ public class SecurityFilterChainConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf().disable()  // CSRF 공격 방지 필터 비활성화
+        return http.csrf().disable()  // CSRF 공격 방지 필터 비활성화
                 .addFilter(corsConfig.corsFilter()) // CORS 필터 추가
                 .httpBasic().disable()  // http
                 .formLogin().disable() // 시큐리티 기본 로그인 페이지 사용 안함
-                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers(POST, "/fundings/manage/**").hasRole(MANAGER.getRole()) // 펀딩 관리자 권한이 필요한 요청
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests.requestMatchers(POST, "/fundings/manage/**").hasRole(MANAGER.getRole()) // 펀딩 관리자 권한이 필요한 요청
                         .anyRequest().permitAll() // 모든 요청에 대해 접근 허용
-                )
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 생성 정책 설정: STATELESS (상태 정보를 서버에 저장하지 않음)
+                ).sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 생성 정책 설정: STATELESS (상태 정보를 서버에 저장하지 않음)
                 .and().addFilter(jwtAuthenticationFilter) // JWT 인증 필터 추가
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint) // JWT 인증 필터에서 발생하는 예외 처리
                 .and().authenticationProvider(authenticationProvider) // 커스텀 인증 프로바이더 추가
