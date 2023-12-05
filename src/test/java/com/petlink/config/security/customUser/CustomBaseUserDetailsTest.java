@@ -12,7 +12,7 @@ import java.util.Collection;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class CustomUserDetailsTest {
+class CustomBaseUserDetailsTest {
 
     @Test
     @DisplayName("매니저 이메일일 경우 ROLE_MANAGER 권한을 가진 CustomUserDetails 객체를 생성한다.")

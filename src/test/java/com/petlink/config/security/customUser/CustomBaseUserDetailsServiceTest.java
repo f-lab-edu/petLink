@@ -21,7 +21,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CustomUserDetailsServiceTest {
+public class CustomBaseUserDetailsServiceTest {
 
     private MemberRepository memberRepository;
     private ManagerRepository managerRepository;
