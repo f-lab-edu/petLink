@@ -28,7 +28,7 @@ public class JwtTokenProvider {
     public String createToken(Member member) {
         Claims claims = Jwts.claims();
         claims.put("id", member.getId());
-        claims.put("role", JwtRole.MEMBER);
+        claims.put("role", UserRole.MEMBER);
         long systemTime = System.currentTimeMillis();
 
         return Jwts.builder()
@@ -46,7 +46,7 @@ public class JwtTokenProvider {
     public String createToken(Manager manager) {
         Claims claims = Jwts.claims();
         claims.put("id", manager.getId());
-        claims.put("role", JwtRole.MANAGER);
+        claims.put("role", UserRole.MANAGER);
         long systemTime = System.currentTimeMillis();
 
         return Jwts.builder()

@@ -1,8 +1,6 @@
 package com.petlink.config.security.customUser;
 
-import com.petlink.manager.domain.Manager;
-import com.petlink.member.domain.Member;
-import com.petlink.member.domain.MemberStatus;
+import com.petlink.common.domain.user.BaseUser;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,37 +12,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.petlink.common.util.jwt.JwtRole.MANAGER;
-import static com.petlink.common.util.jwt.JwtRole.MEMBER;
-
 @Builder
 @Getter
 public class CustomUserDetails implements UserDetails {
 
-    private Member member;
-    private Manager manager;
+    private BaseUser user;
 
-    public CustomUserDetails(Member member) {
-        this.member = member;
-    }
-
-    public CustomUserDetails(Manager manager) {
-        this.manager = manager;
-    }
-
-    public CustomUserDetails(Member member, Manager manager) {
-        this.member = member;
-        this.manager = manager;
+    public CustomUserDetails(BaseUser user) {
+        this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if (manager != null) {
-            authorities.add(new SimpleGrantedAuthority(MANAGER.getRole()));
-        }
-        if (member != null) {
-            authorities.add(new SimpleGrantedAuthority(MEMBER.getRole()));
+        if (user != null) {
+            authorities.add(new SimpleGrantedAuthority(user.getRole().getRole()));
         }
         return authorities;
     }
@@ -52,22 +34,13 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        if (manager != null) {
-            return manager.getPassword();
-        }
-        if (member != null) {
-            return member.getPassword();
-        }
         throw new UsernameNotFoundException("No user found.");
     }
 
     @Override
     public String getUsername() {
-        if (manager != null) {
-            return manager.getEmail();
-        }
-        if (member != null) {
-            return member.getEmail();
+        if (user != null) {
+            return user.getEmail();
         }
         throw new UsernameNotFoundException("No user found.");
     }
@@ -87,14 +60,9 @@ public class CustomUserDetails implements UserDetails {
         return true;
     }
 
-
     @Override
     public boolean isEnabled() {
-        if (member != null) {
-            MemberStatus status = member.getStatus();
-            return status.equals(MemberStatus.ACTIVE);
-        }
-        return manager != null;
+        return true;
     }
 }
 

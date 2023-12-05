@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum JwtRole {
+public enum UserRole {
 	MANAGER("ROLE_MANAGER"),
 	MEMBER("ROLE_MEMBER");
 

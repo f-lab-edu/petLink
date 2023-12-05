@@ -32,14 +32,7 @@ public class JpaAuditingConfiguration {
             Object principal = authentication.getPrincipal();
 
             if (principal instanceof CustomUserDetails userDetails) {
-
-                String email = null;
-                if (userDetails.getManager() != null) {
-                    email = userDetails.getManager().getEmail();
-                } else if (userDetails.getMember() != null) {
-                    email = userDetails.getMember().getEmail();
-                }
-                return Optional.ofNullable(email);
+                return Optional.ofNullable(userDetails.getUser().getEmail());
             } else {
                 return Optional.of((String) principal);
             }

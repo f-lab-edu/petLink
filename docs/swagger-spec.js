@@ -6,7 +6,7 @@ window.swaggerSpec={
     "version" : "0.1.0"
   },
   "servers" : [ {
-    "url" : "http://localhost:8080"
+    "url" : "localhost"
   } ],
   "tags" : [ ],
   "paths" : {
@@ -110,7 +110,7 @@ window.swaggerSpec={
                 },
                 "examples" : {
                   "fundings/get-list" : {
-                    "value" : "{\"content\":[{\"id\":1,\"title\":\"Test Title 1\",\"state\":\"SCHEDULED\",\"category\":\"FOOD\",\"startDate\":[2023,1,1,0,0],\"endDate\":[2023,12,31,0,0]},{\"id\":2,\"title\":\"Test Title 2\",\"state\":\"PROGRESS\",\"category\":\"TOY\",\"startDate\":[2023,1,1,0,0],\"endDate\":[2023,12,31,0,0]}],\"pageable\":{\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"offset\":0,\"pageNumber\":0,\"pageSize\":2,\"paged\":true,\"unpaged\":false},\"totalPages\":1,\"totalElements\":2,\"last\":true,\"size\":2,\"number\":0,\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"numberOfElements\":2,\"first\":true,\"empty\":false}"
+                    "value" : "{\"content\":[{\"id\":1,\"title\":\"Test Title 1\",\"state\":\"SCHEDULED\",\"category\":\"FOOD\",\"startDate\":[2023,1,1,0,0],\"endDate\":[2023,12,31,0,0]},{\"id\":2,\"title\":\"Test Title 2\",\"state\":\"PROGRESS\",\"category\":\"TOY\",\"startDate\":[2023,1,1,0,0],\"endDate\":[2023,12,31,0,0]}],\"pageable\":{\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"offset\":0,\"pageNumber\":0,\"pageSize\":2,\"paged\":true,\"unpaged\":false},\"last\":true,\"totalPages\":1,\"totalElements\":2,\"size\":2,\"number\":0,\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"first\":true,\"numberOfElements\":2,\"empty\":false}"
                   }
                 }
               }

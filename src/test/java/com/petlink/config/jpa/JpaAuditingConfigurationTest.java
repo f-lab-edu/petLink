@@ -29,7 +29,7 @@ public class JpaAuditingConfigurationTest {
     public void testGetCurrentAuditorForMember() {
         // Given
         Member member = Member.builder().email("email@google.com").build();
-        CustomUserDetails userDetails = CustomUserDetails.builder().member(member).build();
+        CustomUserDetails userDetails = CustomUserDetails.builder().user(member).build();
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
