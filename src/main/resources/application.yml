@@ -29,6 +29,8 @@ logging:
 jwt:
   secret-key: ${jwt.secret.key}
   expire-length: ${jwt.expire.length}
+  prefix: ${jwt.prefix}
+  header: ${jwt.header}
 
 # Object Storage properties
 storage:

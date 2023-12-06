@@ -1,7 +1,6 @@
 package com.petlink.common.util.jwt;
 
-import com.petlink.manager.domain.Manager;
-import com.petlink.member.domain.Member;
+import com.petlink.common.domain.user.BaseUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -22,36 +21,21 @@ public class JwtTokenProvider {
     @Value("${jwt.expire-length}")
     private Long expireLength;
 
-    /**
-     * 매니저 토큰 생성
-     */
-    public String createToken(Member member) {
-        Claims claims = Jwts.claims();
-        claims.put("id", member.getId());
-        claims.put("role", UserRole.MEMBER);
-        long systemTime = System.currentTimeMillis();
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(member.getEmail())
-                .setIssuedAt(new Date(systemTime))
-                .setExpiration(new Date(systemTime + expireLength))
-                .signWith(getKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
 
     /**
-     * 매니저 토큰 생성
+     * 토큰 생성
+     *
+     * @param user
+     * @return
      */
-    public String createToken(Manager manager) {
+    public String createToken(BaseUser user) {
         Claims claims = Jwts.claims();
-        claims.put("id", manager.getId());
-        claims.put("role", UserRole.MANAGER);
+        claims.put("id", user.getId());
+        claims.put("role", user.getRole().getRole());
         long systemTime = System.currentTimeMillis();
-
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(manager.getEmail())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date(systemTime))
                 .setExpiration(new Date(systemTime + expireLength))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
