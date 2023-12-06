@@ -43,6 +43,7 @@ class JwtTokenProviderTest {
     @DisplayName("토큰을 생성할 수 있다.")
     void createToken() {
         String token = provider.createToken(member);
+        System.out.println(token);
         assertThat(token).isNotNull();
     }
 

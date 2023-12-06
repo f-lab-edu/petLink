@@ -31,6 +31,7 @@ public class JwtTokenProvider {
     public String createToken(BaseUser user) {
         Claims claims = Jwts.claims();
         claims.put("id", user.getId());
+        claims.put("name", user.getName());
         claims.put("role", user.getRole().getRole());
         long systemTime = System.currentTimeMillis();
         return Jwts.builder()
@@ -108,5 +109,4 @@ public class JwtTokenProvider {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
-
 }

@@ -1,11 +1,10 @@
 package com.petlink.config.filter;
 
-import com.petlink.common.util.jwt.JwtToken;
+import com.petlink.common.cache.TokenCacheService;
 import com.petlink.common.util.jwt.JwtTokenProvider;
 import com.petlink.common.util.jwt.UserRole;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
@@ -22,7 +21,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,6 +31,7 @@ import java.util.Optional;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final TokenCacheService tokenCacheService;
     private final List<String> excludedPaths = List.of(
             "/docs/index.html",
             "/members/duplicate/**",
@@ -47,13 +46,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.getWriter().println("{ \"message\": \"" + message + "\" }");
     }
 
-    private Optional<String> parseJwtFromCookie(HttpServletRequest request) {
-        return Optional.ofNullable(request.getCookies())
-                .stream()
-                .flatMap(Arrays::stream)
-                .filter(cookie -> JwtToken.JWT_TOKEN.getTokenName().equals(cookie.getName()))
-                .map(Cookie::getValue)
-                .findFirst();
+    private Optional<String> parseJwt(HttpServletRequest request) {
+        return Optional.of(request.getHeader("Authorization").substring(7));
     }
 
     private Authentication getAuthentication(String token) {
@@ -76,7 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        Optional<String> tokenOptional = parseJwtFromCookie(request);
+        Optional<String> tokenOptional = parseJwt(request);
 
         if (tokenOptional.isEmpty()) {
             generateTokenExceptionMessage(response, "인증을 위해 JWT 토큰이 필요합니다.");
@@ -85,7 +79,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = tokenOptional.get();
+
+        if (tokenCacheService.isBlackList(token)) {
+            generateTokenExceptionMessage(response, "만료된 토큰입니다.");
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         log.info(jwtTokenProvider.getRoleByToken(token));
+
         if (Objects.equals(jwtTokenProvider.getRoleByToken(token), UserRole.MANAGER.getRole())) {
             filterChain.doFilter(request, response);
             return;
