@@ -6,10 +6,10 @@ permissions:
 
 on:
   issue_comment:
-    types: [created]
+    types: [ created ]
 
 jobs:
-  code-review: 
+  code-review:
     runs-on: ubuntu-latest
     steps:
       - uses: anc95/ChatGPT-CodeReview@main
