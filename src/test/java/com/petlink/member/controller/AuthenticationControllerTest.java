@@ -2,6 +2,7 @@ package com.petlink.member.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.petlink.RestDocsSupport;
+import com.petlink.common.cache.TokenCacheService;
 import com.petlink.member.dto.request.LoginRequest;
 import com.petlink.member.dto.response.LoginResponse;
 import com.petlink.member.exception.MemberException;
@@ -38,9 +39,12 @@ class AuthenticationControllerTest extends RestDocsSupport {
     @Mock
     private AuthenticationService authenticationService;
 
+    @Mock
+    private TokenCacheService tokenCacheService;
+
     @Override
     protected Object initController() {
-        return new AuthenticationController(authenticationService);
+        return new AuthenticationController(authenticationService, tokenCacheService);
     }
 
     @Test

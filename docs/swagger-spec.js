@@ -110,7 +110,7 @@ window.swaggerSpec={
                 },
                 "examples" : {
                   "fundings/get-list" : {
-                    "value" : "{\"content\":[{\"id\":1,\"title\":\"Test Title 1\",\"state\":\"SCHEDULED\",\"category\":\"FOOD\",\"startDate\":[2023,1,1,0,0],\"endDate\":[2023,12,31,0,0]},{\"id\":2,\"title\":\"Test Title 2\",\"state\":\"PROGRESS\",\"category\":\"TOY\",\"startDate\":[2023,1,1,0,0],\"endDate\":[2023,12,31,0,0]}],\"pageable\":{\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"offset\":0,\"pageNumber\":0,\"pageSize\":2,\"paged\":true,\"unpaged\":false},\"last\":true,\"totalPages\":1,\"totalElements\":2,\"size\":2,\"number\":0,\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"first\":true,\"numberOfElements\":2,\"empty\":false}"
+                    "value" : "{\"content\":[{\"id\":1,\"title\":\"Test Title 1\",\"state\":\"SCHEDULED\",\"category\":\"FOOD\",\"startDate\":[2023,1,1,0,0],\"endDate\":[2023,12,31,0,0]},{\"id\":2,\"title\":\"Test Title 2\",\"state\":\"PROGRESS\",\"category\":\"TOY\",\"startDate\":[2023,1,1,0,0],\"endDate\":[2023,12,31,0,0]}],\"pageable\":{\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"offset\":0,\"pageSize\":2,\"pageNumber\":0,\"paged\":true,\"unpaged\":false},\"totalPages\":1,\"totalElements\":2,\"last\":true,\"size\":2,\"number\":0,\"sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"numberOfElements\":2,\"first\":true,\"empty\":false}"
                   }
                 }
               }
@@ -142,7 +142,7 @@ window.swaggerSpec={
                 },
                 "examples" : {
                   "fundings/get-by-id" : {
-                    "value" : "{\n  \"id\" : 1,\n  \"managerId\" : 1,\n  \"managerName\" : \"Test Manager\",\n  \"managerEmail\" : \"test@manager.com\",\n  \"phoneNumber\" : \"012-3456-7890\",\n  \"title\" : \"Test Title\",\n  \"miniTitle\" : \"Test Mini Title\",\n  \"content\" : \"Test Content\",\n  \"state\" : \"PROGRESS\",\n  \"category\" : \"FOOD\",\n  \"startDate\" : [ 2023, 1, 1, 0, 0 ],\n  \"endDate\" : [ 2023, 12, 1, 0, 0 ],\n  \"targetDonation\" : 1000000,\n  \"successDonation\" : 500000\n}"
+                    "value" : "{\r\n  \"id\" : 1,\r\n  \"managerId\" : 1,\r\n  \"managerName\" : \"Test Manager\",\r\n  \"managerEmail\" : \"test@manager.com\",\r\n  \"phoneNumber\" : \"012-3456-7890\",\r\n  \"title\" : \"Test Title\",\r\n  \"miniTitle\" : \"Test Mini Title\",\r\n  \"content\" : \"Test Content\",\r\n  \"state\" : \"PROGRESS\",\r\n  \"category\" : \"FOOD\",\r\n  \"startDate\" : [ 2023, 1, 1, 0, 0 ],\r\n  \"endDate\" : [ 2023, 12, 1, 0, 0 ],\r\n  \"targetDonation\" : 1000000,\r\n  \"successDonation\" : 500000\r\n}"
                   }
                 }
               }
@@ -163,7 +163,7 @@ window.swaggerSpec={
               },
               "examples" : {
                 "funding-management/create-funding" : {
-                  "value" : "{\n  \"managerId\" : 1,\n  \"title\" : \"펀딩 제목\",\n  \"miniTitle\" : \"펀딩 소제목\",\n  \"content\" : \"펀딩 내용\",\n  \"category\" : \"FOOD\",\n  \"startDate\" : \"20210801\",\n  \"endDate\" : \"20210831\",\n  \"targetDonation\" : 100000\n}"
+                  "value" : "{\r\n  \"managerId\" : 1,\r\n  \"title\" : \"펀딩 제목\",\r\n  \"miniTitle\" : \"펀딩 소제목\",\r\n  \"content\" : \"펀딩 내용\",\r\n  \"category\" : \"FOOD\",\r\n  \"startDate\" : \"20210801\",\r\n  \"endDate\" : \"20210831\",\r\n  \"targetDonation\" : 100000\r\n}"
                 }
               }
             }
@@ -179,7 +179,7 @@ window.swaggerSpec={
                 },
                 "examples" : {
                   "funding-management/create-funding" : {
-                    "value" : "{\n  \"id\" : 1,\n  \"registeredAt\" : [ 2021, 8, 1, 0, 0 ]\n}"
+                    "value" : "{\r\n  \"id\" : 1,\r\n  \"registeredAt\" : [ 2021, 8, 1, 0, 0 ]\r\n}"
                   }
                 }
               }
@@ -202,7 +202,7 @@ window.swaggerSpec={
                 },
                 "examples" : {
                   "funding-management/upload-image" : {
-                    "value" : "{\n  \"id\" : 1,\n  \"link\" : \"펀딩 이미지 링크\",\n  \"name\" : \"펀딩 이미지 파일명\",\n  \"uploadedAt\" : [ 2021, 8, 1, 0, 0 ]\n}"
+                    "value" : "{\r\n  \"id\" : 1,\r\n  \"link\" : \"펀딩 이미지 링크\",\r\n  \"name\" : \"펀딩 이미지 파일명\",\r\n  \"uploadedAt\" : [ 2021, 8, 1, 0, 0 ]\r\n}"
                   }
                 }
               }
@@ -223,7 +223,7 @@ window.swaggerSpec={
               },
               "examples" : {
                 "member/sign-up" : {
-                  "value" : "{\n  \"name\" : \"TestName\",\n  \"email\" : \"test@example.com\",\n  \"password\" : \"password\",\n  \"tel\" : \"1234567890\",\n  \"zipCode\" : \"12345\",\n  \"address\" : \"TestAddress\",\n  \"detailAddress\" : \"TestDetailAddress\"\n}"
+                  "value" : "{\r\n  \"name\" : \"TestName\",\r\n  \"email\" : \"test@example.com\",\r\n  \"password\" : \"password\",\r\n  \"tel\" : \"1234567890\",\r\n  \"zipCode\" : \"12345\",\r\n  \"address\" : \"TestAddress\",\r\n  \"detailAddress\" : \"TestDetailAddress\"\r\n}"
                 }
               }
             }
@@ -239,7 +239,7 @@ window.swaggerSpec={
                 },
                 "examples" : {
                   "member/sign-up" : {
-                    "value" : "{\n  \"id\" : 1,\n  \"name\" : \"TestName\",\n  \"email\" : \"test@example.com\"\n}"
+                    "value" : "{\r\n  \"id\" : 1,\r\n  \"name\" : \"TestName\",\r\n  \"email\" : \"test@example.com\"\r\n}"
                   }
                 }
               }
@@ -294,7 +294,7 @@ window.swaggerSpec={
                 },
                 "examples" : {
                   "member/name-duplicate" : {
-                    "value" : "{\n  \"message\" : \"사용 가능한 이름입니다.\",\n  \"code\" : \"AVAILABLE_NAME\",\n  \"result\" : false\n}"
+                    "value" : "{\r\n  \"message\" : \"사용 가능한 이름입니다.\",\r\n  \"code\" : \"AVAILABLE_NAME\",\r\n  \"result\" : false\r\n}"
                   }
                 }
               }
@@ -352,7 +352,7 @@ window.swaggerSpec={
               },
               "examples" : {
                 "orders/create-by-member" : {
-                  "value" : "{\n  \"fundingId\" : 1,\n  \"memberId\" : 1,\n  \"payMethod\" : \"BANK_TRANSFER\",\n  \"amountOpen\" : true,\n  \"nameOpen\" : true,\n  \"fundingItems\" : [ {\n    \"fundingItemId\" : 1,\n    \"quantity\" : 1\n  }, {\n    \"fundingItemId\" : 2,\n    \"quantity\" : 1\n  } ],\n  \"zipCode\" : \"12345\",\n  \"address\" : \"서울시 강남구\",\n  \"detailAddress\" : \"테헤란로 427\",\n  \"recipient\" : \"홍길동\",\n  \"phone\" : \"01012345678\",\n  \"subPhone\" : \"01012345678\"\n}"
+                  "value" : "{\r\n  \"fundingId\" : 1,\r\n  \"memberId\" : 1,\r\n  \"payMethod\" : \"BANK_TRANSFER\",\r\n  \"amountOpen\" : true,\r\n  \"nameOpen\" : true,\r\n  \"fundingItems\" : [ {\r\n    \"fundingItemId\" : 1,\r\n    \"quantity\" : 1\r\n  }, {\r\n    \"fundingItemId\" : 2,\r\n    \"quantity\" : 1\r\n  } ],\r\n  \"zipCode\" : \"12345\",\r\n  \"address\" : \"서울시 강남구\",\r\n  \"detailAddress\" : \"테헤란로 427\",\r\n  \"recipient\" : \"홍길동\",\r\n  \"phone\" : \"01012345678\",\r\n  \"subPhone\" : \"01012345678\"\r\n}"
                 }
               }
             }
@@ -368,7 +368,7 @@ window.swaggerSpec={
                 },
                 "examples" : {
                   "orders/create-by-member" : {
-                    "value" : "{\n  \"orderNumber\" : \"20210701-0001\",\n  \"orderId\" : 1,\n  \"fundingId\" : 1,\n  \"recipientInfo\" : {\n    \"name\" : \"홍길동\",\n    \"address\" : {\n      \"addressInfo\" : \"서울시\",\n      \"detailAddress\" : \"관진구\",\n      \"zipCode\" : \"123456\"\n    },\n    \"phone\" : \"01012345678\",\n    \"subPhone\" : \"01012345678\"\n  },\n  \"orderedRewards\" : [ \"리워드1\", \"리워드2\", \"리워드3\", \"리워드4\" ],\n  \"orderStatus\" : \"ORDERED\",\n  \"isAmountOpen\" : true,\n  \"isNameOpen\" : false\n}"
+                    "value" : "{\r\n  \"orderNumber\" : \"20210701-0001\",\r\n  \"orderId\" : 1,\r\n  \"fundingId\" : 1,\r\n  \"recipientInfo\" : {\r\n    \"name\" : \"홍길동\",\r\n    \"address\" : {\r\n      \"addressInfo\" : \"서울시\",\r\n      \"detailAddress\" : \"관진구\",\r\n      \"zipCode\" : \"123456\"\r\n    },\r\n    \"phone\" : \"01012345678\",\r\n    \"subPhone\" : \"01012345678\"\r\n  },\r\n  \"orderedRewards\" : [ \"리워드1\", \"리워드2\", \"리워드3\", \"리워드4\" ],\r\n  \"orderStatus\" : \"ORDERED\",\r\n  \"isAmountOpen\" : true,\r\n  \"isNameOpen\" : false\r\n}"
                   }
                 }
               }

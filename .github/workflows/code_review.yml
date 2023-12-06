@@ -5,11 +5,13 @@ permissions:
   pull-requests: write
 
 on:
-  issue_comment:
-    types: [created]
+  pull_request:
+    types: [ opened, synchronize ]
 
 jobs:
   code-review:
+    # 커밋 내용중에 #code-review 혹은 #code_review가 포함되어 있을 때만 실행
+    if: ${{ contains(github.event.head_commit.message, '#code-review') }} || ${{ contains(github.event.head_commit.message, '#code_review') }}
     runs-on: ubuntu-latest
     steps:
       - uses: anc95/ChatGPT-CodeReview@main
