@@ -10,8 +10,8 @@ on:
 
 jobs:
   code-review:
-    # 커밋명에 '#Code Review'가 포함되어 있을 때만 실행
-    if: contains(github.event.pull_request.head.commit.message, '#code-review')
+    # 커밋 내용중에 #code-review 혹은 #code_review가 포함되어 있을 때만 실행
+    if: contains(github.event.pull_request.title, '#code-review') || contains(github.event.pull_request.title, '#code_review')
     runs-on: ubuntu-latest
     steps:
       - uses: anc95/ChatGPT-CodeReview@main
