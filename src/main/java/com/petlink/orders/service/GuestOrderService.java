@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 
 import static com.petlink.funding.exception.FundingExceptionCode.FUNDING_NOT_FOUND;
 
+
 @Service
+@Deprecated
 @RequiredArgsConstructor
 public class GuestOrderService implements OrderService {
 
