@@ -2,7 +2,6 @@ package com.petlink.orders.controller;
 
 import com.petlink.orders.dto.request.OrderRequest;
 import com.petlink.orders.dto.response.OrderResponseDto;
-import com.petlink.orders.service.GuestOrderService;
 import com.petlink.orders.service.MemberOrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/orders")
 public class OrderController {
 
-    private final GuestOrderService guestOrderService;
     private final MemberOrderService memberOrderService;
 
+    @Deprecated
     @PostMapping("/guest")
-    public ResponseEntity<OrderResponseDto> createOrderByGuest(@RequestBody @Valid OrderRequest orderRequest) throws Exception {
-        return ResponseEntity.ok(guestOrderService.createOrder(orderRequest));
+    public ResponseEntity<Object> createOrderByGuest(@RequestBody @Valid OrderRequest orderRequest) throws Exception {
+        // Deprecated 된 기능입니다. 메시지 반환
+        return ResponseEntity.ok("Deprecated 된 기능입니다.");
     }
 
     @PostMapping("/member")
