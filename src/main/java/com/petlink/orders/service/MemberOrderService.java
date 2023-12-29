@@ -11,6 +11,7 @@ import com.petlink.member.exception.MemberExceptionCode;
 import com.petlink.member.repository.MemberRepository;
 import com.petlink.orders.domain.Orders;
 import com.petlink.orders.dto.request.OrderRequest;
+import com.petlink.orders.dto.response.OrderInfoResponse;
 import com.petlink.orders.dto.response.OrderResponseDto;
 import com.petlink.orders.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,13 @@ public class MemberOrderService implements OrderService {
         return buildOrderResponse(orders, fundingId);
     }
 
+    @Override
+    public OrderInfoResponse getOrderInfo(Long id) {
+        Orders orders = orderRepository.findById(id).orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
+        OrderInfoResponse build = OrderInfoResponse.builder().build();
+        return build;
+    }
+
     private Orders saveOrder(OrderRequest orderRequest, Member member, Funding funding, String paymentNumber) {
         return orderRepository.saveAndFlush(Orders.builder()
                 .funding(funding)
@@ -61,4 +69,6 @@ public class MemberOrderService implements OrderService {
                 .subPhone(orderRequest.getSubPhone())
                 .build());
     }
+
+
 }

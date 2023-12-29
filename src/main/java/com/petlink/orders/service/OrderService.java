@@ -4,6 +4,7 @@ import com.petlink.funding.item.service.ItemFacadeService;
 import com.petlink.orders.domain.Orders;
 import com.petlink.orders.dto.request.FundingItemDto;
 import com.petlink.orders.dto.request.OrderRequest;
+import com.petlink.orders.dto.response.OrderInfoResponse;
 import com.petlink.orders.dto.response.OrderResponseDto;
 
 import java.util.List;
@@ -32,4 +33,6 @@ public interface OrderService {
                 .isNameOpen(orders.getNameOpen())
                 .build();
     }
+
+    OrderInfoResponse getOrderInfo(Long id);
 }
