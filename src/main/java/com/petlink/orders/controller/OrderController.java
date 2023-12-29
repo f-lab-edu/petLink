@@ -1,6 +1,7 @@
 package com.petlink.orders.controller;
 
 import com.petlink.orders.dto.request.OrderRequest;
+import com.petlink.orders.dto.response.OrderInfoResponse;
 import com.petlink.orders.dto.response.OrderResponseDto;
 import com.petlink.orders.service.MemberOrderService;
 import jakarta.validation.Valid;
@@ -36,9 +37,9 @@ public class OrderController {
 
     // todo  특정 결제의 상세 정보를 조회하는 기능
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getOrderInfo(@PathVariable Long id) {
+    public ResponseEntity<OrderInfoResponse> getOrderInfo(@PathVariable Long id) {
         // 결제 정보 조회 코드
-        return ResponseEntity.ok("결제가 성공적으로 생성되었습니다.");
+        return ResponseEntity.ok(memberOrderService.getOrderInfo(id));
     }
 
     // todo 결제 정보를 업데이트하는 기능
