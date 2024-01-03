@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class OrderInfoResponse {
+public class OrderDetailInfoResponse {
     private String orderNumber; // 주문번호
     private Long orderId;     // 주문아이디
     private Long fundingId;   // 펀딩번호
@@ -22,7 +22,6 @@ public class OrderInfoResponse {
 
     private Boolean isAmountOpen;  // 금액공개여부
     private Boolean isNameOpen;   // 이름공개여부
-
     // RecipientInfo 내부 클래스
     @Getter
     @Builder(access = AccessLevel.PRIVATE)
