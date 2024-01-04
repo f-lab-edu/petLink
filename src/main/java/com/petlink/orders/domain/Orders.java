@@ -4,6 +4,7 @@ import com.petlink.common.domain.Address;
 import com.petlink.common.domain.base.BaseEntity;
 import com.petlink.funding.domain.Funding;
 import com.petlink.member.domain.Member;
+import com.petlink.orders.dto.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Comment;
@@ -21,12 +22,12 @@ import java.util.List;
 public class Orders extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;  //주문번호
+    private Long id;
 
     @Comment("펀딩")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funding_id", nullable = false)
-    private Funding funding;   //펀딩 정보
+    private Funding funding;
 
     @Comment("주문자")
     @ManyToOne
@@ -36,6 +37,10 @@ public class Orders extends BaseEntity {
     @Comment("결제번호")
     @Column(nullable = false)
     private String paymentNumber;
+
+    @Comment("결제수단")
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     @Comment("PG사 결제번호")
     @Column(nullable = false)
@@ -71,4 +76,14 @@ public class Orders extends BaseEntity {
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<FundingItemOrder> fundingItemOrders = new ArrayList<>(); //주문 리워드 내역
 
+    public void addFundingItemOrder(FundingItemOrder itemOrder) {
+        if (fundingItemOrders == null) {
+            fundingItemOrders = new ArrayList<>();
+        }
+
+        if (itemOrder != null && !fundingItemOrders.contains(itemOrder)) {
+            fundingItemOrders.add(itemOrder);
+            // 이미 생성 시 'Orders' 객체가 'FundingItemOrder'에 설정되어 있으므로, 여기서는 설정하지 않음
+        }
+    }
 }

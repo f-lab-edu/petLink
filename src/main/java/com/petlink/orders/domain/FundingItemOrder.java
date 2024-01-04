@@ -1,18 +1,8 @@
 package com.petlink.orders.domain;
 
 import com.petlink.funding.item.domain.FundingItem;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Getter
 @Builder
@@ -44,4 +34,8 @@ public class FundingItemOrder {
     @ManyToOne
     @JoinColumn(name = "funding_item_id", insertable = false, updatable = false)
     private FundingItem fundingItem;
+
+    public String getTitle() {
+        return fundingItem.getTitle();
+    }
 }

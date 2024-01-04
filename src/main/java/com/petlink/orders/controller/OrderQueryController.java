@@ -19,7 +19,7 @@ public class OrderQueryController {
     @GetMapping("/{id}")
     public ResponseEntity<OrderDetailInfoResponse> getOrderInfo(@PathVariable Long id) {
         // 결제 정보 조회 코드
-        return ResponseEntity.ok(memberOrderService.getOrderInfo(id));
+        return ResponseEntity.ok(memberOrderService.getOrderDetailInfo(id));
     }
 
     // todo 모든 결제 정보를 조회 하는 기능 이는 주로 GET 요청을 처리.
