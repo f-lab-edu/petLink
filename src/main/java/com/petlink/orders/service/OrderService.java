@@ -17,11 +17,6 @@ public interface OrderService {
         itemFacadeService.decrease(items);
     }
 
-    // 결제 번호 생성 디폴트 메소드
-    default String generatePaymentNumber(String prefix, OrderNumbersGenerator generator) {
-        return prefix + "-" + generator.generateOrderNumber();
-    }
-
     default OrderResponseDto buildOrderResponse(Orders orders, Long fundingId) {
         return OrderResponseDto.builder()
                 .orderNumber(orders.getPaymentNumber())

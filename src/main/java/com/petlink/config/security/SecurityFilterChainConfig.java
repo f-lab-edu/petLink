@@ -36,6 +36,7 @@ public class SecurityFilterChainConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and() // 세션 생성 정책 설정: STATELESS (상태 정보를 서버에 저장하지 않음)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
                         .requestMatchers(POST, "/fundings/manage/**").hasAuthority(MANAGER.getRole()) // 펀딩 관리자 권한이 필요한 요청
+                        .requestMatchers(POST, "/fundings/**").authenticated() // 펀딩 생성 권한이 필요한 요청
                         .anyRequest().permitAll() // 모든 요청에 대해 접근 허용
                 ).addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 추가
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint) // JWT 인증 필터에서 발생하는 예외 처리

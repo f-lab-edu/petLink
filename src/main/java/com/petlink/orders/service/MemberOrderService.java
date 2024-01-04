@@ -41,10 +41,11 @@ public class MemberOrderService implements OrderService {
         Funding funding = fundingRepository.findById(fundingId).orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberException(MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION));
 
-        String paymentNumber = generatePaymentNumber("M-", generator);
+        // 결제 번호 생성
+        String paymentNumber = generator.generateOrderNumber();
 
+        //step 4 : 결제 정보 저장
         Orders orders = saveOrder(orderRequest, member, funding, paymentNumber);
-
         return buildOrderResponse(orders, fundingId);
     }
 
@@ -69,6 +70,5 @@ public class MemberOrderService implements OrderService {
                 .subPhone(orderRequest.getSubPhone())
                 .build());
     }
-
 
 }

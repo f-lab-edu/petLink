@@ -4,25 +4,9 @@ import com.petlink.common.domain.Address;
 import com.petlink.common.domain.base.BaseEntity;
 import com.petlink.funding.domain.Funding;
 import com.petlink.member.domain.Member;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,34 +23,49 @@ public class Orders extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;  //주문번호
 
+    @Comment("펀딩")
     @ManyToOne
     @JoinColumn(name = "funding_id", nullable = false)
     private Funding funding;   //펀딩 정보
 
+    @Comment("주문자")
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member member; //주문자 정보 (비회원일 경우 null)
+    private Member member;
 
+    @Comment("결제번호")
     @Column(nullable = false)
-    private String paymentNumber;   //결제번호
+    private String paymentNumber;
 
+    @Comment("PG사 결제번호")
+    @Column(nullable = false)
+    private String pgPaymentNumber;
+
+    @Comment("결제수단")
     @Enumerated(EnumType.STRING)
-    private PayMethod payMethod;  //결제수단
+    private PayMethod payMethod;
 
-    private Boolean priceOpen;   //금액공개여부
-    private Boolean nameOpen;    //이름공개여부
+    @Comment("금액 공개 여부")
+    private Boolean priceOpen;
+    @Comment("이름 공개 여부")
+    private Boolean nameOpen;
 
-    private String recipient;   //수령인
+    @Comment("수령인")
+    private String recipient;
 
+    @Comment("배송지")
     @Embedded
-    private Address address;    //주소
+    private Address address;
 
-    private String mobilePhone; //휴대폰번호_1
-    private String subPhone;    //휴대폰번호_2
+    @Comment("휴대폰번호_1")
+    private String mobilePhone;
+    @Comment("휴대폰번호_2")
+    private String subPhone;
 
-    private String parcelCode;    //송장코드
-    private String parcelCompany;   //택배사
-
+    @Comment("송장번호")
+    private String parcelCode;
+    @Comment("택배사")
+    private String parcelCompany;
 
     @Builder.Default
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
