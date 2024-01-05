@@ -3,9 +3,7 @@ package com.petlink.orders.service;
 import com.petlink.common.domain.Address;
 import com.petlink.funding.domain.Funding;
 import com.petlink.funding.exception.FundingException;
-import com.petlink.funding.item.domain.FundingItem;
 import com.petlink.funding.item.exception.ItemException;
-import com.petlink.funding.item.exception.ItemExceptionCode;
 import com.petlink.funding.item.repository.ItemRepository;
 import com.petlink.funding.item.service.ItemFacadeService;
 import com.petlink.funding.repository.FundingRepository;
@@ -21,14 +19,19 @@ import com.petlink.orders.dto.response.OrderDetailInfoResponse;
 import com.petlink.orders.dto.response.OrderResponseDto;
 import com.petlink.orders.repository.ItemOrdersRepository;
 import com.petlink.orders.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.petlink.funding.exception.FundingExceptionCode.FUNDING_NOT_FOUND;
+import static com.petlink.funding.item.exception.ItemExceptionCode.ITEM_NOT_FOUND;
+import static java.time.LocalTime.now;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberOrderService implements OrderService {
@@ -42,6 +45,7 @@ public class MemberOrderService implements OrderService {
     private final OrderNumbersGenerator generator;  // 결제 번호 생성기
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public OrderResponseDto createOrder(OrderRequest orderRequest) throws Exception {
 
         // step 1 : 리워드 재고 감소
@@ -56,6 +60,7 @@ public class MemberOrderService implements OrderService {
 
         // 결제 번호 생성
         String paymentNumber = generator.generateOrderNumber();
+        log.info("paymentNumber : {} :: {}", paymentNumber, now());
 
         //step 4 : 결제 정보 저장
         Orders orders = saveOrder(orderRequest, member, funding, paymentNumber);
@@ -64,32 +69,20 @@ public class MemberOrderService implements OrderService {
     }
 
     private void saveOrderItems(Orders orders, List<FundingItemDto> fundingItems) {
-        // FundingItem ID들을 한 번에 조회
-        List<Long> itemIds = fundingItems.stream()
-                .map(FundingItemDto::getFundingItemId)
-                .collect(Collectors.toList());
-        List<FundingItem> items = itemRepository.findAllById(itemIds);
-
-        // FundingItemOrder 객체 생성
-        List<FundingItemOrder> itemOrders = fundingItems.stream().map(fundingItemDto -> {
-            FundingItem item = items.stream()
-                    .filter(i -> i.getId().equals(fundingItemDto.getFundingItemId()))
-                    .findFirst()
-                    .orElseThrow(() -> new ItemException(ItemExceptionCode.ITEM_NOT_FOUND));
-            return FundingItemOrder.builder()
-                    .fundingItem(item)
+        List<FundingItemOrder> itemOrders = new ArrayList<>();
+        fundingItems.forEach(item -> {
+            var fundingItem = itemRepository.findById(item.getFundingItemId()).orElseThrow(() -> new ItemException(ITEM_NOT_FOUND));
+            FundingItemOrder itemOrder = FundingItemOrder.builder()
                     .orders(orders)
-                    .quantity(fundingItemDto.getQuantity())
-                    .build();
-        }).collect(Collectors.toList());
-
-        // 일괄 저장
-        itemOrdersRepository.saveAll(itemOrders);
-
-        // Orders 객체에 추가
-        itemOrders.forEach(orders::addFundingItemOrder);
+                    .fundingItem(fundingItem)
+                    .quantity(item.getQuantity()).build();
+            orders.addFundingItemOrder(itemOrder);
+            itemOrders.add(itemOrder);
+            itemOrdersRepository.saveAndFlush(itemOrder);
+            log.info("fundingItemId: {} , orderId : {}", item.getFundingItemId(), orders.getId());
+        });
+        log.info("itemOrders : {}", itemOrders);
     }
-
 
     private Orders saveOrder(OrderRequest orderRequest, Member member, Funding funding, String paymentNumber) {
         return orderRepository.saveAndFlush(Orders.builder()
