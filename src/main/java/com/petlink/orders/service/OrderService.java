@@ -26,7 +26,7 @@ public interface OrderService {
                 .fundingId(fundingId)
                 .orderStatus(OrderStatus.ORDERED)
                 .recipientInfo(OrderResponseDto.RecipientInfo.of(orders.getRecipient(), orders.getAddress(), orders.getMobilePhone(), orders.getSubPhone()))
-                //.orderedRewards(orders.getFundingItemOrders().stream().map(fio -> fio.getFundingItem().getTitle()).toList())
+                .orderedRewards(orders.getFundingItemOrders().stream().map(fio -> fio.getFundingItem().getTitle()).toList())
                 .isAmountOpen(orders.getPriceOpen())
                 .isNameOpen(orders.getNameOpen())
                 .build();

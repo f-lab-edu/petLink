@@ -13,10 +13,12 @@ import com.petlink.member.exception.MemberExceptionCode;
 import com.petlink.member.repository.MemberRepository;
 import com.petlink.orders.domain.FundingItemOrder;
 import com.petlink.orders.domain.Orders;
+import com.petlink.orders.dto.OrderStatus;
 import com.petlink.orders.dto.request.FundingItemDto;
 import com.petlink.orders.dto.request.OrderRequest;
 import com.petlink.orders.dto.response.OrderDetailInfoResponse;
 import com.petlink.orders.dto.response.OrderResponseDto;
+import com.petlink.orders.exception.OrdersException;
 import com.petlink.orders.repository.ItemOrdersRepository;
 import com.petlink.orders.repository.OrderRepository;
 import jakarta.transaction.Transactional;
@@ -29,6 +31,7 @@ import java.util.List;
 
 import static com.petlink.funding.exception.FundingExceptionCode.FUNDING_NOT_FOUND;
 import static com.petlink.funding.item.exception.ItemExceptionCode.ITEM_NOT_FOUND;
+import static com.petlink.orders.exception.OrdersExceptionCode.NOT_FOUND_ORDER;
 import static java.time.LocalTime.now;
 
 @Slf4j
@@ -78,7 +81,7 @@ public class MemberOrderService implements OrderService {
                     .quantity(item.getQuantity()).build();
             orders.addFundingItemOrder(itemOrder);
             itemOrders.add(itemOrder);
-            itemOrdersRepository.saveAndFlush(itemOrder);
+            itemOrdersRepository.save(itemOrder);
             log.info("fundingItemId: {} , orderId : {}", item.getFundingItemId(), orders.getId());
         });
         log.info("itemOrders : {}", itemOrders);
@@ -96,12 +99,13 @@ public class MemberOrderService implements OrderService {
                 .address(Address.of(orderRequest.getZipCode(), orderRequest.getAddress(), orderRequest.getDetailAddress()))
                 .mobilePhone(orderRequest.getPhone())
                 .subPhone(orderRequest.getSubPhone())
+                .orderStatus(OrderStatus.ORDERED)
                 .build());
     }
 
     @Override
     public OrderDetailInfoResponse getOrderDetailInfo(Long id) {
-        Orders orders = orderRepository.findById(id).orElseThrow(() -> new FundingException(FUNDING_NOT_FOUND));
+        Orders orders = orderRepository.findById(id).orElseThrow(() -> new OrdersException(NOT_FOUND_ORDER));
         List<String> itmeList = orders.getFundingItemOrders().stream().map(fundingItemOrder -> fundingItemOrder.getFundingItem().getTitle()).toList();
         return buildDetailResponse(orders, itmeList);
     }

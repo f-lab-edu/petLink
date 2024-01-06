@@ -2,8 +2,10 @@ package com.petlink.orders;
 
 import com.petlink.common.domain.Address;
 import com.petlink.orders.domain.PayMethod;
+import com.petlink.orders.dto.OrderStatus;
 import com.petlink.orders.dto.request.FundingItemDto;
 import com.petlink.orders.dto.request.OrderRequest;
+import com.petlink.orders.dto.response.OrderDetailInfoResponse;
 import com.petlink.orders.dto.response.OrderResponseDto;
 
 import java.util.List;
@@ -67,4 +69,16 @@ public class OrderTestUtils {
                 .build();
     }
 
+    public OrderDetailInfoResponse getOrderDetailInfoResponse() {
+        return OrderDetailInfoResponse.builder()
+                .orderId(1L)
+                .orderNumber(ORDER_NUMBER)
+                .fundingId(1L)
+                .memberId(1L)
+                .orderedRewards(List.of("리워드1", "리워드2", "리워드3", "리워드4"))
+                .orderStatus(OrderStatus.ORDERED)
+                .isAmountOpen(true)
+                .isNameOpen(false)
+                .build();
+    }
 }
