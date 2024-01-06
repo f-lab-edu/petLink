@@ -4,22 +4,9 @@ import com.petlink.common.domain.base.BaseEntity;
 import com.petlink.funding.domain.Funding;
 import com.petlink.funding.item.exception.ItemException;
 import com.petlink.orders.domain.FundingItemOrder;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.Comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,19 +26,24 @@ public class FundingItem extends BaseEntity {
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
+    @Comment("해당 펀딩: 어느 펀딩의 아이템인지")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "funding_id", nullable = false)
     private Funding funding;
 
+    @Comment("아이템 제목")
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Comment("아이템 내용")
     @Column(name = "content", nullable = false)
     private String content;
 
+    @Comment("아이템 가격")
     @Column(name = "stock", nullable = false)
     private Long stock;
 
+    @Comment("아이템 최대 구매 수량")
     @Column(name = "max_buy_count", nullable = false)
     private Long maxBuyCount;
 

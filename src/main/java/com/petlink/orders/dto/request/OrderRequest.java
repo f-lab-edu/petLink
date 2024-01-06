@@ -1,6 +1,5 @@
 package com.petlink.orders.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.petlink.orders.domain.PayMethod;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -20,17 +19,16 @@ import static lombok.AccessLevel.PROTECTED;
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
 public class OrderRequest {
-
     @NotNull(message = "펀딩 ID는 필수 값입니다.")
     private Long fundingId;
 
+    @NotNull(message = "회원 ID는 필수 값입니다.")
     private Long memberId;
 
     @NotNull(message = "결제 방법은 필수 값입니다.")
     private PayMethod payMethod;
 
     private boolean amountOpen;
-
     private boolean nameOpen;
 
     @NotEmpty(message = "펀딩 아이템은 최소 1개 이상이어야 합니다.")
@@ -55,9 +53,4 @@ public class OrderRequest {
 
     @Pattern(regexp = "^\\d{10,11}$", message = "전화번호 형식이 올바르지 않습니다.")
     private String subPhone;
-
-    @JsonIgnore
-    public boolean isMemberIdExist() {
-        return memberId != null;
-    }
 }

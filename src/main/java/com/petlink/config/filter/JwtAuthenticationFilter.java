@@ -37,8 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/members/duplicate/**",
             "/members/signup",
             "/auth/login",
-            "/fundings",
-            "/orders");
+            "/fundings/**",
+            "/orders/**");
     private final PathMatcher pathMatcher = new AntPathMatcher();
 
     private static void generateTokenExceptionMessage(HttpServletResponse response, String message) throws IOException {

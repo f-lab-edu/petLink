@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class FundingItemDto {
     @NotNull(message = "펀딩 아이템 ID는 필수 값입니다.")
     private Long fundingItemId;
-
     @Min(value = 1, message = "구매 수량은 1 이상이어야 합니다.")
+    @NotNull(message = "구매 수량은 필수 값입니다.")
     private Long quantity;
 }
