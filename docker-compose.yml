@@ -2,15 +2,24 @@ version: '3.9'
 services:
   app:
     platform: linux/x86_64
-    image: deadwhale/petlink:latest
+    build: . # 현재위치의 Dockerfile을 참조
+    image: petlink:latest #deadwhale/petlink:latest
     ports:
-      - "8080:8080"
+      - "8088:8088"
     env_file:
       - .env
+    #    command:
+    #      - --spring.profiles.active=dev # for dev profile
     depends_on:
-      - redis     # Resource Lock storage
-  redis:
+      - redisson  # for order lock storage
+      - redis-jwt # for login token storage
+  redisson:
+    platform: linux/x86_64
+    hostname: redis
+    ports:
+      - "6379:6379"
+  redis-jwt:
     platform: linux/x86_64
     image: redis:alpine
     ports:
-      - "6379:6379"
+      - "6380:6379"

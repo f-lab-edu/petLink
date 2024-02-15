@@ -88,10 +88,10 @@ paths:
                     ,\"state\":\"PROGRESS\",\"category\":\"TOY\",\"startDate\":[2023,1,1,0,0],\"\
                     endDate\":[2023,12,31,0,0]}],\"pageable\":{\"sort\":{\"empty\"\
                     :true,\"sorted\":false,\"unsorted\":true},\"offset\":0,\"pageSize\"\
-                    :2,\"pageNumber\":0,\"paged\":true,\"unpaged\":false},\"totalElements\"\
-                    :2,\"last\":true,\"totalPages\":1,\"size\":2,\"number\":0,\"sort\"\
-                    :{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"numberOfElements\"\
-                    :2,\"first\":true,\"empty\":false}"
+                    :2,\"pageNumber\":0,\"unpaged\":false,\"paged\":true},\"totalPages\"\
+                    :1,\"totalElements\":2,\"last\":true,\"size\":2,\"number\":0,\"\
+                    sort\":{\"empty\":true,\"sorted\":false,\"unsorted\":true},\"\
+                    first\":true,\"numberOfElements\":2,\"empty\":false}"
   /fundings/{id}:
     get:
       tags:
@@ -270,39 +270,6 @@ paths:
                     \ : [ \"리워드1\", \"리워드2\", \"리워드3\", \"리워드4\" ],\r\n  \"orderStatus\"\
                     \ : \"ORDERED\",\r\n  \"isAmountOpen\" : true,\r\n  \"isNameOpen\"\
                     \ : false\r\n}"
-  /orders/guest:
-    post:
-      tags:
-      - orders
-      operationId: orders/create-by-guest
-      requestBody:
-        content:
-          application/json;charset=UTF-8:
-            schema:
-              $ref: '#/components/schemas/orders-guest933516009'
-            examples:
-              orders/create-by-guest:
-                value: "{\"fundingId\":1,\"memberId\":null,\"payMethod\":\"BANK_TRANSFER\"\
-                  ,\"amountOpen\":true,\"nameOpen\":true,\"fundingItems\":[{\"fundingItemId\"\
-                  :1,\"quantity\":1},{\"fundingItemId\":2,\"quantity\":1}],\"zipCode\"\
-                  :\"12345\",\"address\":\"서울시 강남구\",\"detailAddress\":\"테헤란로 427\"\
-                  ,\"recipient\":\"홍길동\",\"phone\":\"01012345678\",\"subPhone\":\"\
-                  01012345678\"}"
-      responses:
-        "200":
-          description: "200"
-          content:
-            application/json;charset=UTF-8:
-              schema:
-                $ref: '#/components/schemas/orders-1541140646'
-              examples:
-                orders/create-by-guest:
-                  value: "{\"orderNumber\":\"20210701-0001\",\"orderId\":1,\"fundingId\"\
-                    :1,\"recipientInfo\":{\"name\":\"홍길동\",\"address\":{\"addressInfo\"\
-                    :\"서울시\",\"detailAddress\":\"관진구\",\"zipCode\":\"123456\"},\"\
-                    phone\":\"01012345678\",\"subPhone\":\"01012345678\"},\"orderedRewards\"\
-                    :[\"리워드1\",\"리워드2\",\"리워드3\",\"리워드4\"],\"orderStatus\":\"ORDERED\"\
-                    ,\"isAmountOpen\":true,\"isNameOpen\":false}"
   /orders/query/{id}:
     get:
       tags:
@@ -532,51 +499,6 @@ components:
         id:
           type: number
           description: 펀딩 이미지 ID
-    orders-guest933516009:
-      type: object
-      properties:
-        zipCode:
-          type: string
-          description: 우편 번호
-        address:
-          type: string
-          description: 주소
-        fundingId:
-          type: number
-          description: 펀딩 ID
-        phone:
-          type: string
-          description: 전화번호
-        payMethod:
-          type: string
-          description: 결제 방법
-        nameOpen:
-          type: boolean
-          description: 이름 공개 여부
-        recipient:
-          type: string
-          description: 수령인
-        detailAddress:
-          type: string
-          description: 상세 주소
-        subPhone:
-          type: string
-          description: 보조 전화번호
-        fundingItems:
-          type: array
-          description: 펀딩 아이템
-          items:
-            type: object
-            properties:
-              quantity:
-                type: number
-                description: 펀딩 아이템 구매 수량
-              fundingItemId:
-                type: number
-                description: 펀딩 아이템 ID
-        amountOpen:
-          type: boolean
-          description: 금액 공개 여부
     orders--1397712321:
       type: object
       properties:
@@ -813,3 +735,10 @@ components:
               type: string
               description: 수령인 보조 전화번호
           description: 수령인 정보
+  securitySchemes:
+    APIKey:
+      type: apiKey
+      name: Authorization
+      in: header
+security:
+  - APIKey: []  # Apply the security scheme here

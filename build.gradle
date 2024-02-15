@@ -5,12 +5,11 @@ plugins {
     id 'com.epages.restdocs-api-spec' version '0.18.2' //rest-docs-openapi3
     id 'org.hidetake.swagger.generator' version '2.18.2' //swagger - ui
 }
-def generated = 'src/main/generated' // querydsl QClass 파일 생성 위치
+def generated = 'src/main/generated'
 
 group = 'com'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
-
 
 repositories {
     mavenCentral()
@@ -83,12 +82,12 @@ tasks.withType(GenerateSwaggerUI).configureEach {
     doFirst {
         def swaggerUIFile = file("${openapi3.outputDirectory}/openapi3.yaml")
 
-        def securitySchemesContent = "  securitySchemes:\n" +                             \
-                                                                 "    APIKey:\n" +                             \
-                                                                 "      type: apiKey\n" +                             \
-                                                                 "      name: Authorization\n" +                             \
-                                                                 "      in: header\n" +                            \
-                                                                 "security:\n" +
+        def securitySchemesContent = "  securitySchemes:\n" +                              \
+                                                                  "    APIKey:\n" +                              \
+                                                                  "      type: apiKey\n" +                              \
+                                                                  "      name: Authorization\n" +                              \
+                                                                  "      in: header\n" +                             \
+                                                                  "security:\n" +
                 "  - APIKey: []  # Apply the security scheme here"
         swaggerUIFile.append securitySchemesContent
     }
