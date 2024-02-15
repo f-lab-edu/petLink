@@ -19,11 +19,12 @@ spring:
           auto: update
   data:
     redis:
-      host: ${redis.host}
-      port: ${redis.port}
+      redisson:
+        host: ${REDISSON_HOST}
+        port: ${REDIS_PORT}
       jwt:
-        port: ${redis.jwt.port}
-
+        host: ${REDIS_JWT_HOST}
+        port: ${REDIS_JWT_PORT}
 
 # log level 설정 (debug, info, warn, error)
 logging:

@@ -15,11 +15,13 @@ services:
       - redis-jwt # for login token storage
   redisson:
     platform: linux/x86_64
-    hostname: redis
+    image: redis:alpine
+    hostname: redisson
     ports:
       - "6379:6379"
   redis-jwt:
     platform: linux/x86_64
     image: redis:alpine
+    hostname: redis-jwt
     ports:
       - "6380:6379"
