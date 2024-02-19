@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Component
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -38,8 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/members/signup",
             "/auth/login",
             "/fundings/**",
-            "/orders/**");
-    private final PathMatcher pathMatcher = new AntPathMatcher();
+            "/orders/**",
+            "/api/oauth/**");
 
     private static void generateTokenExceptionMessage(HttpServletResponse response, String message) throws IOException {
         response.setCharacterEncoding("utf-8");
@@ -57,18 +55,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        PathMatcher pathMatcher = new AntPathMatcher();
+        for (String path : excludedPaths)
+            if (pathMatcher.match(path, request.getServletPath()))
+                return true;
+
+        return super.shouldNotFilter(request);
+    }
+
+    @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
         log.info("JWT Filtering....{}", request.getServletPath());
-
-        boolean isExcluded = excludedPaths.stream()
-                .anyMatch(p -> pathMatcher.match(p, request.getServletPath()));
-
-        if (isExcluded) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         Optional<String> tokenOptional = parseJwt(request);
 

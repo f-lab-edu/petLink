@@ -8,6 +8,7 @@ spring:
     url: ${database.host}
     username: ${database.user}
     password: ${database.password}
+
   jpa:
     database-platform: ${database.platform}
     defer-datasource-initialization: true
@@ -15,8 +16,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        hbm2ddl:
-          auto: update
   data:
     redis:
       redisson:
@@ -25,6 +24,15 @@ spring:
       jwt:
         host: ${REDIS_JWT_HOST}
         port: ${REDIS_JWT_PORT}
+  security:
+    oauth2:
+      client:
+        client:
+          registration: # OAuth2 클라이언트 등록
+            google:
+              client-id: ${oauth2.google.client-id}
+              client-secret: ${oauth2.google.client-secret}
+              scope: ${oauth2.google.scope}
 
 # log level 설정 (debug, info, warn, error)
 logging:

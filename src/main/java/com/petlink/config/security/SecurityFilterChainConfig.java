@@ -1,5 +1,7 @@
 package com.petlink.config.security;
 
+import com.petlink.common.cache.TokenCacheService;
+import com.petlink.common.util.jwt.JwtTokenProvider;
 import com.petlink.config.filter.JwtAuthenticationEntryPoint;
 import com.petlink.config.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +25,11 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityFilterChainConfig {
 
     private final AuthenticationProvider authenticationProvider; // 커스텀 인증 프로바이더(유저 정보를 DB에서 가져오는 역할)
-    private final JwtAuthenticationFilter jwtAuthenticationFilter; // JWT 인증 필터
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; // JWT 인증 필터에서 발생하는 예외 처리
     private final CorsConfig corsConfig;
+    private final JwtTokenProvider tokenProvider;
+    private final TokenCacheService tokenCacheService;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,10 +39,12 @@ public class SecurityFilterChainConfig {
                 .sessionManagement().sessionCreationPolicy(STATELESS) // 서버 상태 관리 : 무상태
                 .and()
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        //oauth2.0
+                        .requestMatchers("/api/oauth2.0/**").permitAll() // oauth2.0 관련 요청은 모두 허용
                         .requestMatchers(POST, "/api/v1/fundings/manage/**").hasAuthority(MANAGER.getRole()) // 펀딩 관리자 권한이 필요한 요청
                         .anyRequest().authenticated() // 모든 요청에 대해 접근 허용
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 추가
+                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider, tokenCacheService), UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터 추가
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint) // JWT 인증 필터에서 발생하는 예외 처리
                 .and().authenticationProvider(authenticationProvider) // 커스텀 인증 프로바이더 추가
                 .build();
