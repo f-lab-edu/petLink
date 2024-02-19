@@ -1,7 +1,7 @@
 package com.petlink.config.security;
 
-import com.petlink.config.filter.JwtAuthenticationEntryPoint;
-import com.petlink.config.filter.JwtAuthenticationFilter;
+import com.petlink.config.security.filter.JwtAuthenticationEntryPoint;
+import com.petlink.config.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;

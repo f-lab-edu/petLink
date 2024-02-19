@@ -19,6 +19,7 @@ public class AuthenticationService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
 
+
     public String login(String email, String password) {
         //회원이 존재하지 않을 경우 예외 처리
         Member member = memberRepository.findByEmail(email)
