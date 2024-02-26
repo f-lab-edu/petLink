@@ -24,4 +24,4 @@ services:
     image: redis:alpine
     hostname: redis-jwt
     ports:
-      - "6380:6379"
+      - "6380:6380"

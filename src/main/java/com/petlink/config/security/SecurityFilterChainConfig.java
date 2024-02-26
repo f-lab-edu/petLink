@@ -13,7 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.petlink.common.util.jwt.UserRole.MANAGER;
+import static com.petlink.common.util.jwt.Role.MANAGER;
 import static org.springframework.http.HttpMethod.POST;
 
 @Slf4j

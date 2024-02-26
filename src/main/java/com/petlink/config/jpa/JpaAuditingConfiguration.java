@@ -1,6 +1,5 @@
 package com.petlink.config.jpa;
 
-import com.petlink.config.security.customUser.CustomUserDetails;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,11 +30,11 @@ public class JpaAuditingConfiguration {
 
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof CustomUserDetails userDetails) {
-                return Optional.ofNullable(userDetails.getUser().getEmail());
-            } else {
-                return Optional.of((String) principal);
-            }
+            //if (principal instanceof CustomUserDetails userDetails) {
+            //    return Optional.ofNullable(userDetails.getUser().getEmail());
+            //} else {
+            //}
+            return Optional.of((String) principal);
         }
     }
 }

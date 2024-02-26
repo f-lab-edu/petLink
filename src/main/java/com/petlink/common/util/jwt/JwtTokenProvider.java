@@ -1,6 +1,6 @@
 package com.petlink.common.util.jwt;
 
-import com.petlink.common.domain.user.BaseUser;
+import com.petlink.member.domain.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -28,7 +28,7 @@ public class JwtTokenProvider  {
      * @param user
      * @return
      */
-    public String createToken(BaseUser user) {
+    public String createToken(Member user) {
         Claims claims = Jwts.claims();
         claims.put("id", user.getId());
         claims.put("name", user.getName());

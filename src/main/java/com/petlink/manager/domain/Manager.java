@@ -1,13 +1,18 @@
 package com.petlink.manager.domain;
 
-import com.petlink.common.domain.user.BaseUser;
-import com.petlink.common.util.jwt.UserRole;
+import com.petlink.common.util.jwt.Role;
 import com.petlink.funding.domain.Funding;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
@@ -15,7 +20,22 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "manager")
-public class Manager extends BaseUser {
+public class Manager {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true, name = "id")
+    protected Long id;
+
+    @Column(unique = true, name = "email", nullable = false)
+    protected String email;
+
+    @Column(name = "name", nullable = false)
+    protected String name;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    protected Role role;
+
     @Column(name = "password", nullable = false)
     private String password;
 
@@ -31,62 +51,14 @@ public class Manager extends BaseUser {
     protected Manager() {
     }
 
-    // 빌더 인스턴스 생성 메소드
-    public static ManagerBuilder builder() {
-        return new ManagerBuilder();
-    }
-
-    // 커스텀 빌더 정의
-    public static class ManagerBuilder {
-        // BaseUser 및 Manager 필드
-        protected Long id;
-        protected String email;
-        protected String name;
-        private String password;
-        private String phoneNumber;
-        private String officeNumber;
-
-        // 필드 설정 메소드들
-        public ManagerBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public ManagerBuilder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public ManagerBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public ManagerBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public ManagerBuilder phoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-            return this;
-        }
-
-        public ManagerBuilder officeNumber(String officeNumber) {
-            this.officeNumber = officeNumber;
-            return this;
-        }
-
-        public Manager build() {
-            Manager manager = new Manager();
-            manager.id = this.id;
-            manager.email = this.email;
-            manager.name = this.name;
-            manager.role = UserRole.MANAGER;
-            manager.password = this.password;
-            manager.phoneNumber = this.phoneNumber;
-            manager.officeNumber = this.officeNumber;
-            return manager;
-        }
+    @Builder
+    public Manager(Long id, String email, String name, Role role, String password, String phoneNumber, String officeNumber) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.role = role;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+        this.officeNumber = officeNumber;
     }
 }

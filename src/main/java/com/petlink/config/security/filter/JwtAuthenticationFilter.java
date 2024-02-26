@@ -2,7 +2,7 @@ package com.petlink.config.security.filter;
 
 import com.petlink.common.cache.TokenCacheService;
 import com.petlink.common.util.jwt.JwtTokenProvider;
-import com.petlink.common.util.jwt.UserRole;
+import com.petlink.common.util.jwt.Role;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -88,7 +88,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         log.info(jwtTokenProvider.getRoleByToken(token));
 
-        if (Objects.equals(jwtTokenProvider.getRoleByToken(token), UserRole.MANAGER.getRole())) {
+        if (Objects.equals(jwtTokenProvider.getRoleByToken(token), Role.MANAGER.getRole())) {
             filterChain.doFilter(request, response);
             return;
         }

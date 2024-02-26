@@ -1,8 +1,7 @@
 package com.petlink.member.domain;
 
 import com.petlink.common.domain.Address;
-import com.petlink.common.domain.user.BaseUser;
-import com.petlink.common.util.jwt.UserRole;
+import com.petlink.common.util.jwt.Role;
 import com.petlink.member.exception.MemberException;
 import com.petlink.orders.domain.Orders;
 import jakarta.persistence.CascadeType;
@@ -12,8 +11,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -24,7 +27,21 @@ import static com.petlink.member.exception.MemberExceptionCode.ALREADY_WITHDRAWA
 @Getter
 @Entity
 @Table(name = "member")
-public class Member extends BaseUser {
+public class Member {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true, name = "id")
+    protected Long id;
+
+    @Column(unique = true, name = "email", nullable = false)
+    protected String email;
+
+    @Column(name = "name", nullable = false)
+    protected String name;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    protected Role role;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -47,19 +64,6 @@ public class Member extends BaseUser {
 
     private List<Orders> ordersList = new ArrayList<>();
 
-    private Member(MemberBuilder builder) {
-        this.id = builder.id;
-        this.email = builder.email;
-        this.name = builder.name;
-        this.role = UserRole.MEMBER;
-        this.password = builder.password;
-        this.tel = builder.tel;
-        this.address = builder.address;
-        this.status = builder.status;
-    }
-
-    protected Member() {
-    }
 
     /**
      * Withdrawal.(탈퇴)
@@ -71,60 +75,19 @@ public class Member extends BaseUser {
         this.status = MemberStatus.INACTIVE;
     }
 
-    // 빌더 인스턴스 생성 메소드
-    public static MemberBuilder builder() {
-        return new MemberBuilder();
+
+    protected Member() {
     }
 
-    // MemberBuilder 정의
-    public static class MemberBuilder {
-        // BaseUser 및 Member 필드
-        protected Long id;
-        protected String email;
-        protected String name;
-        private String password;
-        private String tel;
-        private Address address;
-        private MemberStatus status;
-
-        // 필드 설정 메소드들
-        public MemberBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
-
-        public MemberBuilder email(String email) {
-            this.email = email;
-            return this;
-        }
-
-        public MemberBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public MemberBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public MemberBuilder tel(String tel) {
-            this.tel = tel;
-            return this;
-        }
-
-        public MemberBuilder address(Address address) {
-            this.address = address;
-            return this;
-        }
-
-        public MemberBuilder status(MemberStatus status) {
-            this.status = status;
-            return this;
-        }
-
-        public Member build() {
-            return new Member(this);
-        }
+    @Builder
+    public Member(Long id, String email, String name, Role role, String password, String tel, Address address, MemberStatus status) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.role = role;
+        this.password = password;
+        this.tel = tel;
+        this.address = address;
+        this.status = status;
     }
 }
