@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  mysql:
+    platform: linux/x86_64
+    image: mysql:8.0
+    hostname: mysql
+    ports:
+      - "13306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: petlink
+      MYSQL_USER: petlink_mysql_username
+      MYSQL_PASSWORD: petlink_mysql_password
+    volumes:
+      - ./database/mysql/config:/etc/mysql/conf.d # MySQL 설정 파일
+  redisson:
+    platform: linux/x86_64
+    image: redis:alpine
+    hostname: redisson
+    ports:
+      - "16379:6379"
+  redis-jwt:
+    platform: linux/x86_64
+    image: redis:alpine
+    hostname: redis-jwt
+    ports:
+      - "16380:6380"

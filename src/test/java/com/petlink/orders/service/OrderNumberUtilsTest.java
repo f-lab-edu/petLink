@@ -1,5 +1,6 @@
 package com.petlink.orders.service;
 
+import com.petlink.order.orders.service.OrderNumbersGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

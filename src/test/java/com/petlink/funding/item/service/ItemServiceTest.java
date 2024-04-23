@@ -1,12 +1,13 @@
 package com.petlink.funding.item.service;
 
-import com.petlink.funding.domain.Funding;
-import com.petlink.funding.exception.FundingException;
-import com.petlink.funding.item.domain.FundingItem;
-import com.petlink.funding.item.dto.request.ItemRequestDto;
-import com.petlink.funding.item.dto.response.FundingItemResponseDto;
-import com.petlink.funding.item.repository.ItemRepository;
-import com.petlink.funding.repository.FundingRepository;
+import com.petlink.order.funding.domain.Funding;
+import com.petlink.order.funding.exception.FundingException;
+import com.petlink.order.funding.item.domain.FundingItem;
+import com.petlink.order.funding.item.dto.request.ItemRequestDto;
+import com.petlink.order.funding.item.dto.response.FundingItemResponseDto;
+import com.petlink.order.funding.item.repository.ItemRepository;
+import com.petlink.order.funding.item.service.ItemService;
+import com.petlink.order.funding.repository.FundingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

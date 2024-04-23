@@ -1,12 +1,12 @@
 package com.petlink.orders;
 
 import com.petlink.common.domain.Address;
-import com.petlink.orders.domain.PayMethod;
-import com.petlink.orders.dto.OrderStatus;
-import com.petlink.orders.dto.request.FundingItemDto;
-import com.petlink.orders.dto.request.OrderRequest;
-import com.petlink.orders.dto.response.OrderDetailInfoResponse;
-import com.petlink.orders.dto.response.OrderResponseDto;
+import com.petlink.order.orders.domain.PayMethod;
+import com.petlink.order.orders.dto.OrderStatus;
+import com.petlink.order.orders.dto.request.FundingItemDto;
+import com.petlink.order.orders.dto.request.OrderRequest;
+import com.petlink.order.orders.dto.response.OrderDetailInfoResponse;
+import com.petlink.order.orders.dto.response.OrderResponseDto;
 
 import java.util.List;
 

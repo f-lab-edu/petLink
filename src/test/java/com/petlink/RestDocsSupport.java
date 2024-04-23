@@ -1,7 +1,7 @@
 package com.petlink;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petlink.common.exception.GlobalExceptionHandler;
+import com.petlink.global.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Import;

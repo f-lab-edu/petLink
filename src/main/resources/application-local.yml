@@ -1,0 +1,35 @@
+# DB properties
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:13306/petlink
+    username: petlink_mysql_username
+    password: petlink_mysql_password
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        hbm2ddl:
+          auto: update # create, create-drop, update, validate
+  data:
+    redis:
+      redisson:
+        host: localhost #redisson
+        port: 16379
+      jwt:
+        host: localhost #redis-jwt
+        port: 16380
+
+# JWT properties
+jwt:
+  secret-key: flab-project-petlink-secret-key-sample
+  expire-length: 86400000 # 1 day
+
+# Object Storage properties
+storage:
+  access-key: storage.access.key
+  secret-key: storage.secret.key
+

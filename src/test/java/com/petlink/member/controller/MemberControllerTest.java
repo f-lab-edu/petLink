@@ -2,13 +2,14 @@ package com.petlink.member.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.petlink.RestDocsSupport;
-import com.petlink.common.exception.TokenException;
-import com.petlink.member.dto.request.SignUpRequestDto;
-import com.petlink.member.dto.response.MemberInfoResponseDto;
-import com.petlink.member.dto.response.ResultResponse;
-import com.petlink.member.exception.MemberException;
-import com.petlink.member.exception.MemberExceptionCode;
-import com.petlink.member.service.MemberService;
+import com.petlink.global.exception.TokenException;
+import com.petlink.user.member.controller.MemberController;
+import com.petlink.user.member.dto.request.SignUpRequestDto;
+import com.petlink.user.member.dto.response.MemberInfoResponseDto;
+import com.petlink.user.member.dto.response.ResultResponse;
+import com.petlink.user.member.exception.MemberException;
+import com.petlink.user.member.exception.MemberExceptionCode;
+import com.petlink.user.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,9 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import static com.petlink.common.exception.TokenExceptionCode.INVALID_TOKEN_EXCEPTION;
-import static com.petlink.member.dto.Message.AVAILABLE_NAME;
-import static com.petlink.member.dto.Message.WITHDRAWAL_SUCCESS;
+import static com.petlink.global.exception.TokenExceptionCode.INVALID_TOKEN_EXCEPTION;
+import static com.petlink.user.member.dto.Message.AVAILABLE_NAME;
+import static com.petlink.user.member.dto.Message.WITHDRAWAL_SUCCESS;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -37,7 +38,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.response
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

@@ -1,6 +1,6 @@
 package com.petlink.common.util.date;
 
-import com.petlink.common.exception.CommonException;
+import com.petlink.global.exception.CommonException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

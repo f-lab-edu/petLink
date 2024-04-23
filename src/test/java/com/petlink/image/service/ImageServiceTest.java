@@ -2,12 +2,13 @@ package com.petlink.image.service;
 
 
 import com.amazonaws.services.s3.model.AmazonS3Exception;
-import com.petlink.common.storage.dto.ResultObject;
-import com.petlink.common.storage.exception.StorageException;
-import com.petlink.common.storage.image.ImageUtils;
-import com.petlink.image.domain.Image;
-import com.petlink.image.dto.ImageDto;
-import com.petlink.image.repository.ImageRepository;
+import com.petlink.api.image.domain.Image;
+import com.petlink.api.image.dto.ImageDto;
+import com.petlink.api.image.repository.ImageRepository;
+import com.petlink.api.image.service.ImageService;
+import com.petlink.api.storage.dto.ResultObject;
+import com.petlink.api.storage.exception.StorageException;
+import com.petlink.api.storage.image.ImageUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

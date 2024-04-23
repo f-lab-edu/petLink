@@ -1,8 +1,8 @@
 package com.petlink.common.util.jwt;
 
 import com.petlink.common.domain.Address;
-import com.petlink.member.domain.Member;
-import com.petlink.member.domain.MemberStatus;
+import com.petlink.user.member.domain.Member;
+import com.petlink.user.member.domain.MemberStatus;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;

@@ -1,8 +1,9 @@
 package com.petlink.config.security.customUser;
 
-import com.petlink.manager.repository.ManagerRepository;
-import com.petlink.member.domain.Member;
-import com.petlink.member.repository.MemberRepository;
+import com.petlink.global.config.security.customUser.CustomUserDetailsService;
+import com.petlink.user.manager.repository.ManagerRepository;
+import com.petlink.user.member.domain.Member;
+import com.petlink.user.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

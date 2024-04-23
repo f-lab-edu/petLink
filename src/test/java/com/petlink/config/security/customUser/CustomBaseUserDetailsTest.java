@@ -1,8 +1,9 @@
 package com.petlink.config.security.customUser;
 
-import com.petlink.manager.domain.Manager;
-import com.petlink.member.domain.Member;
-import com.petlink.member.domain.MemberStatus;
+import com.petlink.global.config.security.customUser.CustomUserDetails;
+import com.petlink.user.manager.domain.Manager;
+import com.petlink.user.member.domain.Member;
+import com.petlink.user.member.domain.MemberStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;

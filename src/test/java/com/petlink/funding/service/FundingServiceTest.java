@@ -1,14 +1,15 @@
 package com.petlink.funding.service;
 
-import com.petlink.common.exception.CommonException;
-import com.petlink.funding.domain.Funding;
-import com.petlink.funding.dto.request.FundingRequestDto;
-import com.petlink.funding.dto.request.FundingSearchCriteriaDto;
-import com.petlink.funding.dto.response.FundingDetailResponse;
-import com.petlink.funding.dto.response.FundingListResponseDto;
-import com.petlink.funding.exception.FundingException;
-import com.petlink.funding.repository.FundingRepository;
-import com.petlink.manager.domain.Manager;
+import com.petlink.global.exception.CommonException;
+import com.petlink.order.funding.domain.Funding;
+import com.petlink.order.funding.dto.request.FundingRequestDto;
+import com.petlink.order.funding.dto.request.FundingSearchCriteriaDto;
+import com.petlink.order.funding.dto.response.FundingDetailResponse;
+import com.petlink.order.funding.dto.response.FundingListResponseDto;
+import com.petlink.order.funding.exception.FundingException;
+import com.petlink.order.funding.repository.FundingRepository;
+import com.petlink.order.funding.service.FundingService;
+import com.petlink.user.manager.domain.Manager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,9 +25,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.petlink.common.util.date.DateConverter.toLocalDateTime;
-import static com.petlink.funding.domain.FundingCategory.TOY;
-import static com.petlink.funding.domain.FundingState.PROGRESS;
-import static com.petlink.funding.exception.FundingExceptionCode.NO_SEARCH_RESULTS_FOUND;
+import static com.petlink.order.funding.domain.FundingCategory.TOY;
+import static com.petlink.order.funding.domain.FundingState.PROGRESS;
+import static com.petlink.order.funding.exception.FundingExceptionCode.NO_SEARCH_RESULTS_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;

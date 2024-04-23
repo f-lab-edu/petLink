@@ -2,11 +2,12 @@ package com.petlink.funding.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.petlink.RestDocsSupport;
-import com.petlink.funding.dto.request.FundingPostDto;
-import com.petlink.funding.dto.response.FundingCreateResponse;
-import com.petlink.funding.dto.response.FundingImageResponse;
-import com.petlink.funding.service.FundingManagementService;
-import com.petlink.image.dto.ImageDto;
+import com.petlink.api.image.dto.ImageDto;
+import com.petlink.order.funding.controller.FundingManagementController;
+import com.petlink.order.funding.dto.request.FundingPostDto;
+import com.petlink.order.funding.dto.response.FundingCreateResponse;
+import com.petlink.order.funding.dto.response.FundingImageResponse;
+import com.petlink.order.funding.service.FundingManagementService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +19,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import static com.petlink.common.util.date.DateConverter.toLocalDateTime;
-import static com.petlink.funding.domain.FundingCategory.FOOD;
+import static com.petlink.order.funding.domain.FundingCategory.FOOD;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;

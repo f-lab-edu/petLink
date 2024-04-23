@@ -2,11 +2,12 @@ package com.petlink.member.controller;
 
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper;
 import com.petlink.RestDocsSupport;
-import com.petlink.common.cache.TokenCacheService;
-import com.petlink.member.dto.request.LoginRequest;
-import com.petlink.member.dto.response.LoginResponse;
-import com.petlink.member.exception.MemberException;
-import com.petlink.member.service.AuthenticationService;
+import com.petlink.global.cache.TokenCacheService;
+import com.petlink.user.member.controller.AuthenticationController;
+import com.petlink.user.member.dto.request.LoginRequest;
+import com.petlink.user.member.dto.response.LoginResponse;
+import com.petlink.user.member.exception.MemberException;
+import com.petlink.user.member.service.AuthenticationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,8 +18,8 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import static com.petlink.member.exception.MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION;
-import static com.petlink.member.exception.MemberExceptionCode.NOT_MATCHED_INFOMATION;
+import static com.petlink.user.member.exception.MemberExceptionCode.NOT_FOUND_MEMBER_EXCEPTION;
+import static com.petlink.user.member.exception.MemberExceptionCode.NOT_MATCHED_INFOMATION;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

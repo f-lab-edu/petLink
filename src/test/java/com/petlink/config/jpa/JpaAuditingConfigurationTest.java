@@ -1,8 +1,9 @@
 package com.petlink.config.jpa;
 
-import com.petlink.config.security.customUser.CustomUserDetails;
-import com.petlink.manager.domain.Manager;
-import com.petlink.member.domain.Member;
+import com.petlink.global.config.jpa.JpaAuditingConfiguration;
+import com.petlink.global.config.security.customUser.CustomUserDetails;
+import com.petlink.user.manager.domain.Manager;
+import com.petlink.user.member.domain.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

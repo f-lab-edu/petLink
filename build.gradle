@@ -69,7 +69,7 @@ dependencies {
 // restdocs-openapi3 설정 ===============================================================
 
 openapi3 {
-    server = "localhost"
+    server = "http://localhost:8080"
     title = 'Petlink API'
     description = 'Petlink API description'
     version = '0.1.0'

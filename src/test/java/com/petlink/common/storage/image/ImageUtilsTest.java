@@ -5,9 +5,11 @@ import com.amazonaws.services.s3.model.AmazonS3Exception;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
-import com.petlink.common.storage.dto.ResultObject;
-import com.petlink.common.storage.dto.UploadObject;
-import com.petlink.common.storage.exception.StorageException;
+import com.petlink.api.storage.dto.ResultObject;
+import com.petlink.api.storage.dto.UploadObject;
+import com.petlink.api.storage.exception.StorageException;
+import com.petlink.api.storage.image.Bucket;
+import com.petlink.api.storage.image.ImageUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +20,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
 
-import static com.petlink.common.storage.exception.StorageExceptionCode.FAILED_UPLOAD_IMAGE;
+import static com.petlink.api.storage.exception.StorageExceptionCode.FAILED_UPLOAD_IMAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;

@@ -5,23 +5,6 @@ services:
     build: . # 현재위치의 Dockerfile을 참조
     image: petlink:latest #deadwhale/petlink:latest
     ports:
-      - "8088:8088"
-    env_file:
-      - .env
-    #    command:
-    #      - --spring.profiles.active=dev # for dev profile
-    depends_on:
-      - redisson  # for order lock storage
-      - redis-jwt # for login token storage
-  redisson:
-    platform: linux/x86_64
-    image: redis:alpine
-    hostname: redisson
-    ports:
-      - "6379:6379"
-  redis-jwt:
-    platform: linux/x86_64
-    image: redis:alpine
-    hostname: redis-jwt
-    ports:
-      - "6380:6379"
+      - "8080:8080"
+    command:
+      - --spring.profiles.active=local # for dev profile

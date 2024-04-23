@@ -1,11 +1,12 @@
 package com.petlink.funding.repository;
 
-import com.petlink.config.jpa.QuerydslConfiguration;
-import com.petlink.funding.domain.Funding;
-import com.petlink.funding.domain.FundingCategory;
-import com.petlink.funding.domain.FundingState;
-import com.petlink.funding.dto.request.FundingRequestDto;
-import com.petlink.funding.dto.request.FundingSearchCriteriaDto;
+import com.petlink.global.config.jpa.QuerydslConfiguration;
+import com.petlink.order.funding.domain.Funding;
+import com.petlink.order.funding.domain.FundingCategory;
+import com.petlink.order.funding.domain.FundingState;
+import com.petlink.order.funding.dto.request.FundingRequestDto;
+import com.petlink.order.funding.dto.request.FundingSearchCriteriaDto;
+import com.petlink.order.funding.repository.FundingRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,10 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 
 import static com.petlink.common.util.date.DateConverter.toLocalDateTime;
-import static com.petlink.funding.domain.FundingCategory.FOOD;
-import static com.petlink.funding.domain.FundingCategory.TOY;
-import static com.petlink.funding.domain.FundingState.END;
-import static com.petlink.funding.domain.FundingState.PROGRESS;
+import static com.petlink.order.funding.domain.FundingCategory.FOOD;
+import static com.petlink.order.funding.domain.FundingCategory.TOY;
+import static com.petlink.order.funding.domain.FundingState.END;
+import static com.petlink.order.funding.domain.FundingState.PROGRESS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Import(QuerydslConfiguration.class)
@@ -29,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FundingRepositoryTest {
 
     @Autowired
-    FundingRepository fundingRepository;
+	FundingRepository fundingRepository;
 
     @BeforeEach
     void setUp() {

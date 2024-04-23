@@ -1,9 +1,10 @@
 package com.petlink.member.repository;
 
 import com.petlink.common.domain.Address;
-import com.petlink.config.jpa.QuerydslConfiguration;
-import com.petlink.member.domain.Member;
-import com.petlink.member.domain.MemberStatus;
+import com.petlink.global.config.jpa.QuerydslConfiguration;
+import com.petlink.user.member.domain.Member;
+import com.petlink.user.member.domain.MemberStatus;
+import com.petlink.user.member.repository.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MemberRepositoryTest {
 
     @Autowired
-    MemberRepository memberRepository;
+	MemberRepository memberRepository;
 
     @Test
     @DisplayName("회원 생성 테스트")

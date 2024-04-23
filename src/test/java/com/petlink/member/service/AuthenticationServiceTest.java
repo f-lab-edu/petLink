@@ -1,9 +1,10 @@
 package com.petlink.member.service;
 
 import com.petlink.common.util.jwt.JwtTokenProvider;
-import com.petlink.member.domain.Member;
-import com.petlink.member.exception.MemberException;
-import com.petlink.member.repository.MemberRepository;
+import com.petlink.user.member.domain.Member;
+import com.petlink.user.member.exception.MemberException;
+import com.petlink.user.member.repository.MemberRepository;
+import com.petlink.user.member.service.AuthenticationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,47 +1,19 @@
 server:
-  port: 8088
+  port: 8080
 
-# DB properties
 spring:
-  datasource:
-    driver-class-name: ${database.driver}
-    url: ${database.host}
-    username: ${database.user}
-    password: ${database.password}
-  jpa:
-    database-platform: ${database.platform}
-    defer-datasource-initialization: true
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        hbm2ddl:
-          auto: update
-  data:
-    redis:
-      redisson:
-        host: ${REDISSON_HOST}
-        port: ${REDIS_PORT}
-      jwt:
-        host: ${REDIS_JWT_HOST}
-        port: ${REDIS_JWT_PORT}
+  profiles:
+    default: local
+---
+spring:
+  config:
+    activate:
+      on-profile: local,dev,prod
 
 # log level 설정 (debug, info, warn, error)
 logging:
   level:
     org.hibernate.type: trace
-
-# JWT properties
-jwt:
-  secret-key: ${jwt.secret.key}
-  expire-length: ${jwt.expire.length}
-  prefix: ${jwt.prefix}
-  header: ${jwt.header}
-
-# Object Storage properties
-storage:
-  access-key: ${storage.access.key}
-  secret-key: ${storage.secret.key}
 
 worker:
   id: 1
