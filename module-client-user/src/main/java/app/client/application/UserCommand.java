@@ -8,6 +8,7 @@ public class UserCommand {
 
     public ClientUser createUser(String name, String email) {
         ClientUser clientUser = new ClientUser(name, email);
+        System.out.println("UserCommand.createUser: " + clientUser);
         return clientUser;
     }
 }
