@@ -3,11 +3,13 @@ repositories {
 }
 
 dependencies {
+    implementation project(':module-common')
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     //bycrypt
-  //  implementation 'org.springframework.boot:spring-boot-starter-security'
+    //  implementation 'org.springframework.boot:spring-boot-starter-security'
     //mplementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
 
     //jwt 관련 라이브러리

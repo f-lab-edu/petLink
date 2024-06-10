@@ -1,4 +1,5 @@
 rootProject.name = 'petLink'
 
+include ':module-common'
 include ':module-client-user'
 include ':module-partner-user'
