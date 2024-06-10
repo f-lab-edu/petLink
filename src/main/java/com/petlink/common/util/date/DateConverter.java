@@ -1,6 +1,6 @@
 package com.petlink.common.util.date;
 
-import com.petlink.common.exception.CommonException;
+import com.petlink.global.exception.CommonException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
-import static com.petlink.common.exception.ExceptionCode.INVALID_DATE_FORMAT;
-import static com.petlink.common.exception.ExceptionCode.NULL_IS_NOT_ALLOWED;
+import static com.petlink.global.exception.ExceptionCode.INVALID_DATE_FORMAT;
+import static com.petlink.global.exception.ExceptionCode.NULL_IS_NOT_ALLOWED;
 
 @Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
