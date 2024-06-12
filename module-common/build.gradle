@@ -1,0 +1,18 @@
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    //jwt 관련 라이브러리
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+}
+
+// ---.plain.jar를 만들고 싶으면 아래와 같이 설정한다.
+// 그냥 .jar는 서버를 실행 시키기 때문.
+tasks.jar { enabled = true }
+
+
+tasks.register("prepareKotlinBuildScriptModel") {}
