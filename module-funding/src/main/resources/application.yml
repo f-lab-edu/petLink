@@ -1,6 +1,6 @@
 spring:
   application:
-    name: module-client-user
+    name: module-funding
   # DB properties
   datasource:
     driver-class-name: ${database.driver}
@@ -17,9 +17,8 @@ spring:
         hbm2ddl:
           auto: update # create-drop, create, update, validate, none
 server:
-  port: 9001
-
+  port: 9003
 
 fegin:
   url:
-    prefix: http://localhost:9003
+    prefix: http://localhost:9000

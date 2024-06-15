@@ -33,6 +33,7 @@ configurations {
 subprojects {
     group = 'app'
 
+
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'

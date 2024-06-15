@@ -2,6 +2,8 @@ package app.client.ui;
 
 import app.client.application.UserCommand;
 import app.client.domain.ClientUser;
+import app.client.fegin.FundingFeginClient;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,19 +13,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
     private final UserCommand userCommand;
-
-    public UserController(UserCommand userCommand) {
-        this.userCommand = userCommand;
-    }
+    private final FundingFeginClient fundingFeginClient;
 
     @GetMapping
-    public String getUser() {
-        return "hello ClientUser";
+    public ResponseEntity<?> getUser() {
+        return fundingFeginClient.callGet(
+                "this is custom header",
+                2L
+        );
     }
 
     @GetMapping("/create")

@@ -10,9 +10,8 @@ dependencies {
 
 }
 
-// ---.plain.jar를 만들고 싶으면 아래와 같이 설정한다.
-// 그냥 .jar는 서버를 실행 시키기 때문.
 tasks.jar { enabled = true }
+bootJar { enabled = false }
 
 
 tasks.register("prepareKotlinBuildScriptModel") {}
