@@ -24,12 +24,16 @@
 
 ### 🖥️ 사용 기술 및 환경 🖥️
 
-- JAVA 17
-- SpringBoot 3.0.5
-- MySql 8.0
-- JPA
-- QueryDSL
-- Redis
+`JAVA 17`
+`SpringBoot 3.0.5`
+`MySql 8.0`
+`JPA`
+`QueryDSL`
+`Redis`
+`Object Storage`
+`Docker`
+`Github Actions`
+`AWS`
 
 ----
 
@@ -39,8 +43,8 @@
 <summary>v1 - 초기단계</summary>
 <div markdown="1">
 
-![server_V1.png](readme-resources%2Fimages%2Fserver_V1.png)
-
+![server_V1.png](resources/images/server_V1.png)
+![server_V1.png](resources/images/server_V1.png)
 </div>
 </details>
 
@@ -56,7 +60,7 @@
 
 ### 분산락 처리를 위한 Redis-server 도입
 
-![server-v3.png](readme-resources%2Fimages%2Fserver-v3.png)
+![server-v3.png](resources/images/server-v3.png)
 
 -----
 
@@ -67,7 +71,7 @@
 <summary>v1 - 초기단계</summary>
 <div markdown="1">
 
-![erd_V1.png](readme-resources%2Fimages%2Ferd_V1.png)
+![erd_V1.png](resources/images/erd_V1.png)
 </div>
 </details>
 
@@ -75,7 +79,7 @@
 <summary>v2 - 테이블 개선 </summary>
 <div markdown="1">
 
-![erd_V2.png](readme-resources%2Fimages%2Ferd_V2.png)
+![erd_V2.png](resources/images/erd_V2.png)
 </div>
 </details>
 
@@ -83,10 +87,10 @@
 <summary>v3 - 이미지 처리를 별도의 독립된 테이블로 구분하며 관리하기 위해 수정 </summary>
 <div markdown="1">
 
-![erd_V3.png](readme-resources%2Fimages%2Ferd_V3.png)
+![erd_V3.png](resources/images/erd_V3.png)
 </div>
 </details>
 
 ### v4 - 택배 정보를 Order 테이블에서 관리하도록 수정
 
-![erd_V4.png](readme-resources%2Fimages%2Ferd_V4.png)
+![erd_V4.png](resources/images/erd_V4.png)
