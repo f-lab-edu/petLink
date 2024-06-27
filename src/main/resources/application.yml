@@ -16,13 +16,12 @@ spring:
       hibernate:
         format_sql: true
         hbm2ddl:
-          auto: create-drop
+          auto: update
   data:
     redis:
       redisson:
-        port: ${REDIS_PORT}
         host: ${REDISSON_HOST}
-        password: ${REDISSON_PASSWORD}
+        port: ${REDIS_PORT}
       jwt:
         host: ${REDIS_JWT_HOST}
         port: ${REDIS_JWT_PORT}
